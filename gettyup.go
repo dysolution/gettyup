@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -11,40 +10,51 @@ import (
 	"github.com/dysolution/espapi"
 )
 
-var (
-	apiKey      string
-	apiSecret   string
-	espUsername string
-	espPassword string
-)
+var client espapi.Client
 
-func BatchCreate(batch espapi.SubmissionBatch) {
-	if batch.TypeIsValid() != true {
-		validTypes := strings.Join(espapi.BatchTypes(), ", ")
-		log.Errorf("Invalid submission batch type. Must be one of: %v", validTypes)
-	} else if batch.NameIsValid() != true {
-		log.Errorf("invalid batch name")
-	} else {
-		out, err := json.MarshalIndent(batch, "", "  ")
-		if err != nil {
-			log.Errorf("error marshaling batch")
-		}
-		fmt.Printf("%s\n", out)
-		body, err := espapi.Response(apiKey, apiSecret, espUsername, espPassword)
-		if err != nil {
-			log.Errorf("error contacting API")
-		}
-		responseJson, err := json.Marshal(body)
-		log.Infof("%s", responseJson)
-		if errMsg := body["Error"]; errMsg != "" {
-			log.Errorf(errMsg)
-		}
+func BuildBatch(c *cli.Context) espapi.SubmissionBatch {
+	return espapi.SubmissionBatch{
+		SubmissionName:        c.String("submission-name"),
+		SubmissionType:        c.String("submission-type"),
+		Note:                  c.String("note"),
+		AssignmentId:          c.String("assignment-id"),
+		BriefId:               c.String("brief-id"),
+		EventId:               c.String("event-id"),
+		SaveExtractedMetadata: c.Bool("save-extracted-metadata"),
 	}
+}
+
+func BuildRelease(c *cli.Context) espapi.Release {
+	return espapi.Release{
+		FileName:             c.String("file-name"),
+		FilePath:             c.String("file-path"),
+		ExternalFileLocation: c.String("external-file-location"),
+		ReleaseType:          c.String("release-type"),
+		ModelDateOfBirth:     c.String("model-date-of-birth"),
+		ModelEthnicities:     c.StringSlice("model-ethnicities"),
+		ModelGender:          c.String("model-gender"),
+	}
+}
+
+func CreateBatch(context *cli.Context, client espapi.Client) {
+	batch, err := BuildBatch(context).Marshal()
+	if err != nil {
+		log.Errorf("error creating batch")
+	}
+	client.PostBatch(batch)
+}
+
+func CreateRelease(context *cli.Context, client espapi.Client) {
+	release, err := BuildRelease(context).Marshal()
+	if err != nil {
+		log.Errorf("error creating release")
+	}
+	client.PostRelease(release)
 }
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "gettyUp"
+	app.Name = "gettyup"
 	app.Version = "0.0.1"
 	app.Usage = "interact with the Getty Images ESP API"
 	app.Author = "Jordan Peterson"
@@ -54,57 +64,57 @@ func main() {
 	}
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:        "key, k",
-			Usage:       "your key for the ESP API",
-			EnvVar:      "ESP_API_KEY",
-			Destination: &apiKey,
+			Name:   "key, k",
+			Usage:  "your key for the ESP API",
+			EnvVar: "ESP_API_KEY",
 		},
 		cli.StringFlag{
-			Name:        "secret",
-			Usage:       "your secret for the ESP API",
-			EnvVar:      "ESP_API_SECRET",
-			Destination: &apiSecret,
+			Name:   "secret",
+			Usage:  "your secret for the ESP API",
+			EnvVar: "ESP_API_SECRET",
 		},
 		cli.StringFlag{
-			Name:        "username, u",
-			Usage:       "your ESP username",
-			EnvVar:      "ESP_USERNAME",
-			Destination: &espUsername,
+			Name:   "username, u",
+			Usage:  "your ESP username",
+			EnvVar: "ESP_USERNAME",
 		},
 		cli.StringFlag{
-			Name:        "password, p",
-			Usage:       "your ESP password",
-			EnvVar:      "ESP_PASSWORD",
-			Destination: &espPassword,
+			Name:   "password, p",
+			Usage:  "your ESP password",
+			EnvVar: "ESP_PASSWORD",
 		},
+	}
+	app.Before = func(c *cli.Context) error {
+		client = espapi.Client{espapi.Credentials{
+			ApiKey:      c.String("key"),
+			ApiSecret:   c.String("secret"),
+			EspUsername: c.String("username"),
+			EspPassword: c.String("password"),
+		},
+		}
+		return nil
 	}
 	app.Commands = []cli.Command{
 		{
 			Name:  "batch",
 			Usage: "work with Submission Batches",
-			Action: func(c *cli.Context) {
-				batch := espapi.SubmissionBatch{
-					SubmissionName:        c.String("submission-name"),
-					SubmissionType:        c.String("submission-type"),
-					Note:                  c.String("note"),
-					AssignmentId:          c.String("assignment-id"),
-					BriefId:               c.String("brief-id"),
-					EventId:               c.String("event-id"),
-					SaveExtractedMetadata: c.Bool("save-extracted-metadata"),
-				}
-				BatchCreate(batch)
-			},
-			Flags: []cli.Flag{
-				cli.StringFlag{Name: "submission-name, n"},
-				cli.StringFlag{
-					Name:  "submission-type, t",
-					Usage: fmt.Sprintf("[%s]", strings.Join(espapi.BatchTypes(), "|")),
+			Subcommands: []cli.Command{
+				{
+					Name:   "create",
+					Action: func(c *cli.Context) { CreateBatch(c, client) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-name, n"},
+						cli.StringFlag{
+							Name:  "submission-type, t",
+							Usage: fmt.Sprintf("[%s]", strings.Join(espapi.BatchTypes(), "|")),
+						},
+						cli.StringFlag{Name: "note"},
+						cli.StringFlag{Name: "assignment-id"},
+						cli.StringFlag{Name: "brief-id"},
+						cli.StringFlag{Name: "event-id"},
+						cli.BoolTFlag{Name: "save-extracted-metadata"},
+					},
 				},
-				cli.StringFlag{Name: "note"},
-				cli.StringFlag{Name: "assignment-id"},
-				cli.StringFlag{Name: "brief-id"},
-				cli.StringFlag{Name: "event-id"},
-				cli.BoolTFlag{Name: "save-extracted-metadata"},
 			},
 		},
 		{
@@ -114,6 +124,26 @@ func main() {
 				log.Errorf("not implemented")
 			},
 			Flags: []cli.Flag{},
+		},
+		{
+			Name:  "release",
+			Usage: "work with Releases",
+			Flags: []cli.Flag{},
+			Subcommands: []cli.Command{
+				{
+					Name:   "create",
+					Action: func(c *cli.Context) { CreateRelease(c, client) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "file-name"},
+						cli.StringFlag{Name: "file-path"},
+						cli.StringFlag{Name: "external-file-location"},
+						cli.StringFlag{Name: "release-type"},
+						cli.StringFlag{Name: "model-date-of-birth"},
+						cli.StringSliceFlag{Name: "model-ethnicities"},
+						cli.StringFlag{Name: "model-gender"},
+					},
+				},
+			},
 		},
 	}
 

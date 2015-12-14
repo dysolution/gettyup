@@ -36,6 +36,18 @@ func BuildRelease(c *cli.Context) espapi.Release {
 	}
 }
 
+func BuildContribution(c *cli.Context) espapi.Contribution {
+	return espapi.Contribution{
+		FileName:             c.String("file-name"),
+		FilePath:             c.String("file-path"),
+		SubmittedToReviewAt:  c.String("submitted-to-review-at"),
+		UploadBucket:         c.String("upload-bucket"),
+		ExternalFileLocation: c.String("external-file-location"),
+		UploadId:             c.String("upload-id"),
+		MimeType:             c.String("mime-type"),
+	}
+}
+
 func CreateBatch(context *cli.Context, client espapi.Client) {
 	batch, err := BuildBatch(context).Marshal()
 	if err != nil {
@@ -52,6 +64,13 @@ func CreateRelease(context *cli.Context, client espapi.Client) {
 	client.PostRelease(release)
 }
 
+func CreateContribution(context *cli.Context, client espapi.Client) {
+	release, err := BuildContribution(context).Marshal()
+	if err != nil {
+		log.Errorf("error creating contribution")
+	}
+	client.PostContribution(release)
+}
 func main() {
 	app := cli.NewApp()
 	app.Name = "gettyup"
@@ -120,15 +139,25 @@ func main() {
 		{
 			Name:  "contribution",
 			Usage: "work with Contributions",
-			Action: func(c *cli.Context) {
-				log.Errorf("not implemented")
+			Subcommands: []cli.Command{
+				{
+					Name:   "create",
+					Action: func(c *cli.Context) { CreateContribution(c, client) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "file-name"},
+						cli.StringFlag{Name: "file-path"},
+						cli.StringFlag{Name: "submitted-to-review-at"},
+						cli.StringFlag{Name: "upload-bucket"},
+						cli.StringFlag{Name: "external-file-location"},
+						cli.StringFlag{Name: "upload-id"},
+						cli.StringFlag{Name: "mime-type"},
+					},
+				},
 			},
-			Flags: []cli.Flag{},
 		},
 		{
 			Name:  "release",
 			Usage: "work with Releases",
-			Flags: []cli.Flag{},
 			Subcommands: []cli.Command{
 				{
 					Name:   "create",

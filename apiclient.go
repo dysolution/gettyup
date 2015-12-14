@@ -11,12 +11,13 @@ var client api.Client
 var batchTypes = api.BatchTypes()
 
 func getClient(key, secret, username, password string) api.Client {
-	return api.Client{api.Credentials{
-		ApiKey:      key,
-		ApiSecret:   secret,
-		EspUsername: username,
-		EspPassword: password,
-	},
+	return api.Client{
+		api.Credentials{
+			ApiKey:      key,
+			ApiSecret:   secret,
+			EspUsername: username,
+			EspPassword: password,
+		},
 	}
 }
 

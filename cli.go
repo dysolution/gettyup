@@ -15,18 +15,15 @@ func main() {
 	app.Usage = "interact with the Getty Images ESP API"
 	app.Author = "Jordan Peterson"
 	app.Email = "dysolution@gmail.com"
-	app.Action = func(c *cli.Context) {
-		println("Use `gettyup help` for usage info")
-	}
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "key, k",
-			Usage:  "your key for the ESP API",
+			Usage:  "your ESP API key",
 			EnvVar: "ESP_API_KEY",
 		},
 		cli.StringFlag{
 			Name:   "secret",
-			Usage:  "your secret for the ESP API",
+			Usage:  "your ESP API secret",
 			EnvVar: "ESP_API_SECRET",
 		},
 		cli.StringFlag{
@@ -38,6 +35,13 @@ func main() {
 			Name:   "password, p",
 			Usage:  "your ESP password",
 			EnvVar: "ESP_PASSWORD",
+		},
+		cli.StringFlag{
+			Name:        "s3-bucket, b",
+			Value:       "oregon",
+			Usage:       "nearest S3 bucket = [germany|ireland|oregon|singapore|tokyo|virginia]",
+			Destination: &uploadBucket,
+			EnvVar:      "S3_BUCKET",
 		},
 	}
 	app.Before = func(c *cli.Context) error {

@@ -7,6 +7,7 @@ import (
 )
 
 var client api.Client
+var uploadBucket string
 
 var batchTypes = api.BatchTypes()
 
@@ -18,6 +19,7 @@ func getClient(key, secret, username, password string) api.Client {
 			EspUsername: username,
 			EspPassword: password,
 		},
+		uploadBucket,
 	}
 }
 

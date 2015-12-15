@@ -108,10 +108,14 @@ func main() {
 					Name:   "create",
 					Action: func(c *cli.Context) { CreateRelease(c, client) },
 					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},
 						cli.StringFlag{Name: "file-path"},
 						cli.StringFlag{Name: "external-file-location"},
-						cli.StringFlag{Name: "release-type"},
+						cli.StringFlag{
+							Name:  "release-type",
+							Usage: fmt.Sprintf("[%s]", strings.Join(releaseTypes, "|")),
+						},
 						cli.StringFlag{Name: "model-date-of-birth"},
 						cli.StringSliceFlag{Name: "model-ethnicities"},
 						cli.StringFlag{Name: "model-gender"},

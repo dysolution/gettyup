@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	api "github.com/dysolution/espapi"
@@ -10,6 +12,7 @@ var client api.Client
 var uploadBucket string
 
 var batchTypes = api.BatchTypes()
+var releaseTypes = api.ReleaseTypes()
 
 func getClient(key, secret, username, password string) api.Client {
 	return api.Client{
@@ -37,6 +40,7 @@ func BuildBatch(c *cli.Context) api.SubmissionBatch {
 
 func BuildRelease(c *cli.Context) api.Release {
 	return api.Release{
+		SubmissionBatchId:    c.String("submission-batch-id"),
 		FileName:             c.String("file-name"),
 		FilePath:             c.String("file-path"),
 		ExternalFileLocation: c.String("external-file-location"),
@@ -78,10 +82,15 @@ func CreateBatch(context *cli.Context, client api.Client) {
 
 func CreateRelease(context *cli.Context, client api.Client) {
 	release, err := BuildRelease(context).Marshal()
+	path := fmt.Sprintf("/submission/v1/submission_batches/%s/releases", context.String("submission-batch-id"))
 	if err != nil {
 		log.Errorf("error creating release")
 	}
-	client.PostRelease(release)
+	response, err := client.Post(release, Token(context, client), path)
+	if err != nil {
+		log.Errorf("error POSTing batch")
+	}
+	log.Infof("%s\n", response)
 }
 
 func CreateContribution(context *cli.Context, client api.Client) {

@@ -26,6 +26,8 @@ func getClient(key, secret, username, password string) api.Client {
 	}
 }
 
+// BuildBatch takes a Context of CLI-provided values
+// and returns a SubmissionBatch as defined by the api package.
 func BuildBatch(c *cli.Context) api.SubmissionBatch {
 	return api.SubmissionBatch{
 		SubmissionName:        c.String("submission-name"),

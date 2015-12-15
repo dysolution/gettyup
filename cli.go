@@ -1,3 +1,15 @@
+/*
+GettyUp is a minimal Command Line Interface (CLI)
+for Getty Images' Enterprise Submission Portal (ESP).
+
+You will need a username and password that allows you
+to log in to https://sandbox.espaws.com/ as well as
+an API Key and and API Secret, both of which are accessible
+at https://developer.gettyimages.com/apps/mykeys/.
+
+These values can be provided on the command line as global
+options or set as environment variables (recommended).
+*/
 package main
 
 import (

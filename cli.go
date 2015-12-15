@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 )
 
@@ -16,6 +17,10 @@ func main() {
 	app.Author = "Jordan Peterson"
 	app.Email = "dysolution@gmail.com"
 	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:  "debug, D",
+			Usage: "enable debug output",
+		},
 		cli.StringFlag{
 			Name:   "key, k",
 			Usage:  "your ESP API key",
@@ -51,6 +56,9 @@ func main() {
 			c.String("username"),
 			c.String("password"),
 		)
+		if c.Bool("debug") == true {
+			log.SetLevel(log.DebugLevel)
+		}
 		return nil
 	}
 	app.Commands = []cli.Command{

@@ -64,11 +64,16 @@ func Token(context *cli.Context, client api.Client) api.Token {
 }
 
 func CreateBatch(context *cli.Context, client api.Client) {
+	path := "/submission/v1/submission_batches"
 	batch, err := BuildBatch(context).Marshal()
 	if err != nil {
 		log.Errorf("error creating batch")
 	}
-	client.PostBatch(batch)
+	response, err := client.Post(batch, Token(context, client), path)
+	if err != nil {
+		log.Errorf("error POSTing batch")
+	}
+	log.Infof("%s\n", response)
 }
 
 func CreateRelease(context *cli.Context, client api.Client) {

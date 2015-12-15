@@ -53,13 +53,27 @@ func BuildRelease(c *cli.Context) api.Release {
 
 func BuildContribution(c *cli.Context) api.Contribution {
 	return api.Contribution{
+		CameraShotDate:       c.String("camera-shot-date"),
+		CollectionCode:       c.String("collection-code"),
+		ContentProviderName:  c.String("content-provider-name"),
+		ContentProviderTitle: c.String("content-provider-title"),
+		CountryOfShoot:       c.String("country-of-shoot"),
+		CreditLine:           c.String("credit-line"),
+		ExternalFileLocation: c.String("external-file-location"),
 		FileName:             c.String("file-name"),
 		FilePath:             c.String("file-path"),
-		SubmittedToReviewAt:  c.String("submitted-to-review-at"),
-		UploadBucket:         c.String("upload-bucket"),
-		ExternalFileLocation: c.String("external-file-location"),
-		UploadId:             c.String("upload-id"),
+		Headline:             c.String("headline"),
+		IptcCategory:         c.String("iptc-category"),
 		MimeType:             c.String("mime-type"),
+		ParentSource:         c.String("parent-source"),
+		RecordedDate:         c.String("recorded-date"),
+		RiskCategory:         c.String("risk-category"),
+		ShotSpeed:            c.String("shot-speed"),
+		SiteDestination:      c.StringSlice("site-destination"),
+		Source:               c.String("source"),
+		SubmittedToReviewAt:  c.String("submitted-to-review-at"),
+		UploadBucket:         uploadBucket,
+		UploadId:             c.String("upload-id"),
 	}
 }
 
@@ -100,9 +114,20 @@ func CreateRelease(context *cli.Context, client api.Client) {
 }
 
 func CreateContribution(context *cli.Context, client api.Client) {
-	release, err := BuildContribution(context).Marshal()
+	batch_id := context.String("submission-batch-id")
+	if len(batch_id) < 1 {
+		log.Fatalf("--submission-batch-id must be set")
+	}
+	path := fmt.Sprintf("/submission/v1/submission_batches/%s/contributions", batch_id)
+
+	contribution, err := BuildContribution(context).Marshal()
 	if err != nil {
 		log.Error(err)
 	}
-	client.PostContribution(release)
+
+	response, err := client.Post(contribution, Token(context, client), path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Infof("%s\n", response)
 }

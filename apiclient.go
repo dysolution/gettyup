@@ -17,10 +17,10 @@ var releaseTypes = api.ReleaseTypes()
 func getClient(key, secret, username, password string) api.Client {
 	return api.Client{
 		api.Credentials{
-			ApiKey:      key,
-			ApiSecret:   secret,
-			EspUsername: username,
-			EspPassword: password,
+			APIKey:      key,
+			APISecret:   secret,
+			ESPUsername: username,
+			ESPPassword: password,
 		},
 		uploadBucket,
 	}
@@ -98,11 +98,11 @@ func CreateBatch(context *cli.Context, client api.Client) {
 }
 
 func CreateRelease(context *cli.Context, client api.Client) {
-	batch_id := context.String("submission-batch-id")
-	if len(batch_id) < 1 {
+	batchID := context.String("submission-batch-id")
+	if len(batchID) < 1 {
 		log.Fatalf("--submission-batch-id must be set")
 	}
-	path := fmt.Sprintf("/submission/v1/submission_batches/%s/releases", batch_id)
+	path := fmt.Sprintf("/submission/v1/submission_batches/%s/releases", batchID)
 
 	release, err := BuildRelease(context).Marshal()
 	if err != nil {
@@ -116,11 +116,11 @@ func CreateRelease(context *cli.Context, client api.Client) {
 }
 
 func CreateContribution(context *cli.Context, client api.Client) {
-	batch_id := context.String("submission-batch-id")
-	if len(batch_id) < 1 {
+	batchID := context.String("submission-batch-id")
+	if len(batchID) < 1 {
 		log.Fatalf("--submission-batch-id must be set")
 	}
-	path := fmt.Sprintf("/submission/v1/submission_batches/%s/contributions", batch_id)
+	path := fmt.Sprintf("/submission/v1/submission_batches/%s/contributions", batchID)
 
 	contribution, err := BuildContribution(context).Marshal()
 	if err != nil {

@@ -59,6 +59,10 @@ func BuildContribution(c *cli.Context) api.Contribution {
 	}
 }
 
+func Token(context *cli.Context, client api.Client) api.Token {
+	return client.GetToken()
+}
+
 func CreateBatch(context *cli.Context, client api.Client) {
 	batch, err := BuildBatch(context).Marshal()
 	if err != nil {

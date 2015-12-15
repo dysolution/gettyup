@@ -55,6 +55,11 @@ func main() {
 	}
 	app.Commands = []cli.Command{
 		{
+			Name:   "token",
+			Usage:  "retrieve and print an OAuth2 authorization token",
+			Action: func(c *cli.Context) { fmt.Println(Token(c, client)) },
+		},
+		{
 			Name:  "batch",
 			Usage: "work with Submission Batches",
 			Subcommands: []cli.Command{

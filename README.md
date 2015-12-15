@@ -4,8 +4,8 @@
 ## contribution POST
 
 ### Editorial Image
-
-contribution create \
+```
+gettyup contribution create \
   -b 86101 \
   --camera-shot-date=12/14/2015 \
   --content-provider-name=provider \
@@ -18,3 +18,4 @@ contribution create \
   --site-destination=Editorial \
   --site-destination=WireImage.com \
   --source=AFP
+```

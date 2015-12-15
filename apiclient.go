@@ -71,11 +71,12 @@ func CreateBatch(context *cli.Context, client api.Client) {
 	path := "/submission/v1/submission_batches"
 	batch, err := BuildBatch(context).Marshal()
 	if err != nil {
-		log.Errorf("error creating batch")
+		log.Error(err)
 	}
+
 	response, err := client.Post(batch, Token(context, client), path)
 	if err != nil {
-		log.Errorf("error POSTing batch")
+		log.Error(err)
 	}
 	log.Infof("%s\n", response)
 }
@@ -86,13 +87,14 @@ func CreateRelease(context *cli.Context, client api.Client) {
 		log.Fatalf("--submission-batch-id must be set")
 	}
 	path := fmt.Sprintf("/submission/v1/submission_batches/%s/releases", batch_id)
+
 	release, err := BuildRelease(context).Marshal()
 	if err != nil {
-		log.Errorf("error creating release")
+		log.Fatal(err)
 	}
 	response, err := client.Post(release, Token(context, client), path)
 	if err != nil {
-		log.Errorf("error POSTing batch")
+		log.Fatal(err)
 	}
 	log.Infof("%s\n", response)
 }
@@ -100,7 +102,7 @@ func CreateRelease(context *cli.Context, client api.Client) {
 func CreateContribution(context *cli.Context, client api.Client) {
 	release, err := BuildContribution(context).Marshal()
 	if err != nil {
-		log.Errorf("error creating contribution")
+		log.Error(err)
 	}
 	client.PostContribution(release)
 }

@@ -81,8 +81,12 @@ func CreateBatch(context *cli.Context, client api.Client) {
 }
 
 func CreateRelease(context *cli.Context, client api.Client) {
+	batch_id := context.String("submission-batch-id")
+	if len(batch_id) < 1 {
+		log.Fatalf("--submission-batch-id must be set")
+	}
+	path := fmt.Sprintf("/submission/v1/submission_batches/%s/releases", batch_id)
 	release, err := BuildRelease(context).Marshal()
-	path := fmt.Sprintf("/submission/v1/submission_batches/%s/releases", context.String("submission-batch-id"))
 	if err != nil {
 		log.Errorf("error creating release")
 	}

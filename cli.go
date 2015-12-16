@@ -89,6 +89,7 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:   "create",
+					Usage:  "create a new Submission Batch",
 					Action: func(c *cli.Context) { CreateBatch(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
@@ -105,6 +106,7 @@ func main() {
 				},
 				{
 					Name:   "get",
+					Usage:  "get a specific Submission Batch",
 					Action: func(c *cli.Context) { GetBatch(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
@@ -146,7 +148,7 @@ func main() {
 				},
 				{
 					Name:   "get",
-					Usage:  "get a single Contribution",
+					Usage:  "get a specific Contribution",
 					Action: func(c *cli.Context) { GetContribution(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
@@ -169,6 +171,7 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:   "create",
+					Usage:  "create a new Release within a Submission Batch",
 					Action: func(c *cli.Context) { CreateRelease(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
@@ -186,6 +189,7 @@ func main() {
 				},
 				{
 					Name:   "get",
+					Usage:  "get a specific Release",
 					Action: func(c *cli.Context) { GetRelease(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},

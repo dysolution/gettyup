@@ -19,7 +19,10 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
+	api "github.com/dysolution/espapi"
 )
+
+var token api.Token
 
 func main() {
 	app := cli.NewApp()
@@ -71,13 +74,14 @@ func main() {
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
 		}
+		token = Token()
 		return nil
 	}
 	app.Commands = []cli.Command{
 		{
 			Name:   "token",
 			Usage:  "retrieve and print an OAuth2 authorization token",
-			Action: func(c *cli.Context) { fmt.Println(Token(c, client)) },
+			Action: func(c *cli.Context) { fmt.Println(token) },
 		},
 		{
 			Name:  "batch",
@@ -85,7 +89,7 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:   "create",
-					Action: func(c *cli.Context) { CreateBatch(c, client) },
+					Action: func(c *cli.Context) { CreateBatch(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
 						cli.StringFlag{
@@ -99,6 +103,13 @@ func main() {
 						cli.BoolTFlag{Name: "save-extracted-metadata"},
 					},
 				},
+				{
+					Name:   "get",
+					Action: func(c *cli.Context) { GetBatch(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+					},
+				},
 			},
 		},
 		{
@@ -107,7 +118,8 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:   "create",
-					Action: func(c *cli.Context) { CreateContribution(c, client) },
+					Usage:  "create a new Contribution within a Submission Batch",
+					Action: func(c *cli.Context) { CreateContribution(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},
@@ -132,6 +144,23 @@ func main() {
 						cli.StringFlag{Name: "source"},
 					},
 				},
+				{
+					Name:   "get",
+					Usage:  "get a single Contribution",
+					Action: func(c *cli.Context) { GetContribution(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+						cli.StringFlag{Name: "contribution-id, c"},
+					},
+				},
+				{
+					Name:   "index",
+					Usage:  "get all Contributions for a Submission Batch",
+					Action: func(c *cli.Context) { GetContributions(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+					},
+				},
 			},
 		},
 		{
@@ -140,7 +169,7 @@ func main() {
 			Subcommands: []cli.Command{
 				{
 					Name:   "create",
-					Action: func(c *cli.Context) { CreateRelease(c, client) },
+					Action: func(c *cli.Context) { CreateRelease(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},
@@ -155,10 +184,25 @@ func main() {
 						cli.StringFlag{Name: "model-gender"},
 					},
 				},
+				{
+					Name:   "get",
+					Action: func(c *cli.Context) { GetRelease(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+						cli.StringFlag{Name: "release-id, r"},
+					},
+				},
+				{
+					Name:   "index",
+					Usage:  "get all Releases for a Submission Batch",
+					Action: func(c *cli.Context) { GetReleases(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+					},
+				},
 			},
 		},
 	}
-
 	app.Run(os.Args)
 
 }

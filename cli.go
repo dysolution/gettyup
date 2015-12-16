@@ -112,6 +112,11 @@ func main() {
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
 				},
+				{
+					Name:   "index",
+					Usage:  "get all Submission Batches",
+					Action: func(c *cli.Context) { GetBatches(c) },
+				},
 			},
 		},
 		{

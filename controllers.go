@@ -33,6 +33,10 @@ func GetContribution(context *cli.Context) {
 	getFromBatch("contributions", context, getContributionID(context))
 }
 
+func GetBatches(context *cli.Context) {
+	get(BatchesPath)
+}
+
 func GetReleases(context *cli.Context) {
 	getFromBatch("releases", context, "")
 }

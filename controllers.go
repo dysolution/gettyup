@@ -71,7 +71,7 @@ func getContributionID(context *cli.Context) string {
 	return getRequiredValue(context, "contribution-id")
 }
 
-// GetFromBatch returns objects associated with a release.
+// GetFromBatch returns objects associated with a Submission Batch.
 //
 // If a childID is provided, a single child object, e.g., Release{Id:123},
 // otherwise all child objects associated with that release

@@ -19,6 +19,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
+	models "github.com/dysolution/espapi"
 )
 
 func main() {
@@ -34,6 +35,7 @@ func main() {
 		cli.StringFlag{Name: "secret", Usage: "your ESP API secret", EnvVar: "ESP_API_SECRET"},
 		cli.StringFlag{Name: "username, u", Usage: "your ESP username", EnvVar: "ESP_USERNAME"},
 		cli.StringFlag{Name: "password, p", Usage: "your ESP password", EnvVar: "ESP_PASSWORD"},
+		cli.StringFlag{Name: "token, t", Usage: "use an existing OAuth2 token", EnvVar: "ESP_TOKEN"},
 		cli.StringFlag{
 			Name:        "s3-bucket, b",
 			Value:       "oregon",
@@ -47,6 +49,7 @@ func main() {
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
 		}
+		token = models.Token(c.String("token"))
 		return nil
 	}
 	app.Commands = []cli.Command{

@@ -10,9 +10,16 @@ var client models.Client
 var batchTypes = models.BatchTypes()
 var releaseTypes = models.ReleaseTypes()
 
-// Token is a wrapper for the API's token-providing function.
+var token models.Token
+
+// Token is a memoizing wrapper for the API's token-providing function.
 func Token() models.Token {
-	return client.GetToken()
+	if token != "" {
+		return token
+	} else {
+		token = client.GetToken()
+		return token
+	}
 }
 
 func getClient(key, secret, username, password string) models.Client {

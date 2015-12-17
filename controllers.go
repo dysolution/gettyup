@@ -13,6 +13,10 @@ func CreateBatch(context *cli.Context) {
 	post(buildBatch(context), BatchesPath)
 }
 
+func UpdateBatch(context *cli.Context) {
+	put(buildBatchUpdate(context), batchPath(context))
+}
+
 func CreateRelease(context *cli.Context) {
 	post(buildRelease(context), batchPath(context)+"/releases")
 }
@@ -100,6 +104,18 @@ func post(object Serializable, path string) {
 		log.Fatal(err)
 	}
 	response, err := client.Request("POST", path, Token(), serializedObject)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Infof("%s\n", response)
+}
+
+func put(object Serializable, path string) {
+	serializedObject, err := object.Marshal()
+	if err != nil {
+		log.Fatal(err)
+	}
+	response, err := client.Request("PUT", path, Token(), serializedObject)
 	if err != nil {
 		log.Fatal(err)
 	}

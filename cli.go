@@ -113,6 +113,16 @@ func main() {
 					Usage:  "get all Submission Batches",
 					Action: func(c *cli.Context) { GetBatches(c) },
 				},
+				{
+					Name:   "update",
+					Usage:  "update an existing Submission Batch",
+					Action: func(c *cli.Context) { UpdateBatch(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+						cli.StringFlag{Name: "submission-name, n"},
+						cli.StringFlag{Name: "note"},
+					},
+				},
 			},
 		},
 		{

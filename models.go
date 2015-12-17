@@ -41,6 +41,17 @@ func buildBatch(c *cli.Context) models.SubmissionBatch {
 	}
 }
 
+// buildBatchUpdate takes a Context of CLI-provided values
+// and returns a SubmissionBatch with the new data in the mutable fields.
+func buildBatchUpdate(c *cli.Context) models.SubmissionBatchUpdate {
+	return models.SubmissionBatchUpdate{
+		models.SubmissionBatchChanges{
+			SubmissionName: c.String("submission-name"),
+			Note:           c.String("note"),
+		},
+	}
+}
+
 type Serializable interface {
 	Marshal() ([]byte, error)
 }

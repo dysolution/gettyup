@@ -42,30 +42,16 @@ func getContributionID(context *cli.Context) string {
 	return getRequiredValue(context, "contribution-id")
 }
 
-// GetFromBatch returns objects associated with a Submission Batch.
-//
-// If a childID is provided, a single child object, e.g., Release{Id:123},
-// otherwise all child objects associated with that release
-// will be returned.
-func getFromBatch(children string, context *cli.Context, childID string) {
+func childPath(children string, context *cli.Context, childID string) string {
 	var path string
 	if childID == "" {
 		path = batchPath(context) + "/" + children
 	} else {
 		path = batchPath(context) + "/" + children + "/" + childID
 	}
-	get(path)
+	return path
 }
 
-func deleteFromBatch(children string, context *cli.Context, childID string) {
-	var path string
-	if childID == "" {
-		path = batchPath(context) + "/" + children
-	} else {
-		path = batchPath(context) + "/" + children + "/" + childID
-	}
-	_delete(path)
-}
 func get(path string) {
 	response, err := client.Request("GET", path, Token(), nil)
 	if err != nil {

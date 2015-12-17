@@ -24,16 +24,16 @@ func (b Batch) Delete()      { _delete(b.path()) }
 func (b Batch) path() string { return Batches + "/" + getBatchID(b.context) }
 func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
 
-func (r Release) Index()     { getFromBatch("releases", r.context, "") }
-func (r Release) Get()       { getFromBatch("releases", r.context, r.id()) }
+func (r Release) Index()     { get(childPath("releases", r.context, "")) }
+func (r Release) Get()       { get(childPath("releases", r.context, r.id())) }
 func (r Release) Create()    { post(r.build(r.context), batchPath(r.context)+"/releases") }
-func (r Release) Delete()    { deleteFromBatch("releases", r.context, r.id()) }
+func (r Release) Delete()    { _delete(childPath("releases", r.context, r.id())) }
 func (r Release) id() string { return getRequiredValue(r.context, "release-id") }
 
-func (c Contribution) Index()     { getFromBatch("contributions", c.context, "") }
-func (c Contribution) Get()       { getFromBatch("contributions", c.context, c.id()) }
+func (c Contribution) Index()     { get(childPath("contributions", c.context, "")) }
+func (c Contribution) Get()       { get(childPath("contributions", c.context, c.id())) }
 func (c Contribution) Create()    { post(c.build(c.context), batchPath(c.context)+"/contributions") }
-func (c Contribution) Delete()    { deleteFromBatch("contributions", c.context, c.id()) }
+func (c Contribution) Delete()    { _delete(childPath("contributions", c.context, c.id())) }
 func (c Contribution) id() string { return getRequiredValue(c.context, "contribution-id") }
 
 //func (c Contribution) Update() { put(buildContributionUpdate(c.context), c.path()) }

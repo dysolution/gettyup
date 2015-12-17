@@ -44,6 +44,10 @@ func DeleteContribution(context *cli.Context) {
 	deleteFromBatch("contributions", context, getContributionID(context))
 }
 
+func DeleteRelease(context *cli.Context) {
+	deleteFromBatch("releases", context, getReleaseID(context))
+}
+
 func CreateRelease(context *cli.Context) {
 	post(buildRelease(context), batchPath(context)+"/releases")
 }

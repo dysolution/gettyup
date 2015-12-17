@@ -202,6 +202,15 @@ func main() {
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
 				},
+				{
+					Name:   "delete",
+					Usage:  "delete an existing Release",
+					Action: func(c *cli.Context) { DeleteRelease(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+						cli.StringFlag{Name: "release-id, r"},
+					},
+				},
 			},
 		},
 		{

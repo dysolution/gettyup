@@ -219,17 +219,17 @@ func main() {
 		{
 			Name:   "controlled_values",
 			Usage:  "lists of values for fields with controlled vocabularies",
-			Action: func(c *cli.Context) { GetControlledValues(c) },
+			Action: func(c *cli.Context) { get(ControlledValues) },
+		},
+		{
+			Name:   "transcoder",
+			Usage:  "video transcoder mapping values",
+			Action: func(c *cli.Context) { get(VideoTranscoderMappingValues) },
 		},
 		{
 			Name:   "keywords",
 			Usage:  "controlled vocabularies for describing Contributions",
 			Action: func(c *cli.Context) { GetKeywords(c) },
-		},
-		{
-			Name:   "transcoder",
-			Usage:  "video transcoder mapping values",
-			Action: func(c *cli.Context) { GetVideoTranscoderMappingValues(c) },
 		},
 		{
 			Name:  "people",
@@ -238,22 +238,22 @@ func main() {
 				{
 					Name:   "compositions",
 					Usage:  "all known values for Compositions",
-					Action: func(c *cli.Context) { GetCompositions(c) },
+					Action: func(c *cli.Context) { get(Compositions) },
 				},
 				{
 					Name:   "expressions",
 					Usage:  "all known values for Expressions",
-					Action: func(c *cli.Context) { GetExpressions(c) },
+					Action: func(c *cli.Context) { get(Expressions) },
 				},
 				{
 					Name:   "number_of_people",
 					Usage:  "all known values for Number Of People",
-					Action: func(c *cli.Context) { GetNumberOfPeople(c) },
+					Action: func(c *cli.Context) { get(NumberOfPeople) },
 				},
 				{
 					Name:   "personalities",
 					Usage:  "controlled vocabularies for describing famous personalities",
-					Action: func(c *cli.Context) { GetPersonalities(c) },
+					Action: func(c *cli.Context) { get(Personalities) },
 				},
 			},
 		},

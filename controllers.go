@@ -20,13 +20,14 @@ const (
 	NumberOfPeople string = "/submission/v1/people_metadata/number_of_people"
 )
 
-func GetCompositions(context *cli.Context)                 { get(Compositions) }
-func GetControlledValues(context *cli.Context)             { get(ControlledValues) }
-func GetExpressions(context *cli.Context)                  { get(Expressions) }
-func GetKeywords(context *cli.Context)                     { get(Keywords) }
-func GetNumberOfPeople(context *cli.Context)               { get(NumberOfPeople) }
-func GetPersonalities(context *cli.Context)                { get(Personalities) }
-func GetVideoTranscoderMappingValues(context *cli.Context) { get(VideoTranscoderMappingValues) }
+func GetKeywords(context *cli.Context) {
+	//TODO: use search input from context
+	get(Keywords)
+}
+func GetPersonalities(context *cli.Context) {
+	//TODO: use search input from context
+	get(Personalities)
+}
 
 // Private
 

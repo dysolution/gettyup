@@ -7,10 +7,29 @@ import (
 
 var uploadBucket string
 
-const BatchesPath string = "/submission/v1/submission_batches"
+const (
+	Batches                      string = "/submission/v1/submission_batches"
+	ControlledValues             string = "/submission/v1/controlled_values/index"
+	Keywords                     string = "/submission/v1/keywords/getty"
+	Personalities                string = "/submission/v1/personalities"
+	VideoTranscoderMappingValues string = "/submission/v1/video_transcoder_mapping_values"
+)
+const (
+	Compositions   string = "/submission/v1/people_metadata/compositions"
+	Expressions    string = "/submission/v1/people_metadata/expressions"
+	NumberOfPeople string = "/submission/v1/people_metadata/number_of_people"
+)
+
+func GetCompositions(context *cli.Context)                 { get(Compositions) }
+func GetControlledValues(context *cli.Context)             { get(ControlledValues) }
+func GetExpressions(context *cli.Context)                  { get(Expressions) }
+func GetKeywords(context *cli.Context)                     { get(Keywords) }
+func GetNumberOfPeople(context *cli.Context)               { get(NumberOfPeople) }
+func GetPersonalities(context *cli.Context)                { get(Personalities) }
+func GetVideoTranscoderMappingValues(context *cli.Context) { get(VideoTranscoderMappingValues) }
 
 func CreateBatch(context *cli.Context) {
-	post(buildBatch(context), BatchesPath)
+	post(buildBatch(context), Batches)
 }
 
 func UpdateBatch(context *cli.Context) {
@@ -41,7 +60,7 @@ func GetContribution(context *cli.Context) {
 }
 
 func GetBatches(context *cli.Context) {
-	get(BatchesPath)
+	get(Batches)
 }
 
 func GetReleases(context *cli.Context) {
@@ -55,7 +74,7 @@ func GetContributions(context *cli.Context) {
 // Private
 
 func batchPath(context *cli.Context) string {
-	return BatchesPath + "/" + getBatchID(context)
+	return Batches + "/" + getBatchID(context)
 }
 
 func getRequiredValue(context *cli.Context, param string) string {

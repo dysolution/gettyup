@@ -29,30 +29,11 @@ func main() {
 	app.Author = "Jordan Peterson"
 	app.Email = "dysolution@gmail.com"
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:  "debug, D",
-			Usage: "enable debug output",
-		},
-		cli.StringFlag{
-			Name:   "key, k",
-			Usage:  "your ESP API key",
-			EnvVar: "ESP_API_KEY",
-		},
-		cli.StringFlag{
-			Name:   "secret",
-			Usage:  "your ESP API secret",
-			EnvVar: "ESP_API_SECRET",
-		},
-		cli.StringFlag{
-			Name:   "username, u",
-			Usage:  "your ESP username",
-			EnvVar: "ESP_USERNAME",
-		},
-		cli.StringFlag{
-			Name:   "password, p",
-			Usage:  "your ESP password",
-			EnvVar: "ESP_PASSWORD",
-		},
+		cli.BoolFlag{Name: "debug, D", Usage: "enable debug output"},
+		cli.StringFlag{Name: "key, k", Usage: "your ESP API key", EnvVar: "ESP_API_KEY"},
+		cli.StringFlag{Name: "secret", Usage: "your ESP API secret", EnvVar: "ESP_API_SECRET"},
+		cli.StringFlag{Name: "username, u", Usage: "your ESP username", EnvVar: "ESP_USERNAME"},
+		cli.StringFlag{Name: "password, p", Usage: "your ESP password", EnvVar: "ESP_PASSWORD"},
 		cli.StringFlag{
 			Name:        "s3-bucket, b",
 			Value:       "oregon",
@@ -62,12 +43,7 @@ func main() {
 		},
 	}
 	app.Before = func(c *cli.Context) error {
-		client = getClient(
-			c.String("key"),
-			c.String("secret"),
-			c.String("username"),
-			c.String("password"),
-		)
+		client = getClient(c.String("key"), c.String("secret"), c.String("username"), c.String("password"))
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
 		}
@@ -89,10 +65,7 @@ func main() {
 					Action: func(c *cli.Context) { CreateBatch(c) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
-						cli.StringFlag{
-							Name:  "submission-type, t",
-							Usage: fmt.Sprintf("[%s]", strings.Join(batchTypes, "|")),
-						},
+						cli.StringFlag{Name: "submission-type, t", Usage: fmt.Sprintf("[%s]", strings.Join(batchTypes, "|"))},
 						cli.StringFlag{Name: "note"},
 						cli.StringFlag{Name: "assignment-id"},
 						cli.StringFlag{Name: "brief-id"},
@@ -197,10 +170,7 @@ func main() {
 						cli.StringFlag{Name: "file-name"},
 						cli.StringFlag{Name: "file-path"},
 						cli.StringFlag{Name: "external-file-location"},
-						cli.StringFlag{
-							Name:  "release-type",
-							Usage: fmt.Sprintf("[%s]", strings.Join(releaseTypes, "|")),
-						},
+						cli.StringFlag{Name: "release-type", Usage: fmt.Sprintf("[%s]", strings.Join(releaseTypes, "|"))},
 						cli.StringFlag{Name: "model-date-of-birth"},
 						cli.StringSliceFlag{Name: "model-ethnicities"},
 						cli.StringFlag{Name: "model-gender"},

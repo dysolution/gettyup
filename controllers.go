@@ -87,7 +87,7 @@ func getFromBatch(children string, context *cli.Context, childID string) {
 }
 
 func get(path string) {
-	response, err := client.Get(path, Token())
+	response, err := client.Request("GET", path, Token(), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -99,7 +99,7 @@ func post(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	response, err := client.Post(serializedObject, Token(), path)
+	response, err := client.Request("POST", path, Token(), serializedObject)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -19,10 +19,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	api "github.com/dysolution/espapi"
 )
-
-var token api.Token
 
 func main() {
 	app := cli.NewApp()
@@ -74,14 +71,13 @@ func main() {
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
 		}
-		token = Token()
 		return nil
 	}
 	app.Commands = []cli.Command{
 		{
 			Name:   "token",
 			Usage:  "retrieve and print an OAuth2 authorization token",
-			Action: func(c *cli.Context) { fmt.Println(token) },
+			Action: func(c *cli.Context) { fmt.Println(Token()) },
 		},
 		{
 			Name:  "batch",

@@ -39,6 +39,11 @@ func UpdateBatch(context *cli.Context) {
 func DeleteBatch(context *cli.Context) {
 	_delete(batchPath(context))
 }
+
+func DeleteContribution(context *cli.Context) {
+	deleteFromBatch("contributions", context, getContributionID(context))
+}
+
 func CreateRelease(context *cli.Context) {
 	post(buildRelease(context), batchPath(context)+"/releases")
 }
@@ -112,6 +117,15 @@ func getFromBatch(children string, context *cli.Context, childID string) {
 	get(path)
 }
 
+func deleteFromBatch(children string, context *cli.Context, childID string) {
+	var path string
+	if childID == "" {
+		path = batchPath(context) + "/" + children
+	} else {
+		path = batchPath(context) + "/" + children + "/" + childID
+	}
+	_delete(path)
+}
 func get(path string) {
 	response, err := client.Request("GET", path, Token(), nil)
 	if err != nil {

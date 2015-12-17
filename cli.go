@@ -155,6 +155,15 @@ func main() {
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
 				},
+				{
+					Name:   "delete",
+					Usage:  "delete an existing Contribution",
+					Action: func(c *cli.Context) { DeleteContribution(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+						cli.StringFlag{Name: "contribution-id, c"},
+					},
+				},
 			},
 		},
 		{

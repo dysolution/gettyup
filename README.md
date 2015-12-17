@@ -43,6 +43,13 @@ gettyup batch create \
   --submission-type getty_creative_video
 ```
 
+## [DELETE submission_batch](https://sandbox.espaws.com/swagger/#!/submission_batches/SubmissionBatches_DestroyBatch)
+Delete an existing Submission Batch.
+
+```
+gettyup batch delete \
+  --submission-batch-id 86101
+```
 
 # Contribution commands
 

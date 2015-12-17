@@ -123,6 +123,14 @@ func main() {
 						cli.StringFlag{Name: "note"},
 					},
 				},
+				{
+					Name:   "delete",
+					Usage:  "delete an existing Submission Batch",
+					Action: func(c *cli.Context) { DeleteBatch(c) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+					},
+				},
 			},
 		},
 		{

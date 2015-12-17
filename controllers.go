@@ -28,58 +28,6 @@ func GetNumberOfPeople(context *cli.Context)               { get(NumberOfPeople)
 func GetPersonalities(context *cli.Context)                { get(Personalities) }
 func GetVideoTranscoderMappingValues(context *cli.Context) { get(VideoTranscoderMappingValues) }
 
-func CreateBatch(context *cli.Context) {
-	post(buildBatch(context), Batches)
-}
-
-func UpdateBatch(context *cli.Context) {
-	put(buildBatchUpdate(context), batchPath(context))
-}
-
-func DeleteBatch(context *cli.Context) {
-	_delete(batchPath(context))
-}
-
-func DeleteContribution(context *cli.Context) {
-	deleteFromBatch("contributions", context, getContributionID(context))
-}
-
-func DeleteRelease(context *cli.Context) {
-	deleteFromBatch("releases", context, getReleaseID(context))
-}
-
-func CreateRelease(context *cli.Context) {
-	post(buildRelease(context), batchPath(context)+"/releases")
-}
-
-func CreateContribution(context *cli.Context) {
-	post(buildContribution(context), batchPath(context)+"/contributions")
-}
-
-func GetBatch(context *cli.Context) {
-	get(batchPath(context))
-}
-
-func GetRelease(context *cli.Context) {
-	getFromBatch("releases", context, getReleaseID(context))
-}
-
-func GetContribution(context *cli.Context) {
-	getFromBatch("contributions", context, getContributionID(context))
-}
-
-func GetBatches(context *cli.Context) {
-	get(Batches)
-}
-
-func GetReleases(context *cli.Context) {
-	getFromBatch("releases", context, "")
-}
-
-func GetContributions(context *cli.Context) {
-	getFromBatch("contributions", context, "")
-}
-
 // Private
 
 func batchPath(context *cli.Context) string {

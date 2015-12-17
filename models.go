@@ -12,6 +12,31 @@ var releaseTypes = models.ReleaseTypes()
 
 var token models.Token
 
+type Batch struct{ context *cli.Context }
+type Release struct{ context *cli.Context }
+type Contribution struct{ context *cli.Context }
+
+func (b Batch) Index()       { get(Batches) }
+func (b Batch) Get()         { get(b.path()) }
+func (b Batch) Create()      { post(buildBatch(b.context), Batches) }
+func (b Batch) Update()      { put(buildBatchUpdate(b.context), b.path()) }
+func (b Batch) Delete()      { _delete(b.path()) }
+func (b Batch) path() string { return Batches + "/" + getBatchID(b.context) }
+func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
+
+func (r Release) Index()     { getFromBatch("releases", r.context, "") }
+func (r Release) Get()       { getFromBatch("releases", r.context, r.id()) }
+func (r Release) Create()    { post(r.build(r.context), batchPath(r.context)+"/releases") }
+func (r Release) Delete()    { deleteFromBatch("releases", r.context, r.id()) }
+func (r Release) id() string { return getRequiredValue(r.context, "release-id") }
+
+func (c Contribution) Index()     { getFromBatch("contributions", c.context, "") }
+func (c Contribution) Get()       { getFromBatch("contributions", c.context, c.id()) }
+func (c Contribution) Create()    { post(c.build(c.context), batchPath(c.context)+"/contributions") }
+func (c Contribution) Delete()    { deleteFromBatch("contributions", c.context, c.id()) }
+func (c Contribution) id() string { return getRequiredValue(c.context, "contribution-id") }
+
+//func (c Contribution) Update() { put(buildContributionUpdate(c.context), c.path()) }
 // Token is a memoizing wrapper for the API's token-providing function.
 func Token() models.Token {
 	if token != "" {
@@ -63,7 +88,7 @@ type Serializable interface {
 	Marshal() ([]byte, error)
 }
 
-func buildRelease(c *cli.Context) models.Release {
+func (release Release) build(c *cli.Context) models.Release {
 	return models.Release{
 		SubmissionBatchId:    c.String("submission-batch-id"),
 		FileName:             c.String("file-name"),
@@ -76,7 +101,7 @@ func buildRelease(c *cli.Context) models.Release {
 	}
 }
 
-func buildContribution(c *cli.Context) models.Contribution {
+func (contribution Contribution) build(c *cli.Context) models.Contribution {
 	return models.Contribution{
 		CameraShotDate:       c.String("camera-shot-date"),
 		CollectionCode:       c.String("collection-code"),

@@ -65,7 +65,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Submission Batch",
-					Action: func(c *cli.Context) { CreateBatch(c) },
+					Action: func(c *cli.Context) { Batch{c}.Create() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
 						cli.StringFlag{Name: "submission-type, t", Usage: fmt.Sprintf("[%s]", strings.Join(batchTypes, "|"))},
@@ -79,7 +79,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Submission Batch",
-					Action: func(c *cli.Context) { GetBatch(c) },
+					Action: func(c *cli.Context) { Batch{c}.Get() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -87,12 +87,12 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Submission Batches",
-					Action: func(c *cli.Context) { GetBatches(c) },
+					Action: func(c *cli.Context) { Batch{c}.Index() },
 				},
 				{
 					Name:   "update",
 					Usage:  "update an existing Submission Batch",
-					Action: func(c *cli.Context) { UpdateBatch(c) },
+					Action: func(c *cli.Context) { Batch{c}.Update() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "submission-name, n"},
@@ -102,7 +102,7 @@ func main() {
 				{
 					Name:   "delete",
 					Usage:  "delete an existing Submission Batch",
-					Action: func(c *cli.Context) { DeleteBatch(c) },
+					Action: func(c *cli.Context) { Batch{c}.Delete() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -116,7 +116,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Contribution within a Submission Batch",
-					Action: func(c *cli.Context) { CreateContribution(c) },
+					Action: func(c *cli.Context) { Contribution{c}.Create() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},
@@ -144,7 +144,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Contribution",
-					Action: func(c *cli.Context) { GetContribution(c) },
+					Action: func(c *cli.Context) { Contribution{c}.Get() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "contribution-id, c"},
@@ -153,7 +153,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Contributions for a Submission Batch",
-					Action: func(c *cli.Context) { GetContributions(c) },
+					Action: func(c *cli.Context) { Contribution{c}.Index() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -161,7 +161,7 @@ func main() {
 				{
 					Name:   "delete",
 					Usage:  "delete an existing Contribution",
-					Action: func(c *cli.Context) { DeleteContribution(c) },
+					Action: func(c *cli.Context) { Contribution{c}.Delete() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "contribution-id, c"},
@@ -176,7 +176,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Release within a Submission Batch",
-					Action: func(c *cli.Context) { CreateRelease(c) },
+					Action: func(c *cli.Context) { Release{c}.Create() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},
@@ -191,7 +191,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Release",
-					Action: func(c *cli.Context) { GetRelease(c) },
+					Action: func(c *cli.Context) { Release{c}.Get() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "release-id, r"},
@@ -200,7 +200,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Releases for a Submission Batch",
-					Action: func(c *cli.Context) { GetReleases(c) },
+					Action: func(c *cli.Context) { Release{c}.Index() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -208,7 +208,7 @@ func main() {
 				{
 					Name:   "delete",
 					Usage:  "delete an existing Release",
-					Action: func(c *cli.Context) { DeleteRelease(c) },
+					Action: func(c *cli.Context) { Release{c}.Delete() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "release-id, r"},

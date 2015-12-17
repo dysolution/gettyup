@@ -224,7 +224,7 @@ func main() {
 		{
 			Name:   "transcoder",
 			Usage:  "video transcoder mapping values",
-			Action: func(c *cli.Context) { get(VideoTranscoderMappingValues) },
+			Action: func(c *cli.Context) { get(TranscoderMappings) },
 		},
 		{
 			Name:   "keywords",

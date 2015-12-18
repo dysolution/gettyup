@@ -54,7 +54,8 @@ func childPath(children string, context *cli.Context, childID string) string {
 }
 
 func get(path string) {
-	response, err := client.Request("GET", path, Token(), nil)
+	params := espsdk.RequestParams{"GET", path, Token(), nil}
+	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,7 +63,8 @@ func get(path string) {
 }
 
 func _delete(path string) {
-	response, err := client.Request("DELETE", path, Token(), nil)
+	params := espsdk.RequestParams{"DELETE", path, Token(), nil}
+	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -74,7 +76,8 @@ func post(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	response, err := client.Request("POST", path, Token(), serializedObject)
+	params := espsdk.RequestParams{"POST", path, Token(), serializedObject}
+	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -86,7 +89,8 @@ func put(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	response, err := client.Request("PUT", path, Token(), serializedObject)
+	params := espsdk.RequestParams{"PUT", path, Token(), serializedObject}
+	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
 	}

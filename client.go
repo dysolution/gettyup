@@ -1,14 +1,14 @@
 package main
 
 import (
-	api "github.com/dysolution/espsdk"
+	sdk "github.com/dysolution/espsdk"
 )
 
-var client api.Client
+var client sdk.Client
 
-func getClient(key, secret, username, password string) api.Client {
-	return api.Client{
-		api.Credentials{
+func getClient(key, secret, username, password string) sdk.Client {
+	return sdk.Client{
+		sdk.Credentials{
 			APIKey:      key,
 			APISecret:   secret,
 			ESPUsername: username,
@@ -18,13 +18,13 @@ func getClient(key, secret, username, password string) api.Client {
 	}
 }
 
-var batchTypes = api.BatchTypes()
-var releaseTypes = api.ReleaseTypes()
+var batchTypes = sdk.BatchTypes()
+var releaseTypes = sdk.ReleaseTypes()
 
-var token api.Token
+var token sdk.Token
 
 // Token is a memoizing wrapper for the API's token-providing function.
-func Token() api.Token {
+func Token() sdk.Token {
 	if token != "" {
 		return token
 	} else {

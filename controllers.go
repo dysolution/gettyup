@@ -3,7 +3,7 @@ package main
 import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	"github.com/dysolution/espsdk"
+	sdk "github.com/dysolution/espsdk"
 )
 
 var uploadBucket string
@@ -53,17 +53,18 @@ func childPath(children string, context *cli.Context, childID string) string {
 	return path
 }
 
-func get(path string) {
-	params := espsdk.RequestParams{"GET", path, Token(), nil}
+func get(path string) []byte {
+	params := sdk.RequestParams{"GET", path, Token(), nil}
 	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
 	}
 	log.Debugf("%s\n", response)
+	return response
 }
 
 func _delete(path string) {
-	params := espsdk.RequestParams{"DELETE", path, Token(), nil}
+	params := sdk.RequestParams{"DELETE", path, Token(), nil}
 	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
@@ -76,7 +77,7 @@ func post(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	params := espsdk.RequestParams{"POST", path, Token(), serializedObject}
+	params := sdk.RequestParams{"POST", path, Token(), serializedObject}
 	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)
@@ -89,7 +90,7 @@ func put(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	params := espsdk.RequestParams{"PUT", path, Token(), serializedObject}
+	params := sdk.RequestParams{"PUT", path, Token(), serializedObject}
 	response, err := client.Request(&params)
 	if err != nil {
 		log.Fatal(err)

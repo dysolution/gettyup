@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	models "github.com/dysolution/espapi"
+	models "github.com/dysolution/espsdk"
 )
 
 type Contribution struct{ context *cli.Context }

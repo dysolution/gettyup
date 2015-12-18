@@ -19,7 +19,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	models "github.com/dysolution/espapi"
+	models "github.com/dysolution/espsdk"
 )
 
 func main() {

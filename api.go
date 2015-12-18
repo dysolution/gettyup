@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "github.com/dysolution/espapi"
+	api "github.com/dysolution/espsdk"
 )
 
 var client api.Client

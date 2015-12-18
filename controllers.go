@@ -58,7 +58,7 @@ func get(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("%s\n", response)
+	log.Debugf("%s\n", response)
 }
 
 func _delete(path string) {
@@ -66,7 +66,7 @@ func _delete(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("%s\n", response)
+	log.Debugf("%s\n", response)
 }
 
 func post(object Serializable, path string) {
@@ -78,7 +78,7 @@ func post(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("%s\n", response)
+	log.Debugf("%s\n", response)
 }
 
 func put(object Serializable, path string) {
@@ -90,5 +90,5 @@ func put(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Infof("%s\n", response)
+	log.Debugf("%s\n", response)
 }

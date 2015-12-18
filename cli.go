@@ -31,6 +31,7 @@ func main() {
 	app.Email = "dysolution@gmail.com"
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{Name: "debug, D", Usage: "enable debug output"},
+		cli.BoolFlag{Name: "quiet, q", Usage: "print only ESP's response"},
 		cli.StringFlag{Name: "key, k", Usage: "your ESP API key", EnvVar: "ESP_API_KEY"},
 		cli.StringFlag{Name: "secret", Usage: "your ESP API secret", EnvVar: "ESP_API_SECRET"},
 		cli.StringFlag{Name: "username, u", Usage: "your ESP username", EnvVar: "ESP_USERNAME"},
@@ -48,6 +49,9 @@ func main() {
 		client = getClient(c.String("key"), c.String("secret"), c.String("username"), c.String("password"))
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
+		}
+		if c.Bool("quiet") == true {
+			log.SetLevel(log.WarnLevel)
 		}
 		token = models.Token(c.String("token"))
 		return nil

@@ -7,12 +7,12 @@ import (
 
 type Release struct{ context *cli.Context }
 
-func (r Release) Index()     { get(childPath("releases", r.context, "")) }
-func (r Release) Get()       { get(childPath("releases", r.context, r.id())) }
-func (r Release) Create()    { post(r.build(r.context), batchPath(r.context)+"/releases") }
-func (r Release) Delete()    { _delete(childPath("releases", r.context, r.id())) }
-func (r Release) id() string { return getRequiredValue(r.context, "release-id") }
-
+func (r Release) Index()       { get(childPath("releases", r.context, "")) }
+func (r Release) Get()         { get(r.path()) }
+func (r Release) Create()      { post(r.build(r.context), batchPath(r.context)+"/releases") }
+func (r Release) Delete()      { _delete(r.path()) }
+func (r Release) id() string   { return getRequiredValue(r.context, "release-id") }
+func (r Release) path() string { return childPath("releases", r.context, r.id()) }
 func (release Release) build(c *cli.Context) sdk.Release {
 	return sdk.Release{
 		SubmissionBatchId:    c.String("submission-batch-id"),

@@ -22,6 +22,9 @@ import (
 	sdk "github.com/dysolution/espsdk"
 )
 
+var releaseTypes = fmt.Sprintf("%s", strings.Join(sdk.Release{}.ValidTypes(), " OR "))
+var batchTypes = fmt.Sprintf("%s", strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "gettyup"
@@ -72,7 +75,7 @@ func main() {
 					Action: func(c *cli.Context) { Batch{c}.Create() },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
-						cli.StringFlag{Name: "submission-type, t", Usage: fmt.Sprintf("%s", strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))},
+						cli.StringFlag{Name: "submission-type, t", Usage: batchTypes},
 						cli.StringFlag{Name: "note"},
 						cli.StringFlag{Name: "assignment-id"},
 						cli.StringFlag{Name: "brief-id"},
@@ -203,7 +206,7 @@ func main() {
 						cli.StringFlag{Name: "file-name"},
 						cli.StringFlag{Name: "file-path"},
 						cli.StringFlag{Name: "external-file-location"},
-						cli.StringFlag{Name: "release-type", Usage: fmt.Sprintf("%s", strings.Join(sdk.Release{}.ValidTypes(), " OR "))},
+						cli.StringFlag{Name: "release-type", Usage: releaseTypes},
 						cli.StringFlag{Name: "model-date-of-birth"},
 						cli.StringSliceFlag{Name: "model-ethnicities"},
 						cli.StringFlag{Name: "model-gender"},

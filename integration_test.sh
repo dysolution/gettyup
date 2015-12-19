@@ -2,7 +2,9 @@
 
 set -e
 
-CMD="go run *.go ${@}"
+#CMD="go run *.go ${@}"
+go install
+CMD="gettyup ${@}"
 TOKEN=$($CMD token)  # retrieve and cache a token
 
 GES_BATCH_ID=86102  # a Getty Editorial Still (Image) batch
@@ -14,10 +16,6 @@ CREATE_BATCH=( \
     --submission-name "My Creative Videos" \
     --submission-type getty_creative_video \
 )
-
-INDEX_BATCHES=($CMD --token=$TOKEN batch index)
-
-GET_BATCH=($CMD --token=$TOKEN batch get --submission-batch-id $GES_BATCH_ID)
 
 CREATE_CONTRIBUTION=( \
   $CMD ${@} --token=$TOKEN contribution create \
@@ -35,17 +33,6 @@ CREATE_CONTRIBUTION=( \
     --source=AFP \
 )
 
-INDEX_CONTRIBUTIONS=( \
-  $CMD --token=$TOKEN contribution index \
-    --submission-batch-id $GES_BATCH_ID \
-)
-
-GET_CONTRIBUTION=( \
-  $CMD --token=$TOKEN contribution get \
-    --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124128 \
-)
-
 CREATE_RELEASE=( \
   $CMD --token=$TOKEN release create \
     --submission-batch-id $GCV_BATCH_ID \
@@ -54,15 +41,18 @@ CREATE_RELEASE=( \
     --file-path some/s3/path \
 )
 
+GET_BATCH=($CMD --token=$TOKEN batch get --submission-batch-id $GES_BATCH_ID)
+
+GET_CONTRIBUTION=( \
+  $CMD --token=$TOKEN contribution get \
+    --submission-batch-id $GES_BATCH_ID \
+    --contribution-id 1124128 \
+)
+
 GET_RELEASE=( \
   $CMD --token=$TOKEN release get \
     --submission-batch-id $GCV_BATCH_ID \
     --release-id 39658 \
-)
-
-INDEX_RELEASES=( \
-  $CMD --token=$TOKEN release index \
-    --submission-batch-id $GCV_BATCH_ID \
 )
 
 UPDATE_BATCH=( \
@@ -79,6 +69,25 @@ UPDATE_CONTRIBUTION=( \
     --headline="another photo" \
 )
 
+UPDATE_RELEASE=( \
+  $CMD ${@} --token=$TOKEN release update \
+    --submission-batch-id $GCV_BATCH_ID \
+    --release-id 39658 \
+    --note "new release note" \
+)
+
+INDEX_BATCHES=($CMD --token=$TOKEN batch index)
+
+INDEX_CONTRIBUTIONS=( \
+  $CMD --token=$TOKEN contribution index \
+    --submission-batch-id $GES_BATCH_ID \
+)
+
+INDEX_RELEASES=( \
+  $CMD --token=$TOKEN release index \
+    --submission-batch-id $GCV_BATCH_ID \
+)
+
 DELETE_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution delete \
     --submission-batch-id $GES_BATCH_ID \
@@ -91,9 +100,11 @@ DELETE_CONTRIBUTION=( \
 
 "${UPDATE_BATCH[@]}"
 "${UPDATE_CONTRIBUTION[@]}"
+"${UPDATE_RELEASE[@]}"
 
 "${GET_BATCH[@]}"
 "${GET_CONTRIBUTION[@]}"
+"${GET_RELEASE[@]}"
 
 "${INDEX_BATCHES[@]}"
 "${INDEX_CONTRIBUTIONS[@]}"

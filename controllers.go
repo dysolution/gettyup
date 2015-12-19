@@ -55,21 +55,21 @@ func childPath(children string, context *cli.Context, childID string) string {
 
 func get(path string) []byte {
 	params := sdk.RequestParams{"GET", path, Token(), nil}
-	response, err := client.Request(&params)
-	if err != nil {
-		log.Fatal(err)
+	result := client.Request(&params)
+	if result.Err != nil {
+		log.Fatal(result.Err)
 	}
-	log.Debugf("%s\n", response)
-	return response
+	log.Debugf("%s\n", result.Payload)
+	return result.Payload
 }
 
 func _delete(path string) {
 	params := sdk.RequestParams{"DELETE", path, Token(), nil}
-	response, err := client.Request(&params)
-	if err != nil {
-		log.Fatal(err)
+	result := client.Request(&params)
+	if result.Err != nil {
+		log.Fatal(result.Err)
 	}
-	log.Debugf("%s\n", response)
+	log.Debugf("%s\n", result.Payload)
 }
 
 func post(object Serializable, path string) {
@@ -78,11 +78,11 @@ func post(object Serializable, path string) {
 		log.Fatal(err)
 	}
 	params := sdk.RequestParams{"POST", path, Token(), serializedObject}
-	response, err := client.Request(&params)
-	if err != nil {
-		log.Fatal(err)
+	result := client.Request(&params)
+	if result.Err != nil {
+		log.Fatal(result.Err)
 	}
-	log.Debugf("%s\n", response)
+	log.Debugf("%s\n", result.Payload)
 }
 
 func put(object Serializable, path string) {
@@ -91,9 +91,9 @@ func put(object Serializable, path string) {
 		log.Fatal(err)
 	}
 	params := sdk.RequestParams{"PUT", path, Token(), serializedObject}
-	response, err := client.Request(&params)
-	if err != nil {
-		log.Fatal(err)
+	result := client.Request(&params)
+	if result.Err != nil {
+		log.Fatal(result.Err)
 	}
-	log.Debugf("%s\n", response)
+	log.Debugf("%s\n", result.Payload)
 }

@@ -19,7 +19,7 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	models "github.com/dysolution/espsdk"
+	sdk "github.com/dysolution/espsdk"
 )
 
 func main() {
@@ -53,7 +53,7 @@ func main() {
 		if c.Bool("quiet") == true {
 			log.SetLevel(log.WarnLevel)
 		}
-		token = models.Token(c.String("token"))
+		token = sdk.Token(c.String("token"))
 		return nil
 	}
 	app.Commands = []cli.Command{

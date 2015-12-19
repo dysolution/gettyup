@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	models "github.com/dysolution/espsdk"
+	sdk "github.com/dysolution/espsdk"
 )
 
 type Contribution struct{ context *cli.Context }
@@ -15,8 +15,8 @@ func (c Contribution) id() string { return getRequiredValue(c.context, "contribu
 
 //func (c Contribution) Update() { put(buildContributionUpdate(c.context), c.path()) }
 
-func (contribution Contribution) build(c *cli.Context) models.Contribution {
-	return models.Contribution{
+func (contribution Contribution) build(c *cli.Context) sdk.Contribution {
+	return sdk.Contribution{
 		CameraShotDate:       c.String("camera-shot-date"),
 		CollectionCode:       c.String("collection-code"),
 		ContentProviderName:  c.String("content-provider-name"),

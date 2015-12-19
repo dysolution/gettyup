@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	models "github.com/dysolution/espsdk"
+	sdk "github.com/dysolution/espsdk"
 )
 
 type Release struct{ context *cli.Context }
@@ -13,8 +13,8 @@ func (r Release) Create()    { post(r.build(r.context), batchPath(r.context)+"/r
 func (r Release) Delete()    { _delete(childPath("releases", r.context, r.id())) }
 func (r Release) id() string { return getRequiredValue(r.context, "release-id") }
 
-func (release Release) build(c *cli.Context) models.Release {
-	return models.Release{
+func (release Release) build(c *cli.Context) sdk.Release {
+	return sdk.Release{
 		SubmissionBatchId:    c.String("submission-batch-id"),
 		FileName:             c.String("file-name"),
 		FilePath:             c.String("file-path"),

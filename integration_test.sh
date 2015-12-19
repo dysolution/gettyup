@@ -45,3 +45,6 @@ gettyup ${@} --token=$TOKEN release create \
 gettyup ${@} --token=$TOKEN release get \
   --submission-batch-id $GCV_BATCH_ID \
   --release-id 39658
+
+gettyup ${@} --token=$TOKEN release index \
+  --submission-batch-id $GCV_BATCH_ID \

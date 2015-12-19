@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/codegangsta/cli"
-	models "github.com/dysolution/espsdk"
+	sdk "github.com/dysolution/espsdk"
 )
 
 type Batch struct{ context *cli.Context }
@@ -15,8 +15,8 @@ func (b Batch) Delete()      { _delete(b.path()) }
 func (b Batch) path() string { return Batches + "/" + getBatchID(b.context) }
 func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
 
-func (b Batch) build(c *cli.Context) models.SubmissionBatch {
-	return models.SubmissionBatch{
+func (b Batch) build(c *cli.Context) sdk.SubmissionBatch {
+	return sdk.SubmissionBatch{
 		SubmissionName:        c.String("submission-name"),
 		SubmissionType:        c.String("submission-type"),
 		Note:                  c.String("note"),
@@ -27,9 +27,9 @@ func (b Batch) build(c *cli.Context) models.SubmissionBatch {
 	}
 }
 
-func (b Batch) buildUpdate() models.SubmissionBatchUpdate {
-	return models.SubmissionBatchUpdate{
-		models.SubmissionBatchChanges{
+func (b Batch) buildUpdate() sdk.SubmissionBatchUpdate {
+	return sdk.SubmissionBatchUpdate{
+		sdk.SubmissionBatchChanges{
 			SubmissionName: b.context.String("submission-name"),
 			Note:           b.context.String("note"),
 		},

@@ -81,9 +81,16 @@ func main() {
 					},
 				},
 				{
-					Name:   "get",
-					Usage:  "get a specific Submission Batch",
-					Action: func(c *cli.Context) { Batch{c}.Get() },
+					Name:  "get",
+					Usage: "get a specific Submission Batch",
+					Action: func(c *cli.Context) {
+						batch := Batch{c}.Get()
+						prettyOutput, err := batch.Marshal()
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Printf("%s\n", prettyOutput)
+					},
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},

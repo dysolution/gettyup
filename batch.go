@@ -31,9 +31,9 @@ func (b Batch) build(c *cli.Context) sdk.SubmissionBatch {
 		SubmissionName:        c.String("submission-name"),
 		SubmissionType:        c.String("submission-type"),
 		Note:                  c.String("note"),
-		AssignmentId:          c.String("assignment-id"),
-		BriefId:               c.String("brief-id"),
-		EventId:               c.String("event-id"),
+		AssignmentID:          c.String("assignment-id"),
+		BriefID:               c.String("brief-id"),
+		EventID:               c.String("event-id"),
 		SaveExtractedMetadata: c.Bool("save-extracted-metadata"),
 	}
 }

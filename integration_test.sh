@@ -65,12 +65,38 @@ INDEX_RELEASES=( \
     --submission-batch-id $GCV_BATCH_ID \
 )
 
+UPDATE_BATCH=( \
+  $CMD ${@} --token=$TOKEN batch update \
+    --submission-batch-id $GCV_BATCH_ID \
+    --submission-name "My Creative Videos" \
+    --note "new note" \
+)
+
+UPDATE_CONTRIBUTION=( \
+  $CMD ${@} --token=$TOKEN contribution update \
+    --submission-batch-id $GES_BATCH_ID \
+    --contribution-id 1124128
+    --headline="another photo" \
+)
+
+DELETE_CONTRIBUTION=( \
+  $CMD --token=$TOKEN contribution delete \
+    --submission-batch-id $GES_BATCH_ID \
+    --contribution-id 1124219
+)
+
 "${CREATE_BATCH[@]}"
 "${CREATE_CONTRIBUTION[@]}"
 "${CREATE_RELEASE[@]}"
 
+"${UPDATE_BATCH[@]}"
+"${UPDATE_CONTRIBUTION[@]}"
+
+"${GET_BATCH[@]}"
 "${GET_CONTRIBUTION[@]}"
 
 "${INDEX_BATCHES[@]}"
 "${INDEX_CONTRIBUTIONS[@]}"
 "${INDEX_RELEASES[@]}"
+
+"${DELETE_CONTRIBUTION[@]}"

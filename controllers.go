@@ -69,6 +69,10 @@ func get(path string) []byte {
 }
 
 func _delete(path string) {
+	// serializedObject, err := object.Marshal()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 	params := sdk.RequestParams{"DELETE", path, Token(), nil}
 	result := client.Request(&params)
 	if result.Err != nil {

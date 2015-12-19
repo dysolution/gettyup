@@ -7,13 +7,13 @@ import (
 
 type Contribution struct{ context *cli.Context }
 
-func (c Contribution) Index()     { get(childPath("contributions", c.context, "")) }
-func (c Contribution) Get()       { get(childPath("contributions", c.context, c.id())) }
-func (c Contribution) Create()    { post(c.build(c.context), batchPath(c.context)+"/contributions") }
-func (c Contribution) Delete()    { _delete(childPath("contributions", c.context, c.id())) }
-func (c Contribution) id() string { return getRequiredValue(c.context, "contribution-id") }
-
-//func (c Contribution) Update() { put(buildContributionUpdate(c.context), c.path()) }
+func (c Contribution) Index()       { get(childPath("contributions", c.context, "")) }
+func (c Contribution) Get()         { c.path() }
+func (c Contribution) Create()      { post(c.build(c.context), batchPath(c.context)+"/contributions") }
+func (c Contribution) Update()      { put(c.buildUpdate(), c.path()) }
+func (c Contribution) Delete()      { _delete(c.path()) }
+func (c Contribution) path() string { return string(childPath("contributions", c.context, c.id())) }
+func (c Contribution) id() string   { return getRequiredValue(c.context, "contribution-id") }
 
 func (contribution Contribution) build(c *cli.Context) sdk.Contribution {
 	return sdk.Contribution{
@@ -38,5 +38,13 @@ func (contribution Contribution) build(c *cli.Context) sdk.Contribution {
 		SubmittedToReviewAt:  c.String("submitted-to-review-at"),
 		UploadBucket:         uploadBucket,
 		UploadId:             c.String("upload-id"),
+	}
+}
+
+func (c Contribution) buildUpdate() sdk.ContributionUpdate {
+	return sdk.ContributionUpdate{
+		sdk.Contribution{
+			Headline: c.context.String("headline"),
+		},
 	}
 }

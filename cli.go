@@ -170,6 +170,16 @@ func main() {
 					},
 				},
 				{
+					Name:   "update",
+					Usage:  "update an existing Contribution",
+					Action: func(c *cli.Context) { Contribution{c}.Update() },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "submission-batch-id, b"},
+						cli.StringFlag{Name: "contribution-id, c"},
+						cli.StringFlag{Name: "headline"},
+					},
+				},
+				{
 					Name:   "delete",
 					Usage:  "delete an existing Contribution",
 					Action: func(c *cli.Context) { Contribution{c}.Delete() },

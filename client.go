@@ -18,9 +18,6 @@ func getClient(key, secret, username, password string) sdk.Client {
 	}
 }
 
-var batchTypes = sdk.BatchTypes()
-var releaseTypes = sdk.ReleaseTypes()
-
 var token sdk.Token
 
 // Token is a memoizing wrapper for the API's token-providing function.

@@ -59,6 +59,11 @@ func get(path string) []byte {
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
+	stats, err := result.Marshal()
+	if err != nil {
+		log.Fatal(result.Err)
+	}
+	log.Info(string(stats))
 	log.Debugf("%s\n", result.Payload)
 	return result.Payload
 }
@@ -69,6 +74,12 @@ func _delete(path string) {
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
+
+	stats, err := result.Marshal()
+	if err != nil {
+		log.Fatal(result.Err)
+	}
+	log.Info(string(stats))
 	log.Debugf("%s\n", result.Payload)
 }
 
@@ -77,11 +88,18 @@ func post(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	params := sdk.RequestParams{"POST", path, Token(), serializedObject}
 	result := client.Request(&params)
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
+
+	stats, err := result.Marshal()
+	if err != nil {
+		log.Fatal(result.Err)
+	}
+	log.Info(string(stats))
 	log.Debugf("%s\n", result.Payload)
 }
 
@@ -90,10 +108,17 @@ func put(object Serializable, path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	params := sdk.RequestParams{"PUT", path, Token(), serializedObject}
 	result := client.Request(&params)
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
+
+	stats, err := result.Marshal()
+	if err != nil {
+		log.Fatal(result.Err)
+	}
+	log.Info(string(stats))
 	log.Debugf("%s\n", result.Payload)
 }

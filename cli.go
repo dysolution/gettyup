@@ -213,9 +213,16 @@ func main() {
 					},
 				},
 				{
-					Name:   "get",
-					Usage:  "get a specific Release",
-					Action: func(c *cli.Context) { Release{c}.Get() },
+					Name:  "get",
+					Usage: "get a specific Release",
+					Action: func(c *cli.Context) {
+						release := Release{c}.Get()
+						prettyOutput, err := release.Marshal()
+						if err != nil {
+							log.Fatal(err)
+						}
+						fmt.Printf("%s\n", prettyOutput)
+					},
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "release-id, r"},

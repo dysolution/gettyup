@@ -5,6 +5,11 @@ import (
 )
 
 var client sdk.Client
+var token sdk.Token
+
+type Serializable interface {
+	Marshal() ([]byte, error)
+}
 
 func getClient(key, secret, username, password string) sdk.Client {
 	return sdk.Client{
@@ -18,8 +23,6 @@ func getClient(key, secret, username, password string) sdk.Client {
 	}
 }
 
-var token sdk.Token
-
 // Token is a memoizing wrapper for the API's token-providing function.
 func Token() sdk.Token {
 	if token != "" {
@@ -28,8 +31,4 @@ func Token() sdk.Token {
 		token = client.GetToken()
 		return token
 	}
-}
-
-type Serializable interface {
-	Marshal() ([]byte, error)
 }

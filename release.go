@@ -1,13 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
+
+// A ReleaseList contains zero or more Releases.
+type ReleaseList []Release
+
+func (rl ReleaseList) Unmarshal(payload []byte) sdk.ReleaseList {
+	return sdk.ReleaseList{}.Unmarshal(payload)
+}
 
 var releaseTypes = string(strings.Join(sdk.Release{}.ValidTypes(), " OR "))
 
@@ -18,7 +23,9 @@ type Release struct{ context *cli.Context }
 
 // Index requests a list of all Releases associated with the specified
 // Submission Batch.
-func (r Release) Index() { get(childPath("releases", r.context, "")) }
+func (r Release) Index() sdk.ReleaseList {
+	return ReleaseList{}.Unmarshal(get(childPath("releases", r.context, "")))
+}
 
 // Get requests the metadata for a specific Release.
 func (r Release) Get() sdk.Release { return r.Unmarshal(r.get()) }
@@ -47,12 +54,7 @@ func (r Release) build() sdk.Release {
 	}
 }
 
-// Unmarshal attempts to deserialize the provided JSON payload into a
-// Release object as defined by the SDK.
+// Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
 func (r Release) Unmarshal(payload []byte) sdk.Release {
-	var release sdk.Release
-	if err := json.Unmarshal(payload, &release); err != nil {
-		log.Fatal(err)
-	}
-	return release
+	return sdk.Release{}.Unmarshal(payload)
 }

@@ -243,7 +243,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Releases for a Submission Batch",
-					Action: func(c *cli.Context) { Release{c}.Index() },
+					Action: func(c *cli.Context) { prettyPrint(c, Release{c}.Index()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},

@@ -82,7 +82,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Submission Batch",
-					Action: func(c *cli.Context) { Batch{c}.Create() },
+					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Create()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
 						cli.StringFlag{Name: "submission-type, t", Usage: batchTypes},
@@ -109,7 +109,7 @@ func main() {
 				{
 					Name:   "update",
 					Usage:  "update an existing Submission Batch",
-					Action: func(c *cli.Context) { Batch{c}.Update() },
+					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Update()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "submission-name, n"},
@@ -133,7 +133,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Contribution within a Submission Batch",
-					Action: func(c *cli.Context) { Contribution{c}.Create() },
+					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Create()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},
@@ -178,7 +178,7 @@ func main() {
 				{
 					Name:   "update",
 					Usage:  "update an existing Contribution",
-					Action: func(c *cli.Context) { Contribution{c}.Update() },
+					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Update()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "contribution-id, c"},
@@ -203,7 +203,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Release within a Submission Batch",
-					Action: func(c *cli.Context) { Release{c}.Create() },
+					Action: func(c *cli.Context) { prettyPrint(c, Release{c}.Create()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "file-name"},

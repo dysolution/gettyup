@@ -87,7 +87,7 @@ func _delete(path string) {
 	log.Debugf("%s\n", result.Payload)
 }
 
-func post(object Serializable, path string) {
+func post(object Serializable, path string) []byte {
 	serializedObject, err := object.Marshal()
 	if err != nil {
 		log.Fatal(err)
@@ -105,9 +105,10 @@ func post(object Serializable, path string) {
 	}
 	log.Info(string(stats))
 	log.Debugf("%s\n", result.Payload)
+	return result.Payload
 }
 
-func put(object Serializable, path string) {
+func put(object Serializable, path string) []byte {
 	serializedObject, err := object.Marshal()
 	if err != nil {
 		log.Fatal(err)
@@ -125,4 +126,5 @@ func put(object Serializable, path string) {
 	}
 	log.Info(string(stats))
 	log.Debugf("%s\n", result.Payload)
+	return result.Payload
 }

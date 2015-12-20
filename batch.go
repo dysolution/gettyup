@@ -10,11 +10,11 @@ import (
 
 type Batch struct{ context *cli.Context }
 
-func (b Batch) Index()                   { get(Batches) }
-func (b Batch) Get() sdk.SubmissionBatch { return b.Unmarshal(get(b.path())) }
-func (b Batch) Create()                  { post(b.build(b.context), Batches) }
-func (b Batch) Update()                  { put(b.buildUpdate(), b.path()) }
-func (b Batch) Delete()                  { _delete(b.path()) }
+func (b Batch) Index()                      { get(Batches) }
+func (b Batch) Get() sdk.SubmissionBatch    { return b.Unmarshal(get(b.path())) }
+func (b Batch) Create() sdk.SubmissionBatch { return b.Unmarshal(post(b.build(b.context), Batches)) }
+func (b Batch) Update() sdk.SubmissionBatch { return b.Unmarshal(put(b.buildUpdate(), b.path())) }
+func (b Batch) Delete()                     { _delete(b.path()) }
 
 func (b Batch) path() string { return Batches + "/" + getBatchID(b.context) }
 func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }

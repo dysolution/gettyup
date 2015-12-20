@@ -8,6 +8,7 @@ var client sdk.Client
 var quiet bool
 var token sdk.Token
 
+// Serializable objects can be Marshaled into JSON.
 type Serializable interface {
 	Marshal() ([]byte, error)
 }
@@ -28,8 +29,7 @@ func getClient(key, secret, username, password string) sdk.Client {
 func Token() sdk.Token {
 	if token != "" {
 		return token
-	} else {
-		token = client.GetToken()
-		return token
 	}
+	token = client.GetToken()
+	return token
 }

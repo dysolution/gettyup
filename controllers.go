@@ -8,10 +8,15 @@ import (
 
 var uploadBucket string
 
+// GetKeywords requests suggestions from the Getty controlled vocabulary
+// for the keywords provided.
 func GetKeywords(context *cli.Context) {
 	//TODO: use search input from context
 	get(Keywords)
 }
+
+// GetPersonalities requests suggestions from the Getty controlled vocabulary
+// for the famous personalities provided.
 func GetPersonalities(context *cli.Context) {
 	//TODO: use search input from context
 	get(Personalities)

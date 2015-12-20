@@ -2,48 +2,59 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
 
+// A Contribution wraps the verbs provided by the ESP API for Contributions,
+// media assets that are associated with a Submission Batch.
 type Contribution struct{ context *cli.Context }
 
-func (c Contribution) Index()                { get(childPath("contributions", c.context, "")) }
+// Index requests a list of all Contributions associated with the specified
+// Submission Batch.
+func (c Contribution) Index() { get(childPath("contributions", c.context, "")) }
+
+// Get requests the metadata for a specific Contribution.
 func (c Contribution) Get() sdk.Contribution { return c.Unmarshal(get(c.path())) }
+
+// Create associates a new Contribution with the specified Submission Batch.
 func (c Contribution) Create() sdk.Contribution {
 	return c.Unmarshal(post(c.build(c.context), batchPath(c.context)+"/contributions"))
 }
-func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(put(c.buildUpdate(), c.path())) }
-func (c Contribution) Delete()                  { _delete(c.path()) }
-func (c Contribution) path() string             { return string(childPath("contributions", c.context, c.id())) }
-func (c Contribution) id() string               { return getRequiredValue(c.context, "contribution-id") }
 
-func (contribution Contribution) build(c *cli.Context) sdk.Contribution {
+// Update changes metadata for an existing Contribution.
+func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(put(c.buildUpdate(), c.path())) }
+
+// Delete destroys a specific Contribution.
+func (c Contribution) Delete()      { _delete(c.path()) }
+func (c Contribution) path() string { return string(childPath("contributions", c.context, c.id())) }
+func (c Contribution) id() string   { return getRequiredValue(c.context, "contribution-id") }
+
+func (c Contribution) build(context *cli.Context) sdk.Contribution {
 	return sdk.Contribution{
-		CameraShotDate:       c.String("camera-shot-date"),
-		CollectionCode:       c.String("collection-code"),
-		ContentProviderName:  c.String("content-provider-name"),
-		ContentProviderTitle: c.String("content-provider-title"),
-		CountryOfShoot:       c.String("country-of-shoot"),
-		CreditLine:           c.String("credit-line"),
-		ExternalFileLocation: c.String("external-file-location"),
-		FileName:             c.String("file-name"),
-		FilePath:             c.String("file-path"),
-		Headline:             c.String("headline"),
-		IptcCategory:         c.String("iptc-category"),
-		MimeType:             c.String("mime-type"),
-		ParentSource:         c.String("parent-source"),
-		RecordedDate:         c.String("recorded-date"),
-		RiskCategory:         c.String("risk-category"),
-		ShotSpeed:            c.String("shot-speed"),
-		SiteDestination:      c.StringSlice("site-destination"),
-		Source:               c.String("source"),
-		SubmittedToReviewAt:  c.String("submitted-to-review-at"),
+		CameraShotDate:       context.String("camera-shot-date"),
+		CollectionCode:       context.String("collection-code"),
+		ContentProviderName:  context.String("content-provider-name"),
+		ContentProviderTitle: context.String("content-provider-title"),
+		CountryOfShoot:       context.String("country-of-shoot"),
+		CreditLine:           context.String("credit-line"),
+		ExternalFileLocation: context.String("external-file-location"),
+		FileName:             context.String("file-name"),
+		FilePath:             context.String("file-path"),
+		Headline:             context.String("headline"),
+		IptcCategory:         context.String("iptc-category"),
+		MimeType:             context.String("mime-type"),
+		ParentSource:         context.String("parent-source"),
+		RecordedDate:         context.String("recorded-date"),
+		RiskCategory:         context.String("risk-category"),
+		ShotSpeed:            context.String("shot-speed"),
+		SiteDestination:      context.StringSlice("site-destination"),
+		Source:               context.String("source"),
+		SubmittedToReviewAt:  context.String("submitted-to-review-at"),
 		UploadBucket:         uploadBucket,
-		UploadId:             c.String("upload-id"),
+		UploadId:             context.String("upload-id"),
 	}
 }
 
@@ -55,18 +66,12 @@ func (c Contribution) buildUpdate() sdk.ContributionUpdate {
 	}
 }
 
+// Unmarshal attempts to deserialize the provided JSON payload into a
+// Contribution object as defined by the SDK.
 func (c Contribution) Unmarshal(payload []byte) sdk.Contribution {
 	var contribution sdk.Contribution
 	if err := json.Unmarshal(payload, &contribution); err != nil {
 		log.Fatal(err)
 	}
 	return contribution
-}
-
-func (c Contribution) PrettyPrint() string {
-	prettyOutput, err := c.Get().Marshal()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return fmt.Sprintf("%s\n", prettyOutput)
 }

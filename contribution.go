@@ -67,7 +67,7 @@ func (c Contribution) build() sdk.Contribution {
 		SubmissionBatchID:    c.context.Int("submission-batch-id"),
 		SubmittedToReviewAt:  c.context.String("submitted-to-review-at"),
 		UploadBucket:         uploadBucket,
-		UploadId:             c.context.String("upload-id"),
+		UploadID:             c.context.String("upload-id"),
 	}
 }
 

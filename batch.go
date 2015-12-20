@@ -9,9 +9,6 @@ import (
 
 var batchTypes = string(strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
 
-// A BatchList contains zero or more Releases.
-type BatchList []Batch
-
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
 type Batch struct{ context *cli.Context }
 

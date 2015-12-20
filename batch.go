@@ -16,7 +16,7 @@ type Batch struct{ context *cli.Context }
 func (b Batch) Index() sdk.BatchListContainer { return sdk.BatchListContainer{}.Unmarshal(get(Batches)) }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() sdk.Batch { return sdk.Batch{ID: b.id()}.Get(&client) }
+func (b Batch) Get() sdk.Batch { return batch(b.id()).Get(&client) }
 
 // Create adds a new Submission Batch.
 func (b Batch) Create() sdk.Batch { return b.Unmarshal(b.post()) }
@@ -25,7 +25,7 @@ func (b Batch) Create() sdk.Batch { return b.Unmarshal(b.post()) }
 func (b Batch) Update() sdk.Batch { return b.Unmarshal(b.put()) }
 
 // Delete destroys a specific Submission Batch.
-func (b Batch) Delete() { sdk.Batch{ID: b.id()}.Delete(&client) }
+func (b Batch) Delete() { batch(b.id()).Delete(&client) }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
 func (b Batch) Unmarshal(payload []byte) sdk.Batch {
@@ -33,7 +33,7 @@ func (b Batch) Unmarshal(payload []byte) sdk.Batch {
 }
 
 func (b Batch) id() int      { return getBatchID(b.context) }
-func (b Batch) path() string { return sdk.BatchPath(&sdk.Batch{ID: b.id()}) }
+func (b Batch) path() string { return sdk.BatchPath(batch(b.id())) }
 func (b Batch) get() []byte  { return get(b.path()) }
 func (b Batch) post() []byte { return post(b.build(), Batches) }
 func (b Batch) put() []byte  { return put(b.buildUpdate(), b.path()) }

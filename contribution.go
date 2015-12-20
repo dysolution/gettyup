@@ -13,8 +13,6 @@ func (cl ContributionList) Unmarshal(payload []byte) sdk.ContributionList {
 	return sdk.ContributionList{}.Unmarshal(payload)
 }
 
-func contribution(id int) sdk.Contribution { return sdk.Contribution{ID: id} }
-
 // A Contribution wraps the verbs provided by the ESP API for Contributions,
 // media assets that are associated with a Submission Batch.
 type Contribution struct{ context *cli.Context }

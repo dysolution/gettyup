@@ -17,8 +17,6 @@ func (rl ReleaseList) Unmarshal(payload []byte) sdk.ReleaseList {
 
 var releaseTypes = string(strings.Join(sdk.Release{}.ValidTypes(), " OR "))
 
-func release(id int) sdk.Release { return sdk.Release{ID: id} }
-
 // A Release wraps the verbs provided by the ESP API for Releases,
 // legal agreements for property owners or models to be associated
 // with Submission Batches.

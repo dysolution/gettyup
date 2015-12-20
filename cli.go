@@ -101,7 +101,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Submission Batches",
-					Action: func(c *cli.Context) { Batch{c}.Index() },
+					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Index()) },
 				},
 				{
 					Name:   "update",
@@ -167,7 +167,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Contributions for a Submission Batch",
-					Action: func(c *cli.Context) { Contribution{c}.Index() },
+					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Index()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},

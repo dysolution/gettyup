@@ -1,21 +1,21 @@
 package main
 
 import (
-	"encoding/json"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
 
 var batchTypes = string(strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
 
+type BatchList []Batch
+
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
 type Batch struct{ context *cli.Context }
 
 // Index requests a list of all Submission Batches belonging to the user.
-func (b Batch) Index() { get(Batches) }
+func (b Batch) Index() sdk.BatchListContainer { return sdk.BatchListContainer{}.Unmarshal(get(Batches)) }
 
 // Get requests the metadata for a specific Submission Batch.
 func (b Batch) Get() sdk.SubmissionBatch { return b.Unmarshal(b.get()) }
@@ -31,11 +31,7 @@ func (b Batch) Delete() { _delete(b.path()) }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
 func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
-	var batch sdk.SubmissionBatch
-	if err := json.Unmarshal(payload, &batch); err != nil {
-		log.Fatal(err)
-	}
-	return batch
+	return sdk.SubmissionBatch{}.Unmarshal(payload)
 }
 
 func (b Batch) path() string { return Batches + "/" + b.id() }

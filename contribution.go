@@ -1,12 +1,16 @@
 package main
 
 import (
-	"encoding/json"
-	"log"
-
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
+
+// A ContributionList contains zero or more Contribtions.
+type ContributionList []Contribution
+
+func (cl ContributionList) Unmarshal(payload []byte) sdk.ContributionList {
+	return sdk.ContributionList{}.Unmarshal(payload)
+}
 
 // A Contribution wraps the verbs provided by the ESP API for Contributions,
 // media assets that are associated with a Submission Batch.
@@ -14,7 +18,9 @@ type Contribution struct{ context *cli.Context }
 
 // Index requests a list of all Contributions associated with the specified
 // Submission Batch.
-func (c Contribution) Index() { get(childPath("contributions", c.context, "")) }
+func (c Contribution) Index() sdk.ContributionList {
+	return ContributionList{}.Unmarshal(get(childPath("contributions", c.context, "")))
+}
 
 // Get requests the metadata for a specific Contribution.
 func (c Contribution) Get() sdk.Contribution { return c.Unmarshal(c.get()) }
@@ -67,12 +73,6 @@ func (c Contribution) buildUpdate() sdk.ContributionUpdate {
 	return sdk.ContributionUpdate{c.build()}
 }
 
-// Unmarshal attempts to deserialize the provided JSON payload into a
-// Contribution object as defined by the SDK.
 func (c Contribution) Unmarshal(payload []byte) sdk.Contribution {
-	var contribution sdk.Contribution
-	if err := json.Unmarshal(payload, &contribution); err != nil {
-		log.Fatal(err)
-	}
-	return contribution
+	return sdk.Contribution{}.Unmarshal(payload)
 }

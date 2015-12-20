@@ -151,7 +151,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Contribution",
-					Action: func(c *cli.Context) { Contribution{c}.Get() },
+					Action: func(c *cli.Context) { fmt.Println(Contribution{c}.PrettyPrint()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "contribution-id, c"},

@@ -68,6 +68,7 @@ UPDATE_CONTRIBUTION=( \
     --submission-batch-id $GES_BATCH_ID \
     --contribution-id 1124128
     --headline="another photo" \
+    --country-of-shoot="Canada" \
 )
 
 INDEX_BATCHES=($CMD --token=$TOKEN batch index)

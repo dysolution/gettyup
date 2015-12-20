@@ -18,28 +18,29 @@ type Release struct{ context *cli.Context }
 func (r Release) Index() { get(childPath("releases", r.context, "")) }
 
 // Get requests the metadata for a specific Release.
-func (r Release) Get() sdk.Release { return r.Unmarshal(get(r.path())) }
+func (r Release) Get() sdk.Release { return r.Unmarshal(r.get()) }
 
 // Create associates a new Release with the specified Submission Batch.
-func (r Release) Create() sdk.Release {
-	return r.Unmarshal(post(r.build(r.context), batchPath(r.context)+"/releases"))
-}
+func (r Release) Create() sdk.Release { return r.Unmarshal(r.post()) }
 
 // Delete destroys a specific Release.
-func (r Release) Delete()      { _delete(r.path()) }
+func (r Release) Delete() { _delete(r.path()) }
+
 func (r Release) id() string   { return getRequiredValue(r.context, "release-id") }
 func (r Release) path() string { return childPath("releases", r.context, r.id()) }
+func (r Release) get() []byte  { return get(r.path()) }
+func (r Release) post() []byte { return post(r.build(), batchPath(r.context)+"/releases") }
 
-func (r Release) build(c *cli.Context) sdk.Release {
+func (r Release) build() sdk.Release {
 	return sdk.Release{
-		SubmissionBatchID:    c.Int("submission-batch-id"),
-		FileName:             c.String("file-name"),
-		FilePath:             c.String("file-path"),
-		ExternalFileLocation: c.String("external-file-location"),
-		ReleaseType:          c.String("release-type"),
-		ModelDateOfBirth:     c.String("model-date-of-birth"),
-		ModelEthnicities:     c.StringSlice("model-ethnicities"),
-		ModelGender:          c.String("model-gender"),
+		ExternalFileLocation: r.context.String("external-file-location"),
+		FileName:             r.context.String("file-name"),
+		FilePath:             r.context.String("file-path"),
+		ModelDateOfBirth:     r.context.String("model-date-of-birth"),
+		ModelEthnicities:     r.context.StringSlice("model-ethnicities"),
+		ModelGender:          r.context.String("model-gender"),
+		ReleaseType:          r.context.String("release-type"),
+		SubmissionBatchID:    r.context.Int("submission-batch-id"),
 	}
 }
 

@@ -57,10 +57,5 @@ func (b Batch) build() sdk.SubmissionBatch {
 }
 
 func (b Batch) buildUpdate() sdk.SubmissionBatchUpdate {
-	return sdk.SubmissionBatchUpdate{
-		sdk.SubmissionBatchChanges{
-			SubmissionName: b.context.String("submission-name"),
-			Note:           b.context.String("note"),
-		},
-	}
+	return sdk.SubmissionBatchUpdate{b.build()}
 }

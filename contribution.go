@@ -31,42 +31,40 @@ func (c Contribution) path() string { return string(childPath("contributions", c
 func (c Contribution) id() string   { return getRequiredValue(c.context, "contribution-id") }
 func (c Contribution) get() []byte  { return get(c.path()) }
 func (c Contribution) post() []byte {
-	return post(c.build(c.context), batchPath(c.context)+"/contributions")
+	return post(c.build(), batchPath(c.context)+"/contributions")
 }
 func (c Contribution) put() []byte { return put(c.buildUpdate(), c.path()) }
 
-func (c Contribution) build(context *cli.Context) sdk.Contribution {
+func (c Contribution) build() sdk.Contribution {
 	return sdk.Contribution{
-		CameraShotDate:       context.String("camera-shot-date"),
-		CollectionCode:       context.String("collection-code"),
-		ContentProviderName:  context.String("content-provider-name"),
-		ContentProviderTitle: context.String("content-provider-title"),
-		CountryOfShoot:       context.String("country-of-shoot"),
-		CreditLine:           context.String("credit-line"),
-		ExternalFileLocation: context.String("external-file-location"),
-		FileName:             context.String("file-name"),
-		FilePath:             context.String("file-path"),
-		Headline:             context.String("headline"),
-		IptcCategory:         context.String("iptc-category"),
-		MimeType:             context.String("mime-type"),
-		ParentSource:         context.String("parent-source"),
-		RecordedDate:         context.String("recorded-date"),
-		RiskCategory:         context.String("risk-category"),
-		ShotSpeed:            context.String("shot-speed"),
-		SiteDestination:      context.StringSlice("site-destination"),
-		Source:               context.String("source"),
-		SubmittedToReviewAt:  context.String("submitted-to-review-at"),
+		CameraShotDate:       c.context.String("camera-shot-date"),
+		CollectionCode:       c.context.String("collection-code"),
+		ContentProviderName:  c.context.String("content-provider-name"),
+		ContentProviderTitle: c.context.String("content-provider-title"),
+		CountryOfShoot:       c.context.String("country-of-shoot"),
+		CreditLine:           c.context.String("credit-line"),
+		ExternalFileLocation: c.context.String("external-file-location"),
+		FileName:             c.context.String("file-name"),
+		FilePath:             c.context.String("file-path"),
+		Headline:             c.context.String("headline"),
+		ID:                   c.context.Int("contribution-id"),
+		IptcCategory:         c.context.String("iptc-category"),
+		MimeType:             c.context.String("mime-type"),
+		ParentSource:         c.context.String("parent-source"),
+		RecordedDate:         c.context.String("recorded-date"),
+		RiskCategory:         c.context.String("risk-category"),
+		ShotSpeed:            c.context.String("shot-speed"),
+		SiteDestination:      c.context.StringSlice("site-destination"),
+		Source:               c.context.String("source"),
+		SubmissionBatchID:    c.context.Int("submission-batch-id"),
+		SubmittedToReviewAt:  c.context.String("submitted-to-review-at"),
 		UploadBucket:         uploadBucket,
-		UploadId:             context.String("upload-id"),
+		UploadId:             c.context.String("upload-id"),
 	}
 }
 
 func (c Contribution) buildUpdate() sdk.ContributionUpdate {
-	return sdk.ContributionUpdate{
-		sdk.Contribution{
-			Headline: c.context.String("headline"),
-		},
-	}
+	return sdk.ContributionUpdate{c.build()}
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a

@@ -15,13 +15,13 @@ type Batch struct{ context *cli.Context }
 func (b Batch) Index() { get(Batches) }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() sdk.SubmissionBatch { return b.Unmarshal(get(b.path())) }
+func (b Batch) Get() sdk.SubmissionBatch { return b.Unmarshal(b.get()) }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() sdk.SubmissionBatch { return b.Unmarshal(post(b.build(b.context), Batches)) }
+func (b Batch) Create() sdk.SubmissionBatch { return b.Unmarshal(b.post()) }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.SubmissionBatch { return b.Unmarshal(put(b.buildUpdate(), b.path())) }
+func (b Batch) Update() sdk.SubmissionBatch { return b.Unmarshal(b.put()) }
 
 // Delete destroys a specific Submission Batch.
 func (b Batch) Delete() { _delete(b.path()) }
@@ -35,18 +35,21 @@ func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
 	return batch
 }
 
-func (b Batch) path() string { return Batches + "/" + getBatchID(b.context) }
+func (b Batch) path() string { return Batches + "/" + b.id() }
 func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
+func (b Batch) get() []byte  { return get(b.path()) }
+func (b Batch) post() []byte { return post(b.build(), Batches) }
+func (b Batch) put() []byte  { return put(b.buildUpdate(), b.path()) }
 
-func (b Batch) build(c *cli.Context) sdk.SubmissionBatch {
+func (b Batch) build() sdk.SubmissionBatch {
 	return sdk.SubmissionBatch{
-		SubmissionName:        c.String("submission-name"),
-		SubmissionType:        c.String("submission-type"),
-		Note:                  c.String("note"),
-		AssignmentID:          c.String("assignment-id"),
-		BriefID:               c.String("brief-id"),
-		EventID:               c.String("event-id"),
-		SaveExtractedMetadata: c.Bool("save-extracted-metadata"),
+		BriefID:               b.context.String("brief-id"),
+		EventID:               b.context.String("event-id"),
+		Note:                  b.context.String("note"),
+		AssignmentID:          b.context.String("assignment-id"),
+		SaveExtractedMetadata: b.context.Bool("save-extracted-metadata"),
+		SubmissionName:        b.context.String("submission-name"),
+		SubmissionType:        b.context.String("submission-type"),
 	}
 }
 

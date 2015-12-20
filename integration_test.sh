@@ -3,6 +3,7 @@
 set -e
 
 #CMD="go run *.go ${@}"
+golint
 go install
 CMD="gettyup ${@}"
 TOKEN=$($CMD token)  # retrieve and cache a token
@@ -69,13 +70,6 @@ UPDATE_CONTRIBUTION=( \
     --headline="another photo" \
 )
 
-UPDATE_RELEASE=( \
-  $CMD ${@} --token=$TOKEN release update \
-    --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39658 \
-    --note "new release note" \
-)
-
 INDEX_BATCHES=($CMD --token=$TOKEN batch index)
 
 INDEX_CONTRIBUTIONS=( \
@@ -100,7 +94,6 @@ DELETE_CONTRIBUTION=( \
 
 "${UPDATE_BATCH[@]}"
 "${UPDATE_CONTRIBUTION[@]}"
-"${UPDATE_RELEASE[@]}"
 
 "${GET_BATCH[@]}"
 "${GET_CONTRIBUTION[@]}"

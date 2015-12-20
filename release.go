@@ -2,11 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
+
+var releaseTypes = string(strings.Join(sdk.Release{}.ValidTypes(), " OR "))
 
 // A Release wraps the verbs provided by the ESP API for Releases,
 // legal agreements for property owners or models to be associated

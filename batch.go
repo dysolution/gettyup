@@ -2,11 +2,14 @@ package main
 
 import (
 	"encoding/json"
+	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
+
+var batchTypes = string(strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
 
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
 type Batch struct{ context *cli.Context }

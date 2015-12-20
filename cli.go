@@ -15,15 +15,10 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	sdk "github.com/dysolution/espsdk"
 )
-
-var releaseTypes = fmt.Sprintf("%s", strings.Join(sdk.Release{}.ValidTypes(), " OR "))
-var batchTypes = fmt.Sprintf("%s", strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
 
 // PrettyPrintable applies to all objects that should have an easy-to-read
 // JSON representation of themselves availalbe for printing.

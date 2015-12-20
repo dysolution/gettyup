@@ -50,8 +50,12 @@ func getReleaseID(context *cli.Context) int {
 	return v
 }
 
-func getContributionID(context *cli.Context) string {
-	return getRequiredValue(context, "contribution-id")
+func getContributionID(context *cli.Context) int {
+	v := context.Int("contribution-id")
+	if v == 0 {
+		log.Fatal("--contribution-id must be set")
+	}
+	return v
 }
 
 func childPath(children string, context *cli.Context, childID string) string {

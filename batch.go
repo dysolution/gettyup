@@ -22,7 +22,7 @@ func (b Batch) Get() sdk.Batch { return batch(b.id()).Get(&client) }
 func (b Batch) Create() sdk.Batch { return b.Unmarshal(b.post()) }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.Batch { return b.Unmarshal(b.put()) }
+func (b Batch) Update() sdk.Batch { return batch(b.id()).Update(&client, b.buildUpdate()) }
 
 // Delete destroys a specific Submission Batch.
 func (b Batch) Delete() { batch(b.id()).Delete(&client) }

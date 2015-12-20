@@ -32,7 +32,9 @@ func (c Contribution) Get() sdk.Contribution {
 func (c Contribution) Create() sdk.Contribution { return c.Unmarshal(c.post()) }
 
 // Update changes metadata for an existing Contribution.
-func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(c.put()) }
+func (c Contribution) Update() sdk.Contribution {
+	return contribution(c.id()).Update(&client, getBatchID(c.context), c.buildUpdate())
+}
 
 // Delete destroys a specific Contribution.
 func (c Contribution) Delete() { contribution(c.id()).Delete(&client, getBatchID(c.context)) }

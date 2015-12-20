@@ -7,7 +7,7 @@ import (
 	sdk "github.com/dysolution/espsdk"
 )
 
-var batchTypes = string(strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
+var batchTypes = string(strings.Join(sdk.Batch{}.ValidTypes(), " OR "))
 
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
 type Batch struct{ context *cli.Context }
@@ -16,20 +16,20 @@ type Batch struct{ context *cli.Context }
 func (b Batch) Index() sdk.BatchListContainer { return sdk.BatchListContainer{}.Unmarshal(get(Batches)) }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() sdk.SubmissionBatch { return b.Unmarshal(b.get()) }
+func (b Batch) Get() sdk.Batch { return b.Unmarshal(b.get()) }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() sdk.SubmissionBatch { return b.Unmarshal(b.post()) }
+func (b Batch) Create() sdk.Batch { return b.Unmarshal(b.post()) }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.SubmissionBatch { return b.Unmarshal(b.put()) }
+func (b Batch) Update() sdk.Batch { return b.Unmarshal(b.put()) }
 
 // Delete destroys a specific Submission Batch.
 func (b Batch) Delete() { _delete(b.path()) }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
-func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
-	return sdk.SubmissionBatch{}.Unmarshal(payload)
+func (b Batch) Unmarshal(payload []byte) sdk.Batch {
+	return sdk.Batch{}.Unmarshal(payload)
 }
 
 func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
@@ -38,8 +38,8 @@ func (b Batch) get() []byte  { return get(b.path()) }
 func (b Batch) post() []byte { return post(b.build(), Batches) }
 func (b Batch) put() []byte  { return put(b.buildUpdate(), b.path()) }
 
-func (b Batch) build() sdk.SubmissionBatch {
-	return sdk.SubmissionBatch{
+func (b Batch) build() sdk.Batch {
+	return sdk.Batch{
 		BriefID:               b.context.String("brief-id"),
 		EventID:               b.context.String("event-id"),
 		Note:                  b.context.String("note"),
@@ -50,6 +50,6 @@ func (b Batch) build() sdk.SubmissionBatch {
 	}
 }
 
-func (b Batch) buildUpdate() sdk.SubmissionBatchUpdate {
-	return sdk.SubmissionBatchUpdate{b.build()}
+func (b Batch) buildUpdate() sdk.BatchUpdate {
+	return sdk.BatchUpdate{b.build()}
 }

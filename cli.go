@@ -63,7 +63,7 @@ func main() {
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
 		}
-		token = sdk.Token(c.String("token"))
+		token = stringToToken(c.String("token"))
 		return nil
 	}
 	app.Commands = []cli.Command{

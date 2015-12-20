@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
@@ -35,4 +37,12 @@ func (r Release) Unmarshal(payload []byte) sdk.Release {
 		log.Fatal(err)
 	}
 	return release
+}
+
+func (r Release) PrettyPrint() string {
+	prettyOutput, err := r.Get().Marshal()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fmt.Sprintf("%s\n", prettyOutput)
 }

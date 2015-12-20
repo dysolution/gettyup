@@ -26,37 +26,17 @@ func GetPersonalities(context *cli.Context) {
 
 func batchPath(context *cli.Context) string { return sdk.BatchPath(&sdk.Batch{ID: getBatchID(context)}) }
 
-func getRequiredValue(context *cli.Context, param string) string {
-	v := context.String(param)
-	if len(v) < 1 {
+func getRequiredID(context *cli.Context, param string) int {
+	v := context.Int(param)
+	if v == 0 {
 		log.Fatalf("--%s must be set", param)
 	}
 	return v
 }
 
-func getBatchID(context *cli.Context) int {
-	v := context.Int("submission-batch-id")
-	if v == 0 {
-		log.Fatal("--submission-batch-id must be set")
-	}
-	return v
-}
-
-func getReleaseID(context *cli.Context) int {
-	v := context.Int("release-id")
-	if v == 0 {
-		log.Fatal("--release-id must be set")
-	}
-	return v
-}
-
-func getContributionID(context *cli.Context) int {
-	v := context.Int("contribution-id")
-	if v == 0 {
-		log.Fatal("--contribution-id must be set")
-	}
-	return v
-}
+func getBatchID(context *cli.Context) int        { return getRequiredID(context, "submission-batch-id") }
+func getReleaseID(context *cli.Context) int      { return getRequiredID(context, "release-id") }
+func getContributionID(context *cli.Context) int { return getRequiredID(context, "contribution-id") }
 
 func childPath(children string, context *cli.Context, childID string) string {
 	var path string

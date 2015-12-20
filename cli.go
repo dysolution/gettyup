@@ -28,7 +28,7 @@ type PrettyPrintable interface {
 
 // prettyPrint allows the CLI to pretty-print JSON responses by default. It
 // can be disabled with the -q (--quiet) global option.
-func prettyPrint(c *cli.Context, o PrettyPrintable) {
+func prettyPrint(o PrettyPrintable) {
 	if quiet != true {
 		fmt.Println(o.PrettyPrint())
 	}
@@ -79,7 +79,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Create()) },
+					Action: func(c *cli.Context) { prettyPrint(Batch{c}.Create()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-name, n"},
 						cli.StringFlag{Name: "submission-type, t", Usage: batchTypes},
@@ -93,7 +93,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Get()) },
+					Action: func(c *cli.Context) { prettyPrint(Batch{c}.Get()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -101,12 +101,12 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Submission Batches",
-					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Index()) },
+					Action: func(c *cli.Context) { prettyPrint(Batch{c}.Index()) },
 				},
 				{
 					Name:   "update",
 					Usage:  "update an existing Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Update()) },
+					Action: func(c *cli.Context) { prettyPrint(Batch{c}.Update()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "submission-name, n"},
@@ -130,7 +130,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Contribution within a Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Create()) },
+					Action: func(c *cli.Context) { prettyPrint(Contribution{c}.Create()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "camera-shot-date"},
 						cli.StringFlag{Name: "collection-code"},
@@ -158,7 +158,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Contribution",
-					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Get()) },
+					Action: func(c *cli.Context) { prettyPrint(Contribution{c}.Get()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "contribution-id, c"},
@@ -167,7 +167,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Contributions for a Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Index()) },
+					Action: func(c *cli.Context) { prettyPrint(Contribution{c}.Index()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -175,7 +175,7 @@ func main() {
 				{
 					Name:   "update",
 					Usage:  "update an existing Contribution",
-					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Update()) },
+					Action: func(c *cli.Context) { prettyPrint(Contribution{c}.Update()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "camera-shot-date"},
 						cli.StringFlag{Name: "collection-code"},
@@ -219,7 +219,7 @@ func main() {
 				{
 					Name:   "create",
 					Usage:  "create a new Release within a Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Release{c}.Create()) },
+					Action: func(c *cli.Context) { prettyPrint(Release{c}.Create()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "external-file-location"},
 						cli.StringFlag{Name: "file-name"},
@@ -235,7 +235,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Release",
-					Action: func(c *cli.Context) { prettyPrint(c, Release{c}.Get()) },
+					Action: func(c *cli.Context) { prettyPrint(Release{c}.Get()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "release-id, r"},
@@ -244,7 +244,7 @@ func main() {
 				{
 					Name:   "index",
 					Usage:  "get all Releases for a Submission Batch",
-					Action: func(c *cli.Context) { prettyPrint(c, Release{c}.Index()) },
+					Action: func(c *cli.Context) { prettyPrint(Release{c}.Index()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},

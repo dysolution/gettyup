@@ -29,7 +29,10 @@ func (r Release) Index() sdk.ReleaseList {
 }
 
 // Get requests the metadata for a specific Release.
-func (r Release) Get() sdk.Release { return r.Unmarshal(r.get()) }
+//func (r Release) Get() sdk.Release { return r.Unmarshal(r.get()) }
+func (r Release) Get() sdk.Release {
+	return sdk.Release{ID: r.id()}.Get(&client, getBatchID(r.context))
+}
 
 // Create associates a new Release with the specified Submission Batch.
 func (r Release) Create() sdk.Release { return r.Unmarshal(r.post()) }
@@ -37,8 +40,9 @@ func (r Release) Create() sdk.Release { return r.Unmarshal(r.post()) }
 // Delete destroys a specific Release.
 func (r Release) Delete() { _delete(r.path()) }
 
-func (r Release) id() string   { return getRequiredValue(r.context, "release-id") }
-func (r Release) path() string { return childPath("releases", r.context, r.id()) }
+//func (r Release) id() string   { return getRequiredValue(r.context, "release-id") }
+func (r Release) id() int      { return getReleaseID(r.context) }
+func (r Release) path() string { return sdk.ReleasePath(getBatchID(r.context), r.id()) }
 func (r Release) get() []byte  { return get(r.path()) }
 func (r Release) post() []byte { return post(r.build(), batchPath(r.context)+"/releases") }
 

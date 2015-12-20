@@ -24,9 +24,7 @@ func GetPersonalities(context *cli.Context) {
 
 // Private
 
-func batchPath(context *cli.Context) string {
-	return Batches + "/" + getBatchID(context)
-}
+func batchPath(context *cli.Context) string { return sdk.BatchPath(&sdk.Batch{ID: getBatchID(context)}) }
 
 func getRequiredValue(context *cli.Context, param string) string {
 	v := context.String(param)
@@ -36,12 +34,20 @@ func getRequiredValue(context *cli.Context, param string) string {
 	return v
 }
 
-func getBatchID(context *cli.Context) string {
-	return getRequiredValue(context, "submission-batch-id")
+func getBatchID(context *cli.Context) int {
+	v := context.Int("submission-batch-id")
+	if v == 0 {
+		log.Fatal("--submission-batch-id must be set")
+	}
+	return v
 }
 
-func getReleaseID(context *cli.Context) string {
-	return getRequiredValue(context, "release-id")
+func getReleaseID(context *cli.Context) int {
+	v := context.Int("release-id")
+	if v == 0 {
+		log.Fatal("--release-id must be set")
+	}
+	return v
 }
 
 func getContributionID(context *cli.Context) string {
@@ -59,8 +65,8 @@ func childPath(children string, context *cli.Context, childID string) string {
 }
 
 func get(path string) []byte {
-	params := sdk.RequestParams{"GET", path, Token(), nil}
-	result := client.Request(&params)
+	request := sdk.NewRequest("GET", path, Token(), nil)
+	result := client.PerformRequest(request)
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
@@ -74,8 +80,8 @@ func get(path string) []byte {
 }
 
 func _delete(path string) {
-	params := sdk.RequestParams{"DELETE", path, Token(), nil}
-	result := client.Request(&params)
+	request := sdk.NewRequest("DELETE", path, Token(), nil)
+	result := client.PerformRequest(request)
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
@@ -94,8 +100,8 @@ func post(object Serializable, path string) []byte {
 		log.Fatal(err)
 	}
 
-	params := sdk.RequestParams{"POST", path, Token(), serializedObject}
-	result := client.Request(&params)
+	request := sdk.NewRequest("POST", path, Token(), serializedObject)
+	result := client.PerformRequest(request)
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}
@@ -115,8 +121,8 @@ func put(object Serializable, path string) []byte {
 		log.Fatal(err)
 	}
 
-	params := sdk.RequestParams{"PUT", path, Token(), serializedObject}
-	result := client.Request(&params)
+	request := sdk.NewRequest("PUT", path, Token(), serializedObject)
+	result := client.PerformRequest(request)
 	if result.Err != nil {
 		log.Fatal(result.Err)
 	}

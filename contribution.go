@@ -17,20 +17,23 @@ type Contribution struct{ context *cli.Context }
 func (c Contribution) Index() { get(childPath("contributions", c.context, "")) }
 
 // Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() sdk.Contribution { return c.Unmarshal(get(c.path())) }
+func (c Contribution) Get() sdk.Contribution { return c.Unmarshal(c.get()) }
 
 // Create associates a new Contribution with the specified Submission Batch.
-func (c Contribution) Create() sdk.Contribution {
-	return c.Unmarshal(post(c.build(c.context), batchPath(c.context)+"/contributions"))
-}
+func (c Contribution) Create() sdk.Contribution { return c.Unmarshal(c.post()) }
 
 // Update changes metadata for an existing Contribution.
-func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(put(c.buildUpdate(), c.path())) }
+func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(c.put()) }
 
 // Delete destroys a specific Contribution.
 func (c Contribution) Delete()      { _delete(c.path()) }
 func (c Contribution) path() string { return string(childPath("contributions", c.context, c.id())) }
 func (c Contribution) id() string   { return getRequiredValue(c.context, "contribution-id") }
+func (c Contribution) get() []byte  { return get(c.path()) }
+func (c Contribution) post() []byte {
+	return post(c.build(c.context), batchPath(c.context)+"/contributions")
+}
+func (c Contribution) put() []byte { return put(c.buildUpdate(), c.path()) }
 
 func (c Contribution) build(context *cli.Context) sdk.Contribution {
 	return sdk.Contribution{

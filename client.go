@@ -5,6 +5,7 @@ import (
 )
 
 var client sdk.Client
+var quiet bool
 var token sdk.Token
 
 type Serializable interface {

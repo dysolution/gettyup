@@ -25,6 +25,18 @@ import (
 var releaseTypes = fmt.Sprintf("%s", strings.Join(sdk.Release{}.ValidTypes(), " OR "))
 var batchTypes = fmt.Sprintf("%s", strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
 
+type PrettyPrintable interface {
+	PrettyPrint() string
+}
+
+// prettyPrint allows the CLI to pretty-print JSON responses by default. It
+// can be disabled with the -q (--quiet) global option.
+func prettyPrint(c *cli.Context, o PrettyPrintable) {
+	if quiet != true {
+		fmt.Println(o.PrettyPrint())
+	}
+}
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "gettyup"
@@ -34,7 +46,7 @@ func main() {
 	app.Email = "dysolution@gmail.com"
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{Name: "debug, D", Usage: "enable debug output"},
-		cli.BoolFlag{Name: "quiet, q", Usage: "print only ESP's response"},
+		cli.BoolFlag{Name: "quiet, q", Usage: "suppress pretty-printed JSON from ESP's response"},
 		cli.StringFlag{Name: "key, k", Usage: "your ESP API key", EnvVar: "ESP_API_KEY"},
 		cli.StringFlag{Name: "secret", Usage: "your ESP API secret", EnvVar: "ESP_API_SECRET"},
 		cli.StringFlag{Name: "username, u", Usage: "your ESP username", EnvVar: "ESP_USERNAME"},
@@ -50,11 +62,9 @@ func main() {
 	}
 	app.Before = func(c *cli.Context) error {
 		client = getClient(c.String("key"), c.String("secret"), c.String("username"), c.String("password"))
+		quiet = c.Bool("quiet") == true
 		if c.Bool("debug") == true {
 			log.SetLevel(log.DebugLevel)
-		}
-		if c.Bool("quiet") == true {
-			log.SetLevel(log.WarnLevel)
 		}
 		token = sdk.Token(c.String("token"))
 		return nil
@@ -86,7 +96,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Submission Batch",
-					Action: func(c *cli.Context) { fmt.Println(Batch{c}.PrettyPrint()) },
+					Action: func(c *cli.Context) { prettyPrint(c, Batch{c}.Get()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
@@ -151,7 +161,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Contribution",
-					Action: func(c *cli.Context) { fmt.Println(Contribution{c}.PrettyPrint()) },
+					Action: func(c *cli.Context) { prettyPrint(c, Contribution{c}.Get()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "contribution-id, c"},
@@ -208,7 +218,7 @@ func main() {
 				{
 					Name:   "get",
 					Usage:  "get a specific Release",
-					Action: func(c *cli.Context) { fmt.Println(Release{c}.PrettyPrint()) },
+					Action: func(c *cli.Context) { prettyPrint(c, Release{c}.Get()) },
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "release-id, r"},

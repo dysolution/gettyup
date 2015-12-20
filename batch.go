@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
@@ -26,14 +25,6 @@ func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
 		log.Fatal(err)
 	}
 	return batch
-}
-
-func (b Batch) PrettyPrint() string {
-	prettyOutput, err := b.Get().Marshal()
-	if err != nil {
-		log.Fatal(err)
-	}
-	return fmt.Sprintf("%s\n", prettyOutput)
 }
 
 func (b Batch) build(c *cli.Context) sdk.SubmissionBatch {

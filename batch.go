@@ -25,7 +25,7 @@ func (b Batch) Create() sdk.Batch { return b.Unmarshal(b.post()) }
 func (b Batch) Update() sdk.Batch { return b.Unmarshal(b.put()) }
 
 // Delete destroys a specific Submission Batch.
-func (b Batch) Delete() { _delete(b.path()) }
+func (b Batch) Delete() { sdk.Batch{ID: b.id()}.Delete(&client) }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
 func (b Batch) Unmarshal(payload []byte) sdk.Batch {

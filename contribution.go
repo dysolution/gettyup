@@ -37,7 +37,7 @@ func (c Contribution) Create() sdk.Contribution { return c.Unmarshal(c.post()) }
 func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(c.put()) }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete() { sdk.Contribution{ID: c.id()}.Delete(&client, getBatchID(c.context)) }
+func (c Contribution) Delete() { contribution(c.id()).Delete(&client, getBatchID(c.context)) }
 
 func (c Contribution) id() int { return getContributionID(c.context) }
 func (c Contribution) path() string {

@@ -10,6 +10,7 @@ import (
 // A ReleaseList contains zero or more Releases.
 type ReleaseList []Release
 
+// Unmarshal attempts to deserialize the provided JSON payload into a slice of Release objects.
 func (rl ReleaseList) Unmarshal(payload []byte) sdk.ReleaseList {
 	return sdk.ReleaseList{}.Unmarshal(payload)
 }

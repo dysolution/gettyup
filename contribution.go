@@ -8,6 +8,7 @@ import (
 // A ContributionList contains zero or more Contribtions.
 type ContributionList []Contribution
 
+// Unmarshal attempts to deserialize the provided JSON payload into a slice of Contribution objects.
 func (cl ContributionList) Unmarshal(payload []byte) sdk.ContributionList {
 	return sdk.ContributionList{}.Unmarshal(payload)
 }
@@ -32,9 +33,10 @@ func (c Contribution) Create() sdk.Contribution { return c.Unmarshal(c.post()) }
 func (c Contribution) Update() sdk.Contribution { return c.Unmarshal(c.put()) }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete()      { _delete(c.path()) }
-func (c Contribution) path() string { return string(childPath("contributions", c.context, c.id())) }
+func (c Contribution) Delete() { _delete(c.path()) }
+
 func (c Contribution) id() string   { return getRequiredValue(c.context, "contribution-id") }
+func (c Contribution) path() string { return string(childPath("contributions", c.context, c.id())) }
 func (c Contribution) get() []byte  { return get(c.path()) }
 func (c Contribution) post() []byte {
 	return post(c.build(), batchPath(c.context)+"/contributions")
@@ -73,6 +75,7 @@ func (c Contribution) buildUpdate() sdk.ContributionUpdate {
 	return sdk.ContributionUpdate{c.build()}
 }
 
+// Unmarshal attempts to deserialize the provided JSON payload into a Contribution object.
 func (c Contribution) Unmarshal(payload []byte) sdk.Contribution {
 	return sdk.Contribution{}.Unmarshal(payload)
 }

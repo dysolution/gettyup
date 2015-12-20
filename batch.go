@@ -9,6 +9,7 @@ import (
 
 var batchTypes = string(strings.Join(sdk.SubmissionBatch{}.ValidTypes(), " OR "))
 
+// A BatchList contains zero or more Releases.
 type BatchList []Batch
 
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
@@ -34,8 +35,8 @@ func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
 	return sdk.SubmissionBatch{}.Unmarshal(payload)
 }
 
-func (b Batch) path() string { return Batches + "/" + b.id() }
 func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
+func (b Batch) path() string { return Batches + "/" + b.id() }
 func (b Batch) get() []byte  { return get(b.path()) }
 func (b Batch) post() []byte { return post(b.build(), Batches) }
 func (b Batch) put() []byte  { return put(b.buildUpdate(), b.path()) }

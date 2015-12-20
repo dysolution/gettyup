@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
@@ -15,8 +16,9 @@ func (b Batch) Get() sdk.SubmissionBatch { return b.Unmarshal(get(b.path())) }
 func (b Batch) Create()                  { post(b.build(b.context), Batches) }
 func (b Batch) Update()                  { put(b.buildUpdate(), b.path()) }
 func (b Batch) Delete()                  { _delete(b.path()) }
-func (b Batch) path() string             { return Batches + "/" + getBatchID(b.context) }
-func (b Batch) id() string               { return getRequiredValue(b.context, "submission-batch-id") }
+
+func (b Batch) path() string { return Batches + "/" + getBatchID(b.context) }
+func (b Batch) id() string   { return getRequiredValue(b.context, "submission-batch-id") }
 
 func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
 	var batch sdk.SubmissionBatch
@@ -24,6 +26,14 @@ func (b Batch) Unmarshal(payload []byte) sdk.SubmissionBatch {
 		log.Fatal(err)
 	}
 	return batch
+}
+
+func (b Batch) PrettyPrint() string {
+	prettyOutput, err := b.Get().Marshal()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fmt.Sprintf("%s\n", prettyOutput)
 }
 
 func (b Batch) build(c *cli.Context) sdk.SubmissionBatch {

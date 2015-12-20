@@ -39,7 +39,8 @@ CREATE_RELEASE=( \
     --submission-batch-id $GCV_BATCH_ID \
     --file-name some_property.jpg \
     --release-type Property \
-    --file-path some/s3/path \
+    --file-path "submission/releases/batch_86103/24780225369200015_some_property.jpg" \
+    --mime-type "image/jpeg" \
 )
 
 GET_BATCH=($CMD --token=$TOKEN batch get --submission-batch-id $GES_BATCH_ID)

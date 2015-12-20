@@ -17,6 +17,8 @@ func (rl ReleaseList) Unmarshal(payload []byte) sdk.ReleaseList {
 
 var releaseTypes = string(strings.Join(sdk.Release{}.ValidTypes(), " OR "))
 
+func release(id int) sdk.Release { return sdk.Release{ID: id} }
+
 // A Release wraps the verbs provided by the ESP API for Releases,
 // legal agreements for property owners or models to be associated
 // with Submission Batches.
@@ -38,7 +40,7 @@ func (r Release) Get() sdk.Release {
 func (r Release) Create() sdk.Release { return r.Unmarshal(r.post()) }
 
 // Delete destroys a specific Release.
-func (r Release) Delete() { _delete(r.path()) }
+func (r Release) Delete() { release(r.id()).Delete(&client, getBatchID(r.context)) }
 
 //func (r Release) id() string   { return getRequiredValue(r.context, "release-id") }
 func (r Release) id() int      { return getReleaseID(r.context) }

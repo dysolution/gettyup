@@ -33,7 +33,7 @@ func (r Release) Index() sdk.ReleaseList {
 // Get requests the metadata for a specific Release.
 //func (r Release) Get() sdk.Release { return r.Unmarshal(r.get()) }
 func (r Release) Get() sdk.Release {
-	return sdk.Release{ID: r.id()}.Get(&client, getBatchID(r.context))
+	return release(r.id()).Get(&client, getBatchID(r.context))
 }
 
 // Create associates a new Release with the specified Submission Batch.

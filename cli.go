@@ -40,21 +40,6 @@ import (
 	"github.com/codegangsta/cli"
 )
 
-// PrettyPrintable applies to all objects that should have an easy-to-read
-// JSON representation of themselves availalbe for printing.
-type PrettyPrintable interface {
-	PrettyPrint() string
-}
-
-// prettyPrint allows the CLI to pretty-print JSON responses by default. It
-// can be disabled with the -q (--quiet) global option.
-func prettyPrint(o PrettyPrintable) {
-	if quiet != true {
-		fmt.Println(o.PrettyPrint())
-	}
-}
-
-// main is where it's at
 func main() {
 	app := cli.NewApp()
 	app.Name = "gettyup"

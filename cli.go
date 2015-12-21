@@ -293,7 +293,7 @@ func main() {
 				{
 					Name:   "expressions",
 					Usage:  "all known values for Expressions",
-					Action: func(c *cli.Context) { GetExpressions(c) },
+					Action: func(c *cli.Context) { prettyPrint(MetadataTranslator{}.GetExpressions(c)) },
 				},
 				{
 					Name:   "number_of_people",

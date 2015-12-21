@@ -36,9 +36,6 @@ func GetTranscoderMappings(context *cli.Context) []byte { return sdk.GetTranscod
 // GetCompositions lists all possible composition values.
 func GetCompositions(context *cli.Context) []byte { return sdk.GetCompositions(&client) }
 
-// GetExpressions lists all possible facial expression values.
-func GetExpressions(context *cli.Context) []byte { return sdk.GetExpressions(&client) }
-
 // A MetadataTranslator uses the SDK to unmarshal responses from the
 // people_metadata endpoints.
 type MetadataTranslator struct{ context *cli.Context }
@@ -51,6 +48,11 @@ func (m MetadataTranslator) Unmarshal(payload []byte) sdk.PeopleMetadataList {
 // GetNumberOfPeople lists all possible values for Number of People.
 func (m MetadataTranslator) GetNumberOfPeople(context *cli.Context) sdk.PeopleMetadataList {
 	return sdk.PeopleMetadataList{}.GetNumberOfPeople(&client)
+}
+
+// GetExpressions lists all possible facial expression values.
+func (m MetadataTranslator) GetExpressions(context *cli.Context) sdk.PeopleMetadataList {
+	return sdk.PeopleMetadataList{}.GetExpressions(&client)
 }
 
 // Private

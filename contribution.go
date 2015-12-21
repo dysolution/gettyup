@@ -20,7 +20,7 @@ type Contribution struct{ context *cli.Context }
 // Index requests a list of all Contributions associated with the specified
 // Submission Batch.
 func (c Contribution) Index() sdk.ContributionList {
-	return ContributionList{}.Unmarshal(get(sdk.ContributionPath(getBatchID(c.context), 0)))
+	return sdk.Contribution{}.Index(&client, getBatchID(c.context))
 }
 
 // Get requests the metadata for a specific Contribution.

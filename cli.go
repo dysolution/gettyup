@@ -288,7 +288,7 @@ func main() {
 				{
 					Name:   "compositions",
 					Usage:  "all known values for Compositions",
-					Action: func(c *cli.Context) { GetCompositions(c) },
+					Action: func(c *cli.Context) { prettyPrint(MetadataTranslator{}.GetCompositions(c)) },
 				},
 				{
 					Name:   "expressions",

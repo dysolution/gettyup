@@ -33,9 +33,6 @@ func GetControlledValues(context *cli.Context) []byte { return sdk.GetControlled
 // for Getty and iStock video.
 func GetTranscoderMappings(context *cli.Context) []byte { return sdk.GetTranscoderMappings(&client) }
 
-// GetCompositions lists all possible composition values.
-func GetCompositions(context *cli.Context) []byte { return sdk.GetCompositions(&client) }
-
 // A MetadataTranslator uses the SDK to unmarshal responses from the
 // people_metadata endpoints.
 type MetadataTranslator struct{ context *cli.Context }
@@ -53,6 +50,11 @@ func (m MetadataTranslator) GetNumberOfPeople(context *cli.Context) sdk.PeopleMe
 // GetExpressions lists all possible facial expression values.
 func (m MetadataTranslator) GetExpressions(context *cli.Context) sdk.PeopleMetadataList {
 	return sdk.PeopleMetadataList{}.GetExpressions(&client)
+}
+
+// GetCompositions lists all possible composition values.
+func (m MetadataTranslator) GetCompositions(context *cli.Context) sdk.PeopleMetadataList {
+	return sdk.PeopleMetadataList{}.GetCompositions(&client)
 }
 
 // Private

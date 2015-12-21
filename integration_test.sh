@@ -103,6 +103,7 @@ DELETE_RELEASE=( \
 
 PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
 PEOPLE_EXPRESSIONS=($CMD --token=$TOKEN people expressions)
+PEOPLE_COMPOSITIONS=($CMD --token=$TOKEN people compositions)
 
 "${CREATE_BATCH[@]}"
 "${CREATE_CONTRIBUTION[@]}"
@@ -125,3 +126,4 @@ PEOPLE_EXPRESSIONS=($CMD --token=$TOKEN people expressions)
 
 "${PEOPLE_NUMBER_OF_PEOPLE[@]}"
 "${PEOPLE_EXPRESSIONS[@]}"
+"${PEOPLE_COMPOSITIONS[@]}"

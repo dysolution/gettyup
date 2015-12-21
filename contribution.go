@@ -42,14 +42,6 @@ func (c Contribution) Update() sdk.Contribution {
 func (c Contribution) Delete() { contribution(c.id()).Delete(&client, getBatchID(c.context)) }
 
 func (c Contribution) id() int { return getContributionID(c.context) }
-func (c Contribution) path() string {
-	return string(childPath("contributions", c.context, string(c.id())))
-}
-func (c Contribution) get() []byte { return get(c.path()) }
-func (c Contribution) post() []byte {
-	return post(c.build(), batchPath(c.context)+"/contributions")
-}
-func (c Contribution) put() []byte { return put(c.buildUpdate(), c.path()) }
 
 func (c Contribution) build() sdk.Contribution {
 	return sdk.Contribution{

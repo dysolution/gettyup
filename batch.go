@@ -32,11 +32,7 @@ func (b Batch) Unmarshal(payload []byte) sdk.Batch {
 	return sdk.Batch{}.Unmarshal(payload)
 }
 
-func (b Batch) id() int      { return getBatchID(b.context) }
-func (b Batch) path() string { return sdk.BatchPath(batch(b.id())) }
-func (b Batch) get() []byte  { return get(b.path()) }
-func (b Batch) post() []byte { return post(b.build(), Batches) }
-func (b Batch) put() []byte  { return put(b.buildUpdate(), b.path()) }
+func (b Batch) id() int { return getBatchID(b.context) }
 
 func (b Batch) build() sdk.Batch {
 	return sdk.Batch{

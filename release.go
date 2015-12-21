@@ -42,11 +42,7 @@ func (r Release) Create() sdk.Release {
 // Delete destroys a specific Release.
 func (r Release) Delete() { release(r.id()).Delete(&client, getBatchID(r.context)) }
 
-//func (r Release) id() string   { return getRequiredValue(r.context, "release-id") }
-func (r Release) id() int      { return getReleaseID(r.context) }
-func (r Release) path() string { return sdk.ReleasePath(getBatchID(r.context), r.id()) }
-func (r Release) get() []byte  { return get(r.path()) }
-func (r Release) post() []byte { return post(r.build(), batchPath(r.context)+"/releases") }
+func (r Release) id() int { return getReleaseID(r.context) }
 
 func (r Release) build() sdk.Release {
 	return sdk.Release{

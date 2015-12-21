@@ -54,7 +54,7 @@ GET_CONTRIBUTION=( \
 GET_RELEASE=( \
   $CMD --token=$TOKEN release get \
     --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39658 \
+    --release-id 39770 \
 )
 
 UPDATE_BATCH=( \
@@ -84,10 +84,21 @@ INDEX_RELEASES=( \
     --submission-batch-id $GCV_BATCH_ID \
 )
 
+DELETE_BATCH=( \
+  $CMD --token=$TOKEN batch delete \
+    --submission-batch-id 86097 \
+)
+
 DELETE_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution delete \
     --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124219
+    --contribution-id 1124254
+)
+
+DELETE_RELEASE=( \
+  $CMD --token=$TOKEN release delete \
+    --submission-batch-id $GCV_BATCH_ID \
+    --release-id 39811
 )
 
 "${CREATE_BATCH[@]}"
@@ -105,4 +116,6 @@ DELETE_CONTRIBUTION=( \
 "${INDEX_CONTRIBUTIONS[@]}"
 "${INDEX_RELEASES[@]}"
 
+"${DELETE_BATCH[@]}"
 "${DELETE_CONTRIBUTION[@]}"
+"${DELETE_RELEASE[@]}"

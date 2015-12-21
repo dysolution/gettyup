@@ -25,11 +25,22 @@ func GetKeywords(context *cli.Context) []byte { return sdk.GetKeywords(&client) 
 //TODO: use search input from context
 func GetPersonalities(context *cli.Context) []byte { return sdk.GetPersonalities(&client) }
 
-func GetControlledValues(context *cli.Context) []byte   { return sdk.GetControlledValues(&client) }
+// GetControlledValues returns complete lists of values and descriptions for
+// fields with controlled vocabularies, grouped by submission type.
+func GetControlledValues(context *cli.Context) []byte { return sdk.GetControlledValues(&client) }
+
+// GetTranscoderMappings lists acceptable transcoder mapping values
+// for Getty and iStock video.
 func GetTranscoderMappings(context *cli.Context) []byte { return sdk.GetTranscoderMappings(&client) }
-func GetCompositions(context *cli.Context) []byte       { return sdk.GetCompositions(&client) }
-func GetExpressions(context *cli.Context) []byte        { return sdk.GetExpressions(&client) }
-func GetNumberOfPeople(context *cli.Context) []byte     { return sdk.GetNumberOfPeople(&client) }
+
+// GetCompositions lists all possible composition values.
+func GetCompositions(context *cli.Context) []byte { return sdk.GetCompositions(&client) }
+
+// GetExpressions lists all possible facial expression values.
+func GetExpressions(context *cli.Context) []byte { return sdk.GetExpressions(&client) }
+
+// GetNumberOfPeople lists all possible values for Number of People.
+func GetNumberOfPeople(context *cli.Context) []byte { return sdk.GetNumberOfPeople(&client) }
 
 // Private
 

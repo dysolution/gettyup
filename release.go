@@ -25,7 +25,7 @@ type Release struct{ context *cli.Context }
 // Index requests a list of all Releases associated with the specified
 // Submission Batch.
 func (r Release) Index() sdk.ReleaseList {
-	return ReleaseList{}.Unmarshal(get(childPath("releases", r.context, "")))
+	return ReleaseList{}.Unmarshal(get(releasePath(getBatchID(r.context), 0)))
 }
 
 // Get requests the metadata for a specific Release.

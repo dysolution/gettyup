@@ -29,7 +29,9 @@ func (c Contribution) Get() sdk.Contribution {
 }
 
 // Create associates a new Contribution with the specified Submission Batch.
-func (c Contribution) Create() sdk.Contribution { return c.Unmarshal(c.post()) }
+func (c Contribution) Create() sdk.Contribution {
+	return sdk.Contribution{}.Create(&client, getBatchID(c.context), c.build())
+}
 
 // Update changes metadata for an existing Contribution.
 func (c Contribution) Update() sdk.Contribution {

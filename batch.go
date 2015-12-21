@@ -19,7 +19,7 @@ func (b Batch) Index() sdk.BatchListContainer { return sdk.BatchListContainer{}.
 func (b Batch) Get() sdk.Batch { return batch(b.id()).Get(&client) }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() sdk.Batch { return b.Unmarshal(b.post()) }
+func (b Batch) Create() sdk.Batch { return sdk.Batch{}.Create(&client, b.build()) }
 
 // Update changes fields for an existing Submission Batch.
 func (b Batch) Update() sdk.Batch { return batch(b.id()).Update(&client, b.buildUpdate()) }

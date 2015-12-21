@@ -35,7 +35,9 @@ func (r Release) Get() sdk.Release {
 }
 
 // Create associates a new Release with the specified Submission Batch.
-func (r Release) Create() sdk.Release { return r.Unmarshal(r.post()) }
+func (r Release) Create() sdk.Release {
+	return sdk.Release{}.Create(&client, getBatchID(r.context), r.build())
+}
 
 // Delete destroys a specific Release.
 func (r Release) Delete() { release(r.id()).Delete(&client, getBatchID(r.context)) }

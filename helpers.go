@@ -17,17 +17,19 @@ var uploadBucket string
 
 // GetKeywords requests suggestions from the Getty controlled vocabulary
 // for the keywords provided.
-func GetKeywords(context *cli.Context) {
-	//TODO: use search input from context
-	get(Keywords)
-}
+//TODO: use search input from context
+func GetKeywords(context *cli.Context) []byte { return sdk.GetKeywords(&client) }
 
 // GetPersonalities requests suggestions from the Getty controlled vocabulary
 // for the famous personalities provided.
-func GetPersonalities(context *cli.Context) {
-	//TODO: use search input from context
-	get(Personalities)
-}
+//TODO: use search input from context
+func GetPersonalities(context *cli.Context) []byte { return sdk.GetPersonalities(&client) }
+
+func GetControlledValues(context *cli.Context) []byte   { return sdk.GetControlledValues(&client) }
+func GetTranscoderMappings(context *cli.Context) []byte { return sdk.GetTranscoderMappings(&client) }
+func GetCompositions(context *cli.Context) []byte       { return sdk.GetCompositions(&client) }
+func GetExpressions(context *cli.Context) []byte        { return sdk.GetExpressions(&client) }
+func GetNumberOfPeople(context *cli.Context) []byte     { return sdk.GetNumberOfPeople(&client) }
 
 // Private
 
@@ -59,17 +61,17 @@ func getBatchID(context *cli.Context) int        { return getRequiredID(context,
 func getReleaseID(context *cli.Context) int      { return getRequiredID(context, "release-id") }
 func getContributionID(context *cli.Context) int { return getRequiredID(context, "contribution-id") }
 
-func get(path string) []byte {
-	request := sdk.NewRequest("GET", path, Token(), nil)
-	result := client.PerformRequest(request)
-	if result.Err != nil {
-		log.Fatal(result.Err)
-	}
-	stats, err := result.Marshal()
-	if err != nil {
-		log.Fatal(result.Err)
-	}
-	log.Info(string(stats))
-	log.Debugf("%s\n", result.Payload)
-	return result.Payload
-}
+// func get(path string) []byte {
+// 	request := sdk.NewRequest("GET", path, Token(), nil)
+// 	result := client.PerformRequest(request)
+// 	if result.Err != nil {
+// 		log.Fatal(result.Err)
+// 	}
+// 	stats, err := result.Marshal()
+// 	if err != nil {
+// 		log.Fatal(result.Err)
+// 	}
+// 	log.Info(string(stats))
+// 	log.Debugf("%s\n", result.Payload)
+// 	return result.Payload
+// }

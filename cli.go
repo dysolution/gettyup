@@ -288,17 +288,17 @@ func main() {
 				{
 					Name:   "compositions",
 					Usage:  "all known values for Compositions",
-					Action: func(c *cli.Context) { prettyPrint(MetadataTranslator{}.GetCompositions(c)) },
+					Action: func(c *cli.Context) { prettyPrint(TermService{}.GetCompositions(c)) },
 				},
 				{
 					Name:   "expressions",
 					Usage:  "all known values for Expressions",
-					Action: func(c *cli.Context) { prettyPrint(MetadataTranslator{}.GetExpressions(c)) },
+					Action: func(c *cli.Context) { prettyPrint(TermService{}.GetExpressions(c)) },
 				},
 				{
 					Name:   "number_of_people",
 					Usage:  "all known values for Number Of People",
-					Action: func(c *cli.Context) { prettyPrint(MetadataTranslator{}.GetNumberOfPeople(c)) },
+					Action: func(c *cli.Context) { prettyPrint(TermService{}.GetNumberOfPeople(c)) },
 				},
 				{
 					Name:   "personalities",

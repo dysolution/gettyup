@@ -33,30 +33,6 @@ func GetControlledValues(context *cli.Context) []byte { return sdk.GetControlled
 // for Getty and iStock video.
 func GetTranscoderMappings(context *cli.Context) []byte { return sdk.GetTranscoderMappings(&client) }
 
-// A MetadataTranslator uses the SDK to unmarshal responses from the
-// people_metadata endpoints.
-type MetadataTranslator struct{ context *cli.Context }
-
-// Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
-func (m MetadataTranslator) Unmarshal(payload []byte) sdk.PeopleMetadataList {
-	return sdk.PeopleMetadataList{}.Unmarshal(payload)
-}
-
-// GetNumberOfPeople lists all possible values for Number of People.
-func (m MetadataTranslator) GetNumberOfPeople(context *cli.Context) sdk.PeopleMetadataList {
-	return sdk.PeopleMetadataList{}.GetNumberOfPeople(&client)
-}
-
-// GetExpressions lists all possible facial expression values.
-func (m MetadataTranslator) GetExpressions(context *cli.Context) sdk.PeopleMetadataList {
-	return sdk.PeopleMetadataList{}.GetExpressions(&client)
-}
-
-// GetCompositions lists all possible composition values.
-func (m MetadataTranslator) GetCompositions(context *cli.Context) sdk.PeopleMetadataList {
-	return sdk.PeopleMetadataList{}.GetCompositions(&client)
-}
-
 // Private
 
 // prettyPrint allows the CLI to pretty-print JSON responses by default. It

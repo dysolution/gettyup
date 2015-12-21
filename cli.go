@@ -298,7 +298,7 @@ func main() {
 				{
 					Name:   "number_of_people",
 					Usage:  "all known values for Number Of People",
-					Action: func(c *cli.Context) { GetNumberOfPeople(c) },
+					Action: func(c *cli.Context) { prettyPrint(MetadataTranslator{}.GetNumberOfPeople(c)) },
 				},
 				{
 					Name:   "personalities",

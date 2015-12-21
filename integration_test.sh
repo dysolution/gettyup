@@ -101,6 +101,8 @@ DELETE_RELEASE=( \
     --release-id 39811
 )
 
+NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
+
 "${CREATE_BATCH[@]}"
 "${CREATE_CONTRIBUTION[@]}"
 "${CREATE_RELEASE[@]}"
@@ -119,3 +121,5 @@ DELETE_RELEASE=( \
 "${DELETE_BATCH[@]}"
 "${DELETE_CONTRIBUTION[@]}"
 "${DELETE_RELEASE[@]}"
+
+"${NUMBER_OF_PEOPLE[@]}"

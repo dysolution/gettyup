@@ -39,8 +39,19 @@ func GetCompositions(context *cli.Context) []byte { return sdk.GetCompositions(&
 // GetExpressions lists all possible facial expression values.
 func GetExpressions(context *cli.Context) []byte { return sdk.GetExpressions(&client) }
 
+// A MetadataTranslator uses the SDK to unmarshal responses from the
+// people_metadata endpoints.
+type MetadataTranslator struct{ context *cli.Context }
+
+// Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
+func (m MetadataTranslator) Unmarshal(payload []byte) sdk.PeopleMetadataList {
+	return sdk.PeopleMetadataList{}.Unmarshal(payload)
+}
+
 // GetNumberOfPeople lists all possible values for Number of People.
-func GetNumberOfPeople(context *cli.Context) []byte { return sdk.GetNumberOfPeople(&client) }
+func (m MetadataTranslator) GetNumberOfPeople(context *cli.Context) sdk.PeopleMetadataList {
+	return sdk.PeopleMetadataList{}.GetNumberOfPeople(&client)
+}
 
 // Private
 

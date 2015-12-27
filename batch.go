@@ -16,25 +16,25 @@ type Batch struct{ context *cli.Context }
 func (b Batch) Index() sdk.BatchListContainer { return sdk.Batch{}.Index(&client) }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() sdk.Batch { return batch(b.id()).Get(&client) }
+func (b Batch) Get() sdk.Createable { return batch(b.id()).Get(&client) }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() sdk.Batch { return sdk.Batch{}.Create(&client, b.build()) }
+func (b Batch) Create() sdk.Createable { return sdk.Create(b.build(), &client) }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.Batch { return batch(b.id()).Update(&client, b.buildUpdate()) }
+func (b Batch) Update() sdk.Createable { return batch(b.id()).Update(&client, b.buildUpdate()) }
 
 // Delete destroys a specific Submission Batch.
 func (b Batch) Delete() { batch(b.id()).Delete(&client) }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
-func (b Batch) Unmarshal(payload []byte) sdk.Batch {
+func (b Batch) Unmarshal(payload []byte) sdk.Createable {
 	return sdk.Batch{}.Unmarshal(payload)
 }
 
 func (b Batch) id() int { return getBatchID(b.context) }
 
-func (b Batch) build() sdk.Batch {
+func (b Batch) build() sdk.Createable {
 	return sdk.Batch{
 		BriefID:               b.context.String("brief-id"),
 		EventID:               b.context.String("event-id"),

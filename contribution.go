@@ -5,7 +5,7 @@ import (
 	sdk "github.com/dysolution/espsdk"
 )
 
-// A ContributionList contains zero or more Contribtions.
+// A ContributionList contains zero or more Contributions.
 type ContributionList []Contribution
 
 // Unmarshal attempts to deserialize the provided JSON payload into a slice of Contribution objects.
@@ -24,17 +24,20 @@ func (c Contribution) Index() sdk.ContributionList {
 }
 
 // Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() sdk.Contribution {
-	return contribution(c.id()).Get(&client, getBatchID(c.context))
+func (c Contribution) Get() sdk.Createable {
+	return sdk.Get(contributionPath(getBatchID(c.context), c.id()), &client)
 }
 
 // Create associates a new Contribution with the specified Submission Batch.
-func (c Contribution) Create() sdk.Contribution {
-	return sdk.Contribution{}.Create(&client, getBatchID(c.context), c.build())
+func (c Contribution) Create() sdk.Createable {
+	batchID := getBatchID(c.context)
+	data := c.build()
+	contributionPath := sdk.ContributionPath(batchID, 0)
+	return sdk.Create(contributionPath, data, &client)
 }
 
 // Update changes metadata for an existing Contribution.
-func (c Contribution) Update() sdk.Contribution {
+func (c Contribution) Update() sdk.Createable {
 	return contribution(c.id()).Update(&client, getBatchID(c.context), c.buildUpdate())
 }
 
@@ -76,6 +79,7 @@ func (c Contribution) buildUpdate() sdk.ContributionUpdate {
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a Contribution object.
-func (c Contribution) Unmarshal(payload []byte) sdk.Contribution {
-	return sdk.Contribution{}.Unmarshal(payload)
+func (c Contribution) Unmarshal(payload []byte) sdk.DeserializedObject {
+	//return sdk.Contribution{}.Unmarshal(payload)
+	return sdk.Unmarshal(payload)
 }

@@ -18,20 +18,20 @@ var uploadBucket string
 // GetKeywords requests suggestions from the Getty controlled vocabulary
 // for the keywords provided.
 //TODO: use search input from context
-func GetKeywords(context *cli.Context) PrettyPrintable {
+func GetKeywords(context *cli.Context) sdk.TermList {
 	return client.GetTermList(sdk.Keywords)
 }
 
 // GetPersonalities requests suggestions from the Getty controlled vocabulary
 // for the famous personalities provided.
 //TODO: use search input from context
-func GetPersonalities(context *cli.Context) PrettyPrintable {
+func GetPersonalities(context *cli.Context) sdk.TermList {
 	return client.GetTermList(sdk.Personalities)
 }
 
 // GetControlledValues returns complete lists of values and descriptions for
 // fields with controlled vocabularies, grouped by submission type.
-func GetControlledValues(context *cli.Context) PrettyPrintable {
+func GetControlledValues(context *cli.Context) sdk.TermList {
 	return client.GetTermList(sdk.ControlledValues)
 }
 

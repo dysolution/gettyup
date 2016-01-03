@@ -30,7 +30,7 @@ func (r Release) Create() sdk.Createable {
 func (r Release) Delete() { client.Delete(r.path()) }
 
 // Get requests the metadata for a specific Release.
-func (r Release) Get() sdk.PrettyPrintable { return client.Get(r.path()) }
+func (r Release) Get() sdk.DeserializedObject { return client.Get(r.path()) }
 
 func (r Release) id() int { return getRequiredID(r.context, "release-id") }
 

@@ -39,7 +39,7 @@ func (c Contribution) Update() sdk.Createable {
 func (c Contribution) Delete() { client.Delete(c.path()) }
 
 // Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() sdk.PrettyPrintable { return client.Get(c.path()) }
+func (c Contribution) Get() sdk.DeserializedObject { return client.Get(c.path()) }
 
 func (c Contribution) id() int { return getRequiredID(c.context, "contribution-id") }
 

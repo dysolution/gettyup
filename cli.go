@@ -274,7 +274,7 @@ func main() {
 		{
 			Name:   "transcoder",
 			Usage:  "video transcoder mapping values",
-			Action: func(c *cli.Context) { GetTranscoderMappings(c) },
+			Action: func(c *cli.Context) { prettyPrint(GetTranscoderMappings(c)) },
 		},
 		{
 			Name:   "keywords",

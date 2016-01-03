@@ -37,17 +37,19 @@ func GetControlledValues(context *cli.Context) PrettyPrintable {
 
 // GetTranscoderMappings lists acceptable transcoder mapping values
 // for Getty and iStock video.
-func GetTranscoderMappings(context *cli.Context) PrettyPrintable {
-	return client.GetTermList(sdk.TranscoderMappings)
+func GetTranscoderMappings(context *cli.Context) sdk.TranscoderMappingList {
+	return client.GetTranscoderMappings()
 }
 
 // Private
 
-// prettyPrint allows the CLI to pretty-print JSON responses by default. It
-// can be disabled with the -q (--quiet) global option.
-func prettyPrint(o PrettyPrintable) {
+func prettyPrint(object interface{}) {
 	if quiet != true {
-		fmt.Println(o.PrettyPrint())
+		prettyOutput, err := sdk.Marshal(object)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(prettyOutput))
 	}
 }
 

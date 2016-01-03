@@ -16,7 +16,7 @@ type Batch struct{ context *cli.Context }
 func (b Batch) Index() sdk.BatchListContainer { return sdk.Batch{}.Index(&client) }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() sdk.PrettyPrintable { return sdk.Get(batchPath(b.context), &client) }
+func (b Batch) Get() sdk.PrettyPrintable { return sdk.Get(b.path(), &client) }
 
 // Create adds a new Submission Batch.
 func (b Batch) Create() sdk.Createable { return sdk.Create(Batches, b.build(), &client) }

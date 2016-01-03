@@ -47,8 +47,6 @@ func contribution(id int) sdk.Contribution { return sdk.Contribution{ID: id} }
 func release(id int) sdk.Release           { return sdk.Release{ID: id} }
 func batch(id int) *sdk.Batch              { return &sdk.Batch{ID: id} }
 
-func batchPath(context *cli.Context) string { return sdk.BatchPath(&sdk.Batch{ID: getBatchID(context)}) }
-
 func getRequiredID(context *cli.Context, param string) int {
 	v := context.Int(param)
 	if v == 0 {

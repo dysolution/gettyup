@@ -23,12 +23,6 @@ func (c Contribution) Index() sdk.ContributionList {
 	return sdk.Contribution{}.Index(&client, getBatchID(c.context))
 }
 
-// Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() sdk.Createable {
-	data := c.build()
-	return sdk.Get(data.Path(), &client)
-}
-
 // Create associates a new Contribution with the specified Submission Batch.
 func (c Contribution) Create() sdk.Createable {
 	data := c.build()
@@ -42,6 +36,9 @@ func (c Contribution) Update() sdk.Createable {
 
 // Delete destroys a specific Contribution.
 func (c Contribution) Delete() { sdk.Delete(c.path(), &client) }
+
+// Get requests the metadata for a specific Contribution.
+func (c Contribution) Get() sdk.PrettyPrintable { return sdk.Get(c.path(), &client) }
 
 func (c Contribution) id() int { return getContributionID(c.context) }
 

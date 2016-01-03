@@ -30,7 +30,6 @@ func (r Release) Index() sdk.ReleaseList {
 
 // Get requests the metadata for a specific Release.
 func (r Release) Get() sdk.Createable {
-	//return release(r.id()).Get(&client, getBatchID(r.context))
 	return sdk.Get(releasePath(getBatchID(r.context), r.id()), &client)
 }
 

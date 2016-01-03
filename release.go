@@ -42,9 +42,17 @@ func (r Release) Create() sdk.Createable {
 }
 
 // Delete destroys a specific Release.
-func (r Release) Delete() { release(r.id()).Delete(&client, getBatchID(r.context)) }
+func (r Release) Delete() { sdk.Delete(r.path(), &client) }
 
 func (r Release) id() int { return getReleaseID(r.context) }
+
+func (r Release) path() string {
+	obj := sdk.Release{
+		ID:                r.id(),
+		SubmissionBatchID: getBatchID(r.context),
+	}
+	return obj.Path()
+}
 
 func (r Release) build() sdk.Release {
 	return sdk.Release{

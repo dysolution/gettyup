@@ -31,7 +31,7 @@ func (c Contribution) Create() sdk.Createable {
 
 // Update changes metadata for an existing Contribution.
 func (c Contribution) Update() sdk.Createable {
-	data := c.buildUpdate()
+	data := sdk.ContributionUpdate{c.build()}
 	return client.Update(data.Path(), data)
 }
 
@@ -77,10 +77,6 @@ func (c Contribution) build() sdk.Contribution {
 		UploadBucket:         uploadBucket,
 		UploadID:             c.context.String("upload-id"),
 	}
-}
-
-func (c Contribution) buildUpdate() sdk.ContributionUpdate {
-	return sdk.ContributionUpdate{c.build()}
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a Contribution object.

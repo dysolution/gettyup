@@ -26,7 +26,7 @@ func (b Batch) Create() sdk.Createable {
 
 // Update changes fields for an existing Submission Batch.
 func (b Batch) Update() sdk.Createable {
-	data := b.buildUpdate()
+	data := sdk.BatchUpdate{b.build()}
 	return client.Update(data.Path(), data)
 }
 
@@ -52,8 +52,4 @@ func (b Batch) build() sdk.Batch {
 		SubmissionName:        b.context.String("submission-name"),
 		SubmissionType:        b.context.String("submission-type"),
 	}
-}
-
-func (b Batch) buildUpdate() sdk.BatchUpdate {
-	return sdk.BatchUpdate{b.build()}
 }

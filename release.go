@@ -28,17 +28,10 @@ func (r Release) Index() sdk.ReleaseList {
 	return sdk.Release{}.Index(&client, getBatchID(r.context))
 }
 
-// Get requests the metadata for a specific Release.
-func (r Release) Get() sdk.Createable {
-	return sdk.Get(releasePath(getBatchID(r.context), r.id()), &client)
-}
-
 // Create associates a new Release with the specified Submission Batch.
 func (r Release) Create() sdk.Createable {
-	batchID := getBatchID(r.context)
 	data := r.build()
-	releasePath := sdk.ReleasePath(batchID, 0)
-	return sdk.Create(releasePath, data, &client)
+	return sdk.Create(data.Path(), data, &client)
 }
 
 // Delete destroys a specific Release.

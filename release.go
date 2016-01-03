@@ -21,7 +21,7 @@ func (r Release) Index() sdk.ReleaseList {
 }
 
 // Create associates a new Release with the specified Submission Batch.
-func (r Release) Create() sdk.Createable {
+func (r Release) Create() sdk.DeserializedObject {
 	data := r.build()
 	return client.Create(data.Path(), data)
 }

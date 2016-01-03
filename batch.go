@@ -19,13 +19,13 @@ func (b Batch) Index() sdk.BatchListContainer { return sdk.Batch{}.Index(&client
 func (b Batch) Get() sdk.DeserializedObject { return client.Get(b.path()) }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() sdk.Createable {
+func (b Batch) Create() sdk.DeserializedObject {
 	data := b.build()
 	return client.Create(data.Path(), data)
 }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.Createable {
+func (b Batch) Update() sdk.DeserializedObject {
 	data := sdk.BatchUpdate{b.build()}
 	return client.Update(data.Path(), data)
 }

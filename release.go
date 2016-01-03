@@ -35,10 +35,10 @@ func (r Release) Create() sdk.Createable {
 }
 
 // Delete destroys a specific Release.
-func (r Release) Delete() { sdk.Delete(r.path(), &client) }
+func (r Release) Delete() { client.Delete(r.path()) }
 
 // Get requests the metadata for a specific Release.
-func (r Release) Get() sdk.PrettyPrintable { return sdk.Get(r.path(), &client) }
+func (r Release) Get() sdk.PrettyPrintable { return client.Get(r.path()) }
 
 func (r Release) id() int { return getReleaseID(r.context) }
 

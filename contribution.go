@@ -35,10 +35,10 @@ func (c Contribution) Update() sdk.Createable {
 }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete() { sdk.Delete(c.path(), &client) }
+func (c Contribution) Delete() { client.Delete(c.path()) }
 
 // Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() sdk.PrettyPrintable { return sdk.Get(c.path(), &client) }
+func (c Contribution) Get() sdk.PrettyPrintable { return client.Get(c.path()) }
 
 func (c Contribution) id() int { return getContributionID(c.context) }
 

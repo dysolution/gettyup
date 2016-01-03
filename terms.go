@@ -16,15 +16,15 @@ func (m TermService) Unmarshal(payload []byte) sdk.TermList {
 
 // GetNumberOfPeople lists all possible values for Number of People.
 func (m TermService) GetNumberOfPeople(context *cli.Context) sdk.TermList {
-	return sdk.TermList{}.GetNumberOfPeople(&client)
+	return client.GetTermList(sdk.NumberOfPeople)
 }
 
 // GetExpressions lists all possible facial expression values.
 func (m TermService) GetExpressions(context *cli.Context) sdk.TermList {
-	return sdk.TermList{}.GetExpressions(&client)
+	return client.GetTermList(sdk.Expressions)
 }
 
 // GetCompositions lists all possible composition values.
 func (m TermService) GetCompositions(context *cli.Context) sdk.TermList {
-	return sdk.TermList{}.GetCompositions(&client)
+	return client.GetTermList(sdk.Compositions)
 }

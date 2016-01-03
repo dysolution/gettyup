@@ -18,20 +18,28 @@ var uploadBucket string
 // GetKeywords requests suggestions from the Getty controlled vocabulary
 // for the keywords provided.
 //TODO: use search input from context
-func GetKeywords(context *cli.Context) []byte { return sdk.GetKeywords(&client) }
+func GetKeywords(context *cli.Context) PrettyPrintable {
+	return client.GetTermList(sdk.Keywords)
+}
 
 // GetPersonalities requests suggestions from the Getty controlled vocabulary
 // for the famous personalities provided.
 //TODO: use search input from context
-func GetPersonalities(context *cli.Context) []byte { return sdk.GetPersonalities(&client) }
+func GetPersonalities(context *cli.Context) PrettyPrintable {
+	return client.GetTermList(sdk.Personalities)
+}
 
 // GetControlledValues returns complete lists of values and descriptions for
 // fields with controlled vocabularies, grouped by submission type.
-func GetControlledValues(context *cli.Context) []byte { return sdk.GetControlledValues(&client) }
+func GetControlledValues(context *cli.Context) PrettyPrintable {
+	return client.GetTermList(sdk.ControlledValues)
+}
 
 // GetTranscoderMappings lists acceptable transcoder mapping values
 // for Getty and iStock video.
-func GetTranscoderMappings(context *cli.Context) []byte { return sdk.GetTranscoderMappings(&client) }
+func GetTranscoderMappings(context *cli.Context) PrettyPrintable {
+	return client.GetTermList(sdk.TranscoderMappings)
+}
 
 // Private
 

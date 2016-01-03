@@ -21,7 +21,7 @@ func (b Batch) Get() sdk.DeserializedObject { return client.Get(b.path()) }
 // Create adds a new Submission Batch.
 func (b Batch) Create() sdk.Createable {
 	data := b.build()
-	return sdk.Create(data.Path(), data, &client)
+	return client.Create(data.Path(), data)
 }
 
 // Update changes fields for an existing Submission Batch.

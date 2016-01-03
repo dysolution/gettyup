@@ -31,7 +31,7 @@ func (r Release) Index() sdk.ReleaseList {
 // Create associates a new Release with the specified Submission Batch.
 func (r Release) Create() sdk.Createable {
 	data := r.build()
-	return sdk.Create(data.Path(), data, &client)
+	return client.Create(data.Path(), data)
 }
 
 // Delete destroys a specific Release.

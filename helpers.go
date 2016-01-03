@@ -55,9 +55,7 @@ func getRequiredID(context *cli.Context, param string) int {
 	return v
 }
 
-func getBatchID(context *cli.Context) int        { return getRequiredID(context, "submission-batch-id") }
-func getReleaseID(context *cli.Context) int      { return getRequiredID(context, "release-id") }
-func getContributionID(context *cli.Context) int { return getRequiredID(context, "contribution-id") }
+func getBatchID(context *cli.Context) int { return getRequiredID(context, "submission-batch-id") }
 
 // func get(path string) []byte {
 // 	request := sdk.NewRequest("GET", path, Token(), nil)

@@ -7,14 +7,6 @@ import (
 	sdk "github.com/dysolution/espsdk"
 )
 
-// A ReleaseList contains zero or more Releases.
-type ReleaseList []Release
-
-// Unmarshal attempts to deserialize the provided JSON payload into a slice of Release objects.
-func (rl ReleaseList) Unmarshal(payload []byte) sdk.ReleaseList {
-	return sdk.ReleaseList{}.Unmarshal(payload)
-}
-
 var releaseTypes = string(strings.Join(sdk.Release{}.ValidTypes(), " OR "))
 
 // A Release wraps the verbs provided by the ESP API for Releases,
@@ -40,7 +32,7 @@ func (r Release) Delete() { client.Delete(r.path()) }
 // Get requests the metadata for a specific Release.
 func (r Release) Get() sdk.PrettyPrintable { return client.Get(r.path()) }
 
-func (r Release) id() int { return getReleaseID(r.context) }
+func (r Release) id() int { return getRequiredID(r.context, "release-id") }
 
 func (r Release) path() string {
 	obj := sdk.Release{

@@ -41,7 +41,7 @@ func (c Contribution) Delete() { client.Delete(c.path()) }
 // Get requests the metadata for a specific Contribution.
 func (c Contribution) Get() sdk.PrettyPrintable { return client.Get(c.path()) }
 
-func (c Contribution) id() int { return getContributionID(c.context) }
+func (c Contribution) id() int { return getRequiredID(c.context, "contribution-id") }
 
 func (c Contribution) path() string {
 	obj := sdk.Contribution{

@@ -14,15 +14,7 @@ type Serializable interface {
 }
 
 func getClient(key, secret, username, password string) sdk.Client {
-	return sdk.Client{
-		sdk.Credentials{
-			APIKey:      key,
-			APISecret:   secret,
-			ESPUsername: username,
-			ESPPassword: password,
-		},
-		uploadBucket,
-	}
+	return sdk.GetClient(key, secret, username, password, uploadBucket)
 }
 
 func stringToToken(tokenString string) sdk.Token {

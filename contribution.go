@@ -42,9 +42,17 @@ func (c Contribution) Update() sdk.Createable {
 }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete() { contribution(c.id()).Delete(&client, getBatchID(c.context)) }
+func (c Contribution) Delete() { sdk.Delete(c.path(), &client) }
 
 func (c Contribution) id() int { return getContributionID(c.context) }
+
+func (c Contribution) path() string {
+	obj := sdk.Contribution{
+		ID:                c.id(),
+		SubmissionBatchID: getBatchID(c.context),
+	}
+	return obj.Path()
+}
 
 func (c Contribution) build() sdk.Contribution {
 	return sdk.Contribution{

@@ -25,15 +25,14 @@ func (c Contribution) Index() sdk.ContributionList {
 
 // Get requests the metadata for a specific Contribution.
 func (c Contribution) Get() sdk.Createable {
-	return sdk.Get(contributionPath(getBatchID(c.context), c.id()), &client)
+	data := c.build()
+	return sdk.Get(data.Path(), &client)
 }
 
 // Create associates a new Contribution with the specified Submission Batch.
 func (c Contribution) Create() sdk.Createable {
-	batchID := getBatchID(c.context)
 	data := c.build()
-	contributionPath := sdk.ContributionPath(batchID, 0)
-	return sdk.Create(contributionPath, data, &client)
+	return sdk.Create(data.Path(), data, &client)
 }
 
 // Update changes metadata for an existing Contribution.

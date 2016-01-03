@@ -25,7 +25,10 @@ func (b Batch) Create() sdk.Createable {
 }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.Createable { return batch(b.id()).Update(&client, b.buildUpdate()) }
+func (b Batch) Update() sdk.Createable {
+	data := b.buildUpdate()
+	return client.Update(data.Path(), data)
+}
 
 // Delete destroys a specific Submission Batch.
 func (b Batch) Delete() { client.Delete(b.path()) }
@@ -42,6 +45,7 @@ func (b Batch) build() sdk.Batch {
 	return sdk.Batch{
 		BriefID:               b.context.String("brief-id"),
 		EventID:               b.context.String("event-id"),
+		ID:                    b.context.Int("submission-batch-id"),
 		Note:                  b.context.String("note"),
 		AssignmentID:          b.context.String("assignment-id"),
 		SaveExtractedMetadata: b.context.Bool("save-extracted-metadata"),

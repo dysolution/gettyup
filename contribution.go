@@ -31,7 +31,8 @@ func (c Contribution) Create() sdk.Createable {
 
 // Update changes metadata for an existing Contribution.
 func (c Contribution) Update() sdk.Createable {
-	return contribution(c.id()).Update(&client, getBatchID(c.context), c.buildUpdate())
+	data := c.buildUpdate()
+	return client.Update(data.Path(), data)
 }
 
 // Delete destroys a specific Contribution.

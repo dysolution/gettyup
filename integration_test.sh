@@ -52,6 +52,8 @@ CREATE_RELEASE=( \
 
 GET_BATCH=($CMD --token=$TOKEN batch get --submission-batch-id $GES_BATCH_ID)
 
+LAST_BATCH=($CMD --token=$TOKEN batch last)
+
 GET_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution get \
     --submission-batch-id $GES_BATCH_ID \
@@ -91,10 +93,6 @@ INDEX_RELEASES=( \
     --submission-batch-id $GCV_BATCH_ID \
 )
 
-DELETE_BATCH=( \
-  $CMD --token=$TOKEN batch delete \
-    --submission-batch-id 86474 \
-)
 
 DELETE_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution delete \
@@ -113,7 +111,12 @@ PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
     PEOPLE_COMPOSITIONS=($CMD --token=$TOKEN people compositions)
     TRANSCODER_MAPPINGS=($CMD --token=$TOKEN transcoder)
 
+# Enable or disable this entire block to keep the count of batches steady
 "${CREATE_BATCH[@]}"
+NEWEST_BATCH_ID=$("${LAST_BATCH[@]}")
+DELETE_BATCH=($CMD --token=$TOKEN batch delete --submission-batch-id $NEWEST_BATCH_ID)
+"${DELETE_BATCH[@]}"
+
 "${CREATE_CONTRIBUTION[@]}"
 "${CREATE_RELEASE[@]}"
 
@@ -128,7 +131,6 @@ PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
 "${INDEX_CONTRIBUTIONS[@]}"
 "${INDEX_RELEASES[@]}"
 
-"${DELETE_BATCH[@]}"
 "${DELETE_CONTRIBUTION[@]}"
 "${DELETE_RELEASE[@]}"
 

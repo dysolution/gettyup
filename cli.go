@@ -95,6 +95,11 @@ func main() {
 						cli.StringFlag{Name: "submission-batch-id, b"},
 					},
 				},
+				{
+					Name:   "last",
+					Usage:  "get the most recent Submission Batch",
+					Action: func(c *cli.Context) { fmt.Println(Batch{c}.Last().ID) },
+				},
 			},
 		},
 		{

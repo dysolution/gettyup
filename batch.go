@@ -13,7 +13,10 @@ var batchTypes = string(strings.Join(sdk.Batch{}.ValidTypes(), " OR "))
 type Batch struct{ context *cli.Context }
 
 // Index requests a list of all Submission Batches belonging to the user.
-func (b Batch) Index() *sdk.DeserializedObject { return client.Index(sdk.Batches) }
+func (b Batch) Index() *sdk.DeserializedObject {
+	data := b.build()
+	return client.Index(data.Path())
+}
 
 // Get requests the metadata for a specific Submission Batch.
 func (b Batch) Get() sdk.DeserializedObject { return client.Get(b.path()) }

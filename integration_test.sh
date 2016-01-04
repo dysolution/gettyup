@@ -2,10 +2,17 @@
 
 set -e
 
+# Uncomment this line (and comment the other CMD declaration) to use
+# "go run" for each test instead of a compiled/installed binary.
+# 
 #CMD="go run *.go ${@}"
+
+# Running a compiled binary for each test will be a bit faster.
+#
 golint
 go install
 CMD="gettyup ${@}"
+
 TOKEN=$($CMD token)  # retrieve and cache a token
 
 GES_BATCH_ID=86102  # a Getty Editorial Still (Image) batch
@@ -48,7 +55,7 @@ GET_BATCH=($CMD --token=$TOKEN batch get --submission-batch-id $GES_BATCH_ID)
 GET_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution get \
     --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124128 \
+    --contribution-id 1124355 \
 )
 
 GET_RELEASE=( \
@@ -67,8 +74,8 @@ UPDATE_BATCH=( \
 UPDATE_CONTRIBUTION=( \
   $CMD ${@} --token=$TOKEN contribution update \
     --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124128
-    --headline="another photo" \
+    --contribution-id 1124360
+    --headline="yet another photo" \
     --country-of-shoot="Canada" \
 )
 
@@ -86,44 +93,47 @@ INDEX_RELEASES=( \
 
 DELETE_BATCH=( \
   $CMD --token=$TOKEN batch delete \
-    --submission-batch-id 86097 \
+    --submission-batch-id 86474 \
 )
 
 DELETE_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution delete \
     --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124254
+    --contribution-id 1124253
 )
 
 DELETE_RELEASE=( \
   $CMD --token=$TOKEN release delete \
     --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39811
+    --release-id 39904
 )
 
 PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
-PEOPLE_EXPRESSIONS=($CMD --token=$TOKEN people expressions)
-PEOPLE_COMPOSITIONS=($CMD --token=$TOKEN people compositions)
+     PEOPLE_EXPRESSIONS=($CMD --token=$TOKEN people expressions)
+    PEOPLE_COMPOSITIONS=($CMD --token=$TOKEN people compositions)
+    TRANSCODER_MAPPINGS=($CMD --token=$TOKEN transcoder)
 
-# "${CREATE_BATCH[@]}"
-# "${CREATE_CONTRIBUTION[@]}"
-# "${CREATE_RELEASE[@]}"
+"${CREATE_BATCH[@]}"
+"${CREATE_CONTRIBUTION[@]}"
+"${CREATE_RELEASE[@]}"
 
-# "${UPDATE_BATCH[@]}"
-# "${UPDATE_CONTRIBUTION[@]}"
+"${UPDATE_BATCH[@]}"
+"${UPDATE_CONTRIBUTION[@]}"
 
-# "${GET_BATCH[@]}"
-# "${GET_CONTRIBUTION[@]}"
+"${GET_BATCH[@]}"
+"${GET_CONTRIBUTION[@]}"
 "${GET_RELEASE[@]}"
 
-# "${INDEX_BATCHES[@]}"
-# "${INDEX_CONTRIBUTIONS[@]}"
-# "${INDEX_RELEASES[@]}"
+"${INDEX_BATCHES[@]}"
+"${INDEX_CONTRIBUTIONS[@]}"
+"${INDEX_RELEASES[@]}"
 
-# "${DELETE_BATCH[@]}"
-# "${DELETE_CONTRIBUTION[@]}"
-# "${DELETE_RELEASE[@]}"
+"${DELETE_BATCH[@]}"
+"${DELETE_CONTRIBUTION[@]}"
+"${DELETE_RELEASE[@]}"
 
-# "${PEOPLE_NUMBER_OF_PEOPLE[@]}"
-# "${PEOPLE_EXPRESSIONS[@]}"
-# "${PEOPLE_COMPOSITIONS[@]}"
+"${PEOPLE_NUMBER_OF_PEOPLE[@]}"
+"${PEOPLE_EXPRESSIONS[@]}"
+"${PEOPLE_COMPOSITIONS[@]}"
+
+"${TRANSCODER_MAPPINGS[@]}"

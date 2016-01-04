@@ -1,4 +1,5 @@
-# gettyup
+# gettyup [![GoDoc](https://godoc.org/github.com/dysolution/gettyup?status.svg)](https://godoc.org/github.com/dysolution/gettyup)
+
 GettyUp is a minimal Command Line Interface (CLI)
 for Getty Images' Enterprise Submission Portal (ESP).
 

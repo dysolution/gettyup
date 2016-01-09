@@ -36,7 +36,9 @@ func (c Contribution) Update() sdk.DeserializedObject {
 }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete() { client.Delete(c.path()) }
+func (c Contribution) Delete() sdk.DeserializedObject {
+	return client.Delete(c.path())
+}
 
 // Get requests the metadata for a specific Contribution.
 func (c Contribution) Get() sdk.DeserializedObject { return client.Get(c.path()) }

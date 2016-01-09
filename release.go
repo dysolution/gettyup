@@ -27,7 +27,9 @@ func (r Release) Create() sdk.DeserializedObject {
 }
 
 // Delete destroys a specific Release.
-func (r Release) Delete() { client.Delete(r.path()) }
+func (r Release) Delete() sdk.DeserializedObject {
+	return client.Delete(r.path())
+}
 
 // Get requests the metadata for a specific Release.
 func (r Release) Get() sdk.DeserializedObject { return client.Get(r.path()) }

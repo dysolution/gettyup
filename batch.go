@@ -34,7 +34,9 @@ func (b Batch) Update() sdk.DeserializedObject {
 }
 
 // Delete destroys a specific Submission Batch.
-func (b Batch) Delete() { client.Delete(b.path()) }
+func (b Batch) Delete() sdk.DeserializedObject {
+	return client.Delete(b.path())
+}
 
 // Last returns the newest Submission Batch.
 func (b Batch) Last() sdk.Batch { return client.Get(sdk.Batches).Last() }

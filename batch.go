@@ -29,7 +29,7 @@ func (b Batch) Create() sdk.DeserializedObject {
 
 // Update changes fields for an existing Submission Batch.
 func (b Batch) Update() sdk.DeserializedObject {
-	data := sdk.BatchUpdate{b.build()}
+	data := sdk.BatchUpdate{Batch: b.build()}
 	return client.Update(data.Path(), data)
 }
 

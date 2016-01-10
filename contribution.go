@@ -31,7 +31,7 @@ func (c Contribution) Create() sdk.DeserializedObject {
 
 // Update changes metadata for an existing Contribution.
 func (c Contribution) Update() sdk.DeserializedObject {
-	data := sdk.ContributionUpdate{c.build()}
+	data := sdk.ContributionUpdate{Contribution: c.build()}
 	return client.Update(data.Path(), data)
 }
 

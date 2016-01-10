@@ -20,12 +20,3 @@ func getClient(key, secret, username, password string) sdk.Client {
 func stringToToken(tokenString string) sdk.Token {
 	return sdk.Token(tokenString)
 }
-
-// Token is a memoizing wrapper for the API's token-providing function.
-func Token() sdk.Token {
-	if token != "" {
-		return token
-	}
-	token = client.GetToken()
-	return token
-}

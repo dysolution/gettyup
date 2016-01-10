@@ -44,7 +44,7 @@ func main() {
 		{
 			Name:   "token",
 			Usage:  "retrieve and print an OAuth2 authorization token",
-			Action: func(c *cli.Context) { fmt.Println(Token()) },
+			Action: func(c *cli.Context) { fmt.Println(client.Token) },
 		},
 		{
 			Name:  "batch",

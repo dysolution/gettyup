@@ -26,13 +26,13 @@ func (c Contribution) Index() sdk.ContributionList {
 // Create associates a new Contribution with the specified Submission Batch.
 func (c Contribution) Create() sdk.DeserializedObject {
 	data := c.build()
-	return client.Create(data.Path(), data)
+	return client.Create(data)
 }
 
 // Update changes metadata for an existing Contribution.
 func (c Contribution) Update() sdk.DeserializedObject {
 	data := sdk.ContributionUpdate{Contribution: c.build()}
-	return client.Update(data.Path(), data)
+	return client.Update(data)
 }
 
 // Delete destroys a specific Contribution.

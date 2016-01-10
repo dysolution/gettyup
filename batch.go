@@ -24,13 +24,13 @@ func (b Batch) Get() sdk.DeserializedObject { return client.Get(b.path()) }
 // Create adds a new Submission Batch.
 func (b Batch) Create() sdk.DeserializedObject {
 	data := b.build()
-	return client.Create(data.Path(), data)
+	return client.Create(data)
 }
 
 // Update changes fields for an existing Submission Batch.
 func (b Batch) Update() sdk.DeserializedObject {
 	data := sdk.BatchUpdate{Batch: b.build()}
-	return client.Update(data.Path(), data)
+	return client.Update(data)
 }
 
 // Delete destroys a specific Submission Batch.

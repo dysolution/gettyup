@@ -66,7 +66,7 @@ func (c Contribution) build() sdk.Contribution {
 		FilePath:             c.context.String("file-path"),
 		Headline:             c.context.String("headline"),
 		ID:                   c.context.Int("contribution-id"),
-		IptcCategory:         c.context.String("iptc-category"),
+		IPTCCategory:         c.context.String("iptc-category"),
 		MimeType:             c.context.String("mime-type"),
 		ParentSource:         c.context.String("parent-source"),
 		RecordedDate:         c.context.String("recorded-date"),

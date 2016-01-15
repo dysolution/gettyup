@@ -8,10 +8,12 @@ import (
 	"github.com/codegangsta/cli"
 )
 
+var patchVersion string
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "gettyup"
-	app.Version = "0.0.2"
+	app.Version = "0.0.2" + patchVersion
 	app.Usage = "interact with the Getty Images ESP API"
 	app.Author = "Jordan Peterson"
 	app.Email = "dysolution@gmail.com"

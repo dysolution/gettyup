@@ -16,7 +16,7 @@ CMD="gettyup ${@}"
 TOKEN=$($CMD token)  # retrieve and cache a token
 
 GES_BATCH_ID=86102  # a Getty Editorial Still (Image) batch
-GCV_BATCH_ID=86103  # a Getty Creative Video batch
+GCV_BATCH_ID=86695  # a Getty Creative Video batch
 
 
 CREATE_BATCH=( \
@@ -63,7 +63,7 @@ GET_CONTRIBUTION=( \
 GET_RELEASE=( \
   $CMD --token=$TOKEN release get \
     --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39770 \
+    --release-id 39938 \
 )
 
 UPDATE_BATCH=( \
@@ -112,6 +112,7 @@ PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
     TRANSCODER_MAPPINGS=($CMD --token=$TOKEN transcoder)
 
 # Enable or disable this entire block to keep the count of batches steady
+
 "${CREATE_BATCH[@]}"
 NEWEST_BATCH_ID=$("${LAST_BATCH[@]}")
 DELETE_BATCH=($CMD --token=$TOKEN batch delete --submission-batch-id $NEWEST_BATCH_ID)

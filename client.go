@@ -4,7 +4,7 @@ import (
 	sdk "github.com/dysolution/espsdk"
 )
 
-var client sdk.Client
+var client *sdk.Client
 var quiet bool
 var token sdk.Token
 
@@ -13,7 +13,7 @@ type Serializable interface {
 	Marshal() ([]byte, error)
 }
 
-func getClient(key, secret, username, password string) sdk.Client {
+func getClient(key, secret, username, password string) *sdk.Client {
 	return sdk.GetClient(key, secret, username, password, uploadBucket)
 }
 

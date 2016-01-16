@@ -9,7 +9,7 @@ import (
 type ContributionList []Contribution
 
 // Unmarshal attempts to deserialize the provided JSON payload into a slice of Contribution objects.
-func (cl ContributionList) Unmarshal(payload []byte) sdk.ContributionList {
+func (cl ContributionList) Unmarshal(payload []byte) (sdk.ContributionList, error) {
 	return sdk.ContributionList{}.Unmarshal(payload)
 }
 
@@ -41,7 +41,29 @@ func (c Contribution) Delete() sdk.DeserializedObject {
 }
 
 // Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() sdk.DeserializedObject { return client.Get(c.path()) }
+func (c Contribution) Get() *sdk.Contribution {
+	desc := "Contribution.Get"
+	data := c.build()
+	var contribution *sdk.Contribution
+
+	result, err := client.VerboseGet(data)
+	if err != nil {
+		result.Log().Error(desc)
+		return contribution
+	}
+	if result.GetStatusCode() == 404 {
+		result.Log().Error(desc)
+		return contribution
+	}
+	result.Log().Info(desc)
+	contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return contribution
+	}
+	return contribution
+
+}
 
 func (c Contribution) id() int { return getRequiredID(c.context, "contribution-id") }
 
@@ -82,7 +104,6 @@ func (c Contribution) build() sdk.Contribution {
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a Contribution object.
-func (c Contribution) Unmarshal(payload []byte) sdk.DeserializedObject {
-	//return sdk.Contribution{}.Unmarshal(payload)
-	return sdk.Unmarshal(payload)
+func (c Contribution) Unmarshal(payload []byte) (*sdk.Contribution, error) {
+	return sdk.Contribution{}.Unmarshal(payload)
 }

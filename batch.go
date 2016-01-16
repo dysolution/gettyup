@@ -19,7 +19,29 @@ func (b Batch) Index() *sdk.DeserializedObject {
 }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() sdk.DeserializedObject { return client.Get(b.path()) }
+func (b Batch) Get() *sdk.Batch {
+	desc := "Batch.Get"
+	data := b.build()
+	var batch *sdk.Batch
+
+	result, err := client.VerboseGet(data)
+	if err != nil {
+		result.Log().Error(desc)
+		return batch
+	}
+	if result.GetStatusCode() == 404 {
+		result.Log().Error(desc)
+		return batch
+	}
+	result.Log().Info(desc)
+	batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return batch
+	}
+	return batch
+
+}
 
 // Create adds a new Submission Batch.
 func (b Batch) Create() sdk.DeserializedObject {

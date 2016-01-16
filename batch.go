@@ -116,7 +116,7 @@ func (b Batch) Delete() *sdk.Batch {
 }
 
 // Last returns the newest Submission Batch.
-func (b Batch) Last() sdk.Batch { return client.Get(sdk.Batches).Last() }
+func (b Batch) Last() sdk.Batch { return client.Index(sdk.Batches).Last() }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
 func (b Batch) Unmarshal(payload []byte) sdk.DeserializedObject {

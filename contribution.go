@@ -1,6 +1,8 @@
 package main
 
 import (
+	"runtime"
+
 	"github.com/codegangsta/cli"
 	sdk "github.com/dysolution/espsdk"
 )
@@ -55,9 +57,35 @@ func (c Contribution) Create() *sdk.Contribution {
 }
 
 // Update changes metadata for an existing Contribution.
-func (c Contribution) Update() sdk.DeserializedObject {
-	data := sdk.ContributionUpdate{Contribution: c.build()}
-	return client.Update(data)
+func (c Contribution) Update() *sdk.Contribution {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
+	data := c.build()
+	var contribution *sdk.Contribution
+
+	result, err := client.Update(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return contribution
+	}
+
+	switch result.StatusCode {
+	case 200:
+		result.Log().Info(desc + "updated")
+		contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch not found")
+	case 422:
+		result.Log().Error(desc + "unprocessable: already-submitted contribution or closed batch")
+	}
+	return contribution
 }
 
 // Delete destroys a specific Contribution.

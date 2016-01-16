@@ -75,9 +75,35 @@ func (b Batch) Create() *sdk.Batch {
 }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() sdk.DeserializedObject {
-	data := sdk.BatchUpdate{Batch: b.build()}
-	return client.Update(data)
+func (b Batch) Update() *sdk.Batch {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
+	data := b.build()
+	var batch *sdk.Batch
+
+	result, err := client.Update(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return batch
+	}
+
+	switch result.StatusCode {
+	case 200:
+		result.Log().Info(desc + "updated")
+		batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch not found")
+	case 422:
+		result.Log().Error(desc + "unprocessable: bad params or closed batch")
+	}
+	return batch
 }
 
 // Delete destroys a specific Submission Batch.

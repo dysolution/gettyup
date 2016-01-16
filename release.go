@@ -21,9 +21,36 @@ func (r Release) Index() sdk.ReleaseList {
 }
 
 // Create associates a new Release with the specified Submission Batch.
-func (r Release) Create() sdk.DeserializedObject {
+func (r Release) Create() *sdk.Release {
+	desc := "Release.Create: "
 	data := r.build()
-	return client.Create(data)
+	var release *sdk.Release
+
+	result, err := client.VerboseCreate(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return release
+	}
+
+	switch result.StatusCode {
+	case 201:
+		result.Log().Info(desc + "created")
+		release, err = sdk.Release{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch not found")
+	case 422:
+		msg := desc + "the release failed to upload: "
+		msg += data.ExternalFileLocation
+		result.Log().Error(msg)
+	}
+	return release
 }
 
 // Delete destroys a specific Release.
@@ -42,7 +69,7 @@ func (r Release) Get() *sdk.Release {
 		result.Log().Error(desc)
 		return release
 	}
-	if result.GetStatusCode() == 404 {
+	if result.StatusCode == 404 {
 		result.Log().Error(desc)
 		return release
 	}

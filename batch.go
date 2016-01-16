@@ -1,6 +1,7 @@
 package main
 
 import (
+	"runtime"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -29,7 +30,7 @@ func (b Batch) Get() *sdk.Batch {
 		result.Log().Error(desc)
 		return batch
 	}
-	if result.GetStatusCode() == 404 {
+	if result.StatusCode == 404 {
 		result.Log().Error(desc)
 		return batch
 	}
@@ -44,9 +45,33 @@ func (b Batch) Get() *sdk.Batch {
 }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() sdk.DeserializedObject {
+func (b Batch) Create() *sdk.Batch {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := b.build()
-	return client.Create(data)
+	var batch *sdk.Batch
+
+	result, err := client.VerboseCreate(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return batch
+	}
+
+	switch result.StatusCode {
+	case 201:
+		result.Log().Info(desc + "created")
+		batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 422:
+		result.Log().Error(desc + "invalid batch data provided")
+	}
+	return batch
 }
 
 // Update changes fields for an existing Submission Batch.
@@ -56,8 +81,38 @@ func (b Batch) Update() sdk.DeserializedObject {
 }
 
 // Delete destroys a specific Submission Batch.
-func (b Batch) Delete() sdk.DeserializedObject {
-	return client.Delete(b.path())
+func (b Batch) Delete() *sdk.Batch {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
+	data := b.build()
+	var batch *sdk.Batch
+
+	result, err := client.VerboseDelete(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return batch
+	}
+
+	switch result.StatusCode {
+	case 204:
+		result.Log().Info(desc + "deleted")
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch not found")
+	case 422:
+		result.Log().Error(desc + "batch is protected from deletion")
+	}
+	// successful deletion usually returns a 204 without a payload/body
+	if len(result.Payload) > 0 {
+		batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	}
+	return batch
 }
 
 // Last returns the newest Submission Batch.

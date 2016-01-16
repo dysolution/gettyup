@@ -24,9 +24,34 @@ func (c Contribution) Index() sdk.ContributionList {
 }
 
 // Create associates a new Contribution with the specified Submission Batch.
-func (c Contribution) Create() sdk.DeserializedObject {
+func (c Contribution) Create() *sdk.Contribution {
+	desc := "Contribution.Create: "
 	data := c.build()
-	return client.Create(data)
+	var contribution *sdk.Contribution
+
+	result, err := client.VerboseCreate(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return contribution
+	}
+
+	switch result.StatusCode {
+	case 201:
+		result.Log().Info(desc + "created")
+		contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch not found")
+	case 422:
+		result.Log().Error(desc + "submission batch is closed")
+	}
+	return contribution
 }
 
 // Update changes metadata for an existing Contribution.
@@ -51,7 +76,7 @@ func (c Contribution) Get() *sdk.Contribution {
 		result.Log().Error(desc)
 		return contribution
 	}
-	if result.GetStatusCode() == 404 {
+	if result.StatusCode == 404 {
 		result.Log().Error(desc)
 		return contribution
 	}

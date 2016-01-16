@@ -51,7 +51,7 @@ func (b Batch) Create() *sdk.Batch {
 	data := b.build()
 	var batch *sdk.Batch
 
-	result, err := client.VerboseCreate(data)
+	result, err := client.Create(data)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return batch

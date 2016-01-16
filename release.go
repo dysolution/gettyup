@@ -26,7 +26,7 @@ func (r Release) Create() *sdk.Release {
 	data := r.build()
 	var release *sdk.Release
 
-	result, err := client.VerboseCreate(data)
+	result, err := client.Create(data)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return release

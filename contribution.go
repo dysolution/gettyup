@@ -29,7 +29,7 @@ func (c Contribution) Create() *sdk.Contribution {
 	data := c.build()
 	var contribution *sdk.Contribution
 
-	result, err := client.VerboseCreate(data)
+	result, err := client.Create(data)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return contribution

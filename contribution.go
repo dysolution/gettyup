@@ -89,8 +89,38 @@ func (c Contribution) Update() *sdk.Contribution {
 }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete() sdk.DeserializedObject {
-	return client.Delete(c.path())
+func (c Contribution) Delete() *sdk.Contribution {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
+	data := c.build()
+	var contribution *sdk.Contribution
+
+	result, err := client.VerboseDelete(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return contribution
+	}
+
+	switch result.StatusCode {
+	case 204:
+		result.Log().Info(desc + "deleted")
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch or contribution not found")
+	case 422:
+		result.Log().Error(desc + "unprocessable: already-submitted contribution or closed batch")
+	}
+	// successful deletion usually returns a 204 without a payload/body
+	if len(result.Payload) > 0 {
+		contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	}
+	return contribution
 }
 
 // Get requests the metadata for a specific Contribution.

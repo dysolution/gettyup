@@ -4,7 +4,7 @@ import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	sdk "github.com/dysolution/espsdk"
+	"github.com/dysolution/espsdk"
 )
 
 // PrettyPrintable applies to all objects that should have an easy-to-read
@@ -18,26 +18,26 @@ var uploadBucket string
 // GetKeywords requests suggestions from the Getty controlled vocabulary
 // for the keywords provided.
 //TODO: use search input from context
-func GetKeywords(context *cli.Context) sdk.TermList {
-	return client.GetTermList(sdk.Keywords)
+func GetKeywords(context *cli.Context) espsdk.TermList {
+	return client.GetTermList(espsdk.Keywords)
 }
 
 // GetPersonalities requests suggestions from the Getty controlled vocabulary
 // for the famous personalities provided.
 //TODO: use search input from context
-func GetPersonalities(context *cli.Context) sdk.TermList {
-	return client.GetTermList(sdk.Personalities)
+func GetPersonalities(context *cli.Context) espsdk.TermList {
+	return client.GetTermList(espsdk.Personalities)
 }
 
 // GetControlledValues returns complete lists of values and descriptions for
 // fields with controlled vocabularies, grouped by submission type.
-func GetControlledValues(context *cli.Context) sdk.TermList {
-	return client.GetTermList(sdk.ControlledValues)
+func GetControlledValues(context *cli.Context) espsdk.TermList {
+	return client.GetTermList(espsdk.ControlledValues)
 }
 
 // GetTranscoderMappings lists acceptable transcoder mapping values
 // for Getty and iStock video.
-func GetTranscoderMappings(context *cli.Context) sdk.TranscoderMappingList {
+func GetTranscoderMappings(context *cli.Context) espsdk.TranscoderMappingList {
 	return client.GetTranscoderMappings()
 }
 
@@ -45,7 +45,7 @@ func GetTranscoderMappings(context *cli.Context) sdk.TranscoderMappingList {
 
 func prettyPrint(object interface{}) {
 	if quiet != true {
-		prettyOutput, err := sdk.Marshal(object)
+		prettyOutput, err := espsdk.Marshal(object)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -53,9 +53,9 @@ func prettyPrint(object interface{}) {
 	}
 }
 
-func contribution(id int) sdk.Contribution { return sdk.Contribution{ID: id} }
-func release(id int) sdk.Release           { return sdk.Release{ID: id} }
-func batch(id int) *sdk.Batch              { return &sdk.Batch{ID: id} }
+func contribution(id int) espsdk.Contribution { return espsdk.Contribution{ID: id} }
+func release(id int) espsdk.Release           { return espsdk.Release{ID: id} }
+func batch(id int) *espsdk.Batch              { return &espsdk.Batch{ID: id} }
 
 func getRequiredID(context *cli.Context, param string) int {
 	v := context.Int(param)

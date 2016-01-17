@@ -4,15 +4,15 @@ import (
 	"runtime"
 
 	"github.com/codegangsta/cli"
-	sdk "github.com/dysolution/espsdk"
+	"github.com/dysolution/espsdk"
 )
 
 // A ContributionList contains zero or more Contributions.
 type ContributionList []Contribution
 
 // Unmarshal attempts to deserialize the provided JSON payload into a slice of Contribution objects.
-func (cl ContributionList) Unmarshal(payload []byte) (sdk.ContributionList, error) {
-	return sdk.ContributionList{}.Unmarshal(payload)
+func (cl ContributionList) Unmarshal(payload []byte) (espsdk.ContributionList, error) {
+	return espsdk.ContributionList{}.Unmarshal(payload)
 }
 
 // A Contribution wraps the verbs provided by the ESP API for Contributions,
@@ -21,15 +21,15 @@ type Contribution struct{ context *cli.Context }
 
 // Index requests a list of all Contributions associated with the specified
 // Submission Batch.
-func (c Contribution) Index() sdk.ContributionList {
-	return sdk.Contribution{}.Index(client, getBatchID(c.context))
+func (c Contribution) Index() espsdk.ContributionList {
+	return espsdk.Contribution{}.Index(client, getBatchID(c.context))
 }
 
 // Create associates a new Contribution with the specified Submission Batch.
-func (c Contribution) Create() *sdk.Contribution {
+func (c Contribution) Create() *espsdk.Contribution {
 	desc := "Contribution.Create: "
 	data := c.build()
-	var contribution *sdk.Contribution
+	var contribution *espsdk.Contribution
 
 	result, err := client.Create(data)
 	if err != nil {
@@ -40,7 +40,7 @@ func (c Contribution) Create() *sdk.Contribution {
 	switch result.StatusCode {
 	case 201:
 		result.Log().Info(desc + "created")
-		contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+		contribution, err = espsdk.Contribution{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -57,11 +57,11 @@ func (c Contribution) Create() *sdk.Contribution {
 }
 
 // Update changes metadata for an existing Contribution.
-func (c Contribution) Update() *sdk.Contribution {
+func (c Contribution) Update() *espsdk.Contribution {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := c.build()
-	var contribution *sdk.Contribution
+	var contribution *espsdk.Contribution
 
 	result, err := client.Update(data)
 	if err != nil {
@@ -72,7 +72,7 @@ func (c Contribution) Update() *sdk.Contribution {
 	switch result.StatusCode {
 	case 200:
 		result.Log().Info(desc + "updated")
-		contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+		contribution, err = espsdk.Contribution{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -89,11 +89,11 @@ func (c Contribution) Update() *sdk.Contribution {
 }
 
 // Delete destroys a specific Contribution.
-func (c Contribution) Delete() *sdk.Contribution {
+func (c Contribution) Delete() *espsdk.Contribution {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := c.build()
-	var contribution *sdk.Contribution
+	var contribution *espsdk.Contribution
 
 	result, err := client.Delete(data)
 	if err != nil {
@@ -115,7 +115,7 @@ func (c Contribution) Delete() *sdk.Contribution {
 	}
 	// successful deletion usually returns a 204 without a payload/body
 	if len(result.Payload) > 0 {
-		contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+		contribution, err = espsdk.Contribution{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -124,10 +124,10 @@ func (c Contribution) Delete() *sdk.Contribution {
 }
 
 // Get requests the metadata for a specific Contribution.
-func (c Contribution) Get() *sdk.Contribution {
+func (c Contribution) Get() *espsdk.Contribution {
 	desc := "Contribution.Get"
 	data := c.build()
-	var contribution *sdk.Contribution
+	var contribution *espsdk.Contribution
 
 	result, err := client.Get(data)
 	if err != nil {
@@ -139,7 +139,7 @@ func (c Contribution) Get() *sdk.Contribution {
 		return contribution
 	}
 	result.Log().Info(desc)
-	contribution, err = sdk.Contribution{}.Unmarshal(result.Payload)
+	contribution, err = espsdk.Contribution{}.Unmarshal(result.Payload)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return contribution
@@ -151,15 +151,15 @@ func (c Contribution) Get() *sdk.Contribution {
 func (c Contribution) id() int { return getRequiredID(c.context, "contribution-id") }
 
 func (c Contribution) path() string {
-	obj := sdk.Contribution{
+	obj := espsdk.Contribution{
 		ID:                c.id(),
 		SubmissionBatchID: getBatchID(c.context),
 	}
 	return obj.Path()
 }
 
-func (c Contribution) build() sdk.Contribution {
-	return sdk.Contribution{
+func (c Contribution) build() espsdk.Contribution {
+	return espsdk.Contribution{
 		CameraShotDate:       c.context.String("camera-shot-date"),
 		CollectionCode:       c.context.String("collection-code"),
 		ContentProviderName:  c.context.String("content-provider-name"),
@@ -187,6 +187,6 @@ func (c Contribution) build() sdk.Contribution {
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a Contribution object.
-func (c Contribution) Unmarshal(payload []byte) (*sdk.Contribution, error) {
-	return sdk.Contribution{}.Unmarshal(payload)
+func (c Contribution) Unmarshal(payload []byte) (*espsdk.Contribution, error) {
+	return espsdk.Contribution{}.Unmarshal(payload)
 }

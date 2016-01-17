@@ -5,10 +5,10 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
-	sdk "github.com/dysolution/espsdk"
+	"github.com/dysolution/espsdk"
 )
 
-var releaseTypes = string(strings.Join(sdk.Release{}.ValidTypes(), " OR "))
+var releaseTypes = string(strings.Join(espsdk.Release{}.ValidTypes(), " OR "))
 
 // A Release wraps the verbs provided by the ESP API for Releases,
 // legal agreements for property owners or models to be associated
@@ -17,15 +17,15 @@ type Release struct{ context *cli.Context }
 
 // Index requests a list of all Releases associated with the specified
 // Submission Batch.
-func (r Release) Index() sdk.ReleaseList {
-	return sdk.Release{}.Index(client, getBatchID(r.context))
+func (r Release) Index() espsdk.ReleaseList {
+	return espsdk.Release{}.Index(client, getBatchID(r.context))
 }
 
 // Create associates a new Release with the specified Submission Batch.
-func (r Release) Create() *sdk.Release {
+func (r Release) Create() *espsdk.Release {
 	desc := "Release.Create: "
 	data := r.build()
-	var release *sdk.Release
+	var release *espsdk.Release
 
 	result, err := client.Create(data)
 	if err != nil {
@@ -36,7 +36,7 @@ func (r Release) Create() *sdk.Release {
 	switch result.StatusCode {
 	case 201:
 		result.Log().Info(desc + "created")
-		release, err = sdk.Release{}.Unmarshal(result.Payload)
+		release, err = espsdk.Release{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -55,11 +55,11 @@ func (r Release) Create() *sdk.Release {
 }
 
 // Delete destroys a specific Release.
-func (r Release) Delete() *sdk.Release {
+func (r Release) Delete() *espsdk.Release {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := r.build()
-	var release *sdk.Release
+	var release *espsdk.Release
 
 	result, err := client.Delete(data)
 	if err != nil {
@@ -81,7 +81,7 @@ func (r Release) Delete() *sdk.Release {
 	}
 	// successful deletion usually returns a 204 without a payload/body
 	if len(result.Payload) > 0 {
-		release, err = sdk.Release{}.Unmarshal(result.Payload)
+		release, err = espsdk.Release{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -90,10 +90,10 @@ func (r Release) Delete() *sdk.Release {
 }
 
 // Get requests the metadata for a specific Release.
-func (r Release) Get() *sdk.Release {
+func (r Release) Get() *espsdk.Release {
 	desc := "Release.Get"
 	data := r.build()
-	var release *sdk.Release
+	var release *espsdk.Release
 
 	result, err := client.Get(data)
 	if err != nil {
@@ -105,7 +105,7 @@ func (r Release) Get() *sdk.Release {
 		return release
 	}
 	result.Log().Info(desc)
-	release, err = sdk.Release{}.Unmarshal(result.Payload)
+	release, err = espsdk.Release{}.Unmarshal(result.Payload)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return release
@@ -117,15 +117,15 @@ func (r Release) Get() *sdk.Release {
 func (r Release) id() int { return getRequiredID(r.context, "release-id") }
 
 func (r Release) path() string {
-	obj := sdk.Release{
+	obj := espsdk.Release{
 		ID:                r.id(),
 		SubmissionBatchID: getBatchID(r.context),
 	}
 	return obj.Path()
 }
 
-func (r Release) build() sdk.Release {
-	return sdk.Release{
+func (r Release) build() espsdk.Release {
+	return espsdk.Release{
 		ExternalFileLocation: r.context.String("external-file-location"),
 		FileName:             r.context.String("file-name"),
 		FilePath:             r.context.String("file-path"),
@@ -141,6 +141,6 @@ func (r Release) build() sdk.Release {
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
-func (r Release) Unmarshal(payload []byte) (*sdk.Release, error) {
-	return sdk.Release{}.Unmarshal(payload)
+func (r Release) Unmarshal(payload []byte) (*espsdk.Release, error) {
+	return espsdk.Release{}.Unmarshal(payload)
 }

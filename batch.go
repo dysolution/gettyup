@@ -5,24 +5,24 @@ import (
 	"strings"
 
 	"github.com/codegangsta/cli"
-	sdk "github.com/dysolution/espsdk"
+	"github.com/dysolution/espsdk"
 )
 
-var batchTypes = string(strings.Join(sdk.Batch{}.ValidTypes(), " OR "))
+var batchTypes = string(strings.Join(espsdk.Batch{}.ValidTypes(), " OR "))
 
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
 type Batch struct{ context *cli.Context }
 
 // Index requests a list of all Submission Batches belonging to the user.
-func (b Batch) Index() sdk.BatchList {
-	return sdk.Batch{}.Index(client)
+func (b Batch) Index() espsdk.BatchList {
+	return espsdk.Batch{}.Index(client)
 }
 
 // Get requests the metadata for a specific Submission Batch.
-func (b Batch) Get() *sdk.Batch {
+func (b Batch) Get() *espsdk.Batch {
 	desc := "Batch.Get"
 	data := b.build()
-	var batch *sdk.Batch
+	var batch *espsdk.Batch
 
 	result, err := client.Get(data)
 	if err != nil {
@@ -34,7 +34,7 @@ func (b Batch) Get() *sdk.Batch {
 		return batch
 	}
 	result.Log().Info(desc)
-	batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+	batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return batch
@@ -44,11 +44,11 @@ func (b Batch) Get() *sdk.Batch {
 }
 
 // Create adds a new Submission Batch.
-func (b Batch) Create() *sdk.Batch {
+func (b Batch) Create() *espsdk.Batch {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := b.build()
-	var batch *sdk.Batch
+	var batch *espsdk.Batch
 
 	result, err := client.Create(data)
 	if err != nil {
@@ -59,7 +59,7 @@ func (b Batch) Create() *sdk.Batch {
 	switch result.StatusCode {
 	case 201:
 		result.Log().Info(desc + "created")
-		batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+		batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -74,11 +74,11 @@ func (b Batch) Create() *sdk.Batch {
 }
 
 // Update changes fields for an existing Submission Batch.
-func (b Batch) Update() *sdk.Batch {
+func (b Batch) Update() *espsdk.Batch {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := b.build()
-	var batch *sdk.Batch
+	var batch *espsdk.Batch
 
 	result, err := client.Update(data)
 	if err != nil {
@@ -89,7 +89,7 @@ func (b Batch) Update() *sdk.Batch {
 	switch result.StatusCode {
 	case 200:
 		result.Log().Info(desc + "updated")
-		batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+		batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -106,11 +106,11 @@ func (b Batch) Update() *sdk.Batch {
 }
 
 // Delete destroys a specific Submission Batch.
-func (b Batch) Delete() *sdk.Batch {
+func (b Batch) Delete() *espsdk.Batch {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := b.build()
-	var batch *sdk.Batch
+	var batch *espsdk.Batch
 
 	result, err := client.Delete(data)
 	if err != nil {
@@ -132,7 +132,7 @@ func (b Batch) Delete() *sdk.Batch {
 	}
 	// successful deletion usually returns a 204 without a payload/body
 	if len(result.Payload) > 0 {
-		batch, err = sdk.Batch{}.Unmarshal(result.Payload)
+		batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
 		if err != nil {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
@@ -141,20 +141,20 @@ func (b Batch) Delete() *sdk.Batch {
 }
 
 // Last returns the newest Submission Batch.
-func (b Batch) Last() sdk.Batch {
-	return sdk.Batch{}.Index(client).Last()
+func (b Batch) Last() espsdk.Batch {
+	return espsdk.Batch{}.Index(client).Last()
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
-func (b Batch) Unmarshal(payload []byte) sdk.DeserializedObject {
-	return sdk.Unmarshal(payload)
+func (b Batch) Unmarshal(payload []byte) espsdk.DeserializedObject {
+	return espsdk.Unmarshal(payload)
 }
 
 func (b Batch) id() int      { return getBatchID(b.context) }
-func (b Batch) path() string { return sdk.Batch{ID: b.id()}.Path() }
+func (b Batch) path() string { return espsdk.Batch{ID: b.id()}.Path() }
 
-func (b Batch) build() sdk.Batch {
-	return sdk.Batch{
+func (b Batch) build() espsdk.Batch {
+	return espsdk.Batch{
 		BriefID:               b.context.String("brief-id"),
 		EventID:               b.context.String("event-id"),
 		ID:                    b.context.Int("submission-batch-id"),

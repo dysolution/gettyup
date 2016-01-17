@@ -1,6 +1,7 @@
 package main
 
 import (
+	"runtime"
 	"strings"
 
 	"github.com/codegangsta/cli"
@@ -54,8 +55,38 @@ func (r Release) Create() *sdk.Release {
 }
 
 // Delete destroys a specific Release.
-func (r Release) Delete() sdk.DeserializedObject {
-	return client.Delete(r.path())
+func (r Release) Delete() *sdk.Release {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
+	data := r.build()
+	var release *sdk.Release
+
+	result, err := client.Delete(data)
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return release
+	}
+
+	switch result.StatusCode {
+	case 204:
+		result.Log().Info(desc + "deleted")
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch or release not found")
+	case 422:
+		result.Log().Error(desc + "unprocessable: release associated with already-submitted contribution")
+	}
+	// successful deletion usually returns a 204 without a payload/body
+	if len(result.Payload) > 0 {
+		release, err = sdk.Release{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	}
+	return release
 }
 
 // Get requests the metadata for a specific Release.
@@ -64,7 +95,7 @@ func (r Release) Get() *sdk.Release {
 	data := r.build()
 	var release *sdk.Release
 
-	result, err := client.VerboseGet(data)
+	result, err := client.Get(data)
 	if err != nil {
 		result.Log().Error(desc)
 		return release

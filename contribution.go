@@ -95,7 +95,7 @@ func (c Contribution) Delete() *sdk.Contribution {
 	data := c.build()
 	var contribution *sdk.Contribution
 
-	result, err := client.VerboseDelete(data)
+	result, err := client.Delete(data)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return contribution
@@ -129,7 +129,7 @@ func (c Contribution) Get() *sdk.Contribution {
 	data := c.build()
 	var contribution *sdk.Contribution
 
-	result, err := client.VerboseGet(data)
+	result, err := client.Get(data)
 	if err != nil {
 		result.Log().Error(desc)
 		return contribution

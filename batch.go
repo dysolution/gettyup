@@ -25,7 +25,7 @@ func (b Batch) Get() *sdk.Batch {
 	data := b.build()
 	var batch *sdk.Batch
 
-	result, err := client.VerboseGet(data)
+	result, err := client.Get(data)
 	if err != nil {
 		result.Log().Error(desc)
 		return batch
@@ -113,7 +113,7 @@ func (b Batch) Delete() *sdk.Batch {
 	data := b.build()
 	var batch *sdk.Batch
 
-	result, err := client.VerboseDelete(data)
+	result, err := client.Delete(data)
 	if err != nil {
 		result.Log().Errorf("%s: %v", desc, err)
 		return batch

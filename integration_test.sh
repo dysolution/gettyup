@@ -16,7 +16,7 @@ CMD="gettyup ${@}"
 TOKEN=$($CMD token)  # retrieve and cache a token
 
 GES_BATCH_ID=86102  # a Getty Editorial Still (Image) batch
-GCV_BATCH_ID=86695  # a Getty Creative Video batch
+GCV_BATCH_ID=88086  # a Getty Creative Video batch
 
 
 CREATE_BATCH=( \
@@ -97,13 +97,13 @@ INDEX_RELEASES=( \
 DELETE_CONTRIBUTION=( \
   $CMD --token=$TOKEN contribution delete \
     --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124253
+    --contribution-id 1124556
 )
 
 DELETE_RELEASE=( \
   $CMD --token=$TOKEN release delete \
     --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39904
+    --release-id 39966
 )
 
 PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)

@@ -14,9 +14,8 @@ var batchTypes = string(strings.Join(sdk.Batch{}.ValidTypes(), " OR "))
 type Batch struct{ context *cli.Context }
 
 // Index requests a list of all Submission Batches belonging to the user.
-func (b Batch) Index() *sdk.DeserializedObject {
-	data := b.build()
-	return client.Index(data.Path())
+func (b Batch) Index() sdk.BatchList {
+	return sdk.Batch{}.Index(client)
 }
 
 // Get requests the metadata for a specific Submission Batch.
@@ -142,7 +141,9 @@ func (b Batch) Delete() *sdk.Batch {
 }
 
 // Last returns the newest Submission Batch.
-func (b Batch) Last() sdk.Batch { return client.Index(sdk.Batches).Last() }
+func (b Batch) Last() sdk.Batch {
+	return sdk.Batch{}.Index(client).Last()
+}
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
 func (b Batch) Unmarshal(payload []byte) sdk.DeserializedObject {

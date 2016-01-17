@@ -2,21 +2,22 @@ package main
 
 import (
 	"github.com/dysolution/espsdk"
+	"github.com/dysolution/sleepwalker"
 )
 
-var client *espsdk.Client
+var client sleepwalker.Client
 var quiet bool
-var token espsdk.Token
+var token sleepwalker.Token
 
 // Serializable objects can be Marshaled into JSON.
 type Serializable interface {
 	Marshal() ([]byte, error)
 }
 
-func getClient(key, secret, username, password string) *espsdk.Client {
-	return espsdk.GetClient(key, secret, username, password, uploadBucket)
+func getClient(key, secret, username, password string) sleepwalker.Client {
+	return sleepwalker.GetClient(key, secret, username, password, espsdk.OAuthEndpoint, espsdk.ESPAPIRoot)
 }
 
-func stringToToken(tokenString string) espsdk.Token {
-	return espsdk.Token(tokenString)
+func stringToToken(tokenString string) sleepwalker.Token {
+	return sleepwalker.Token(tokenString)
 }

@@ -146,8 +146,12 @@ func (b Batch) Last() espsdk.Batch {
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
-func (b Batch) Unmarshal(payload []byte) espsdk.DeserializedObject {
-	return espsdk.Unmarshal(payload)
+func (b Batch) Unmarshal(payload []byte) *espsdk.Batch {
+	batch, err := espsdk.Batch{}.Unmarshal(payload)
+	if err != nil {
+		return &espsdk.Batch{}
+	}
+	return batch
 }
 
 func (b Batch) id() int      { return getBatchID(b.context) }

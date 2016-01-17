@@ -16,15 +16,15 @@ func (m TermService) Unmarshal(payload []byte) espsdk.TermList {
 
 // GetNumberOfPeople lists all possible values for Number of People.
 func (m TermService) GetNumberOfPeople(context *cli.Context) espsdk.TermList {
-	return client.GetTermList(espsdk.NumberOfPeople)
+	return espsdk.Client{}.GetTermList(espsdk.NumberOfPeople)
 }
 
 // GetExpressions lists all possible facial expression values.
 func (m TermService) GetExpressions(context *cli.Context) espsdk.TermList {
-	return client.GetTermList(espsdk.Expressions)
+	return espsdk.Client{}.GetTermList(espsdk.Expressions)
 }
 
 // GetCompositions lists all possible composition values.
 func (m TermService) GetCompositions(context *cli.Context) espsdk.TermList {
-	return client.GetTermList(espsdk.Compositions)
+	return espsdk.Client{}.GetTermList(espsdk.Compositions)
 }

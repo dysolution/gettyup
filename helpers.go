@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	"github.com/dysolution/espsdk"
+	"github.com/dysolution/sleepwalker"
 )
 
 // PrettyPrintable applies to all objects that should have an easy-to-read
@@ -19,33 +21,33 @@ var uploadBucket string
 // for the keywords provided.
 //TODO: use search input from context
 func GetKeywords(context *cli.Context) espsdk.TermList {
-	return client.GetTermList(espsdk.Keywords)
+	return espsdk.Client{}.GetTermList(espsdk.Keywords)
 }
 
 // GetPersonalities requests suggestions from the Getty controlled vocabulary
 // for the famous personalities provided.
 //TODO: use search input from context
 func GetPersonalities(context *cli.Context) espsdk.TermList {
-	return client.GetTermList(espsdk.Personalities)
+	return espsdk.Client{}.GetTermList(espsdk.Personalities)
 }
 
 // GetControlledValues returns complete lists of values and descriptions for
 // fields with controlled vocabularies, grouped by submission type.
 func GetControlledValues(context *cli.Context) espsdk.TermList {
-	return client.GetTermList(espsdk.ControlledValues)
+	return espsdk.Client{}.GetTermList(espsdk.ControlledValues)
 }
 
 // GetTranscoderMappings lists acceptable transcoder mapping values
 // for Getty and iStock video.
 func GetTranscoderMappings(context *cli.Context) espsdk.TranscoderMappingList {
-	return client.GetTranscoderMappings()
+	return espsdk.Client{}.GetTranscoderMappings()
 }
 
 // Private
 
 func prettyPrint(object interface{}) {
 	if quiet != true {
-		prettyOutput, err := espsdk.Marshal(object)
+		prettyOutput, err := sleepwalker.Marshal(object)
 		if err != nil {
 			log.Fatal(err)
 		}

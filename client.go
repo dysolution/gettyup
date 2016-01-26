@@ -5,7 +5,7 @@ import (
 	"github.com/dysolution/sleepwalker"
 )
 
-var client sleepwalker.Client
+var client *sleepwalker.Client
 var quiet bool
 var token sleepwalker.Token
 
@@ -14,8 +14,8 @@ type Serializable interface {
 	Marshal() ([]byte, error)
 }
 
-func getClient(key, secret, username, password string) sleepwalker.Client {
-	return sleepwalker.GetClient(key, secret, username, password, espsdk.OAuthEndpoint, espsdk.ESPAPIRoot)
+func getClient(key, secret, username, password string) *sleepwalker.Client {
+	return sleepwalker.GetClient(key, secret, username, password, espsdk.OAuthEndpoint, espsdk.ESPAPIRoot, Log)
 }
 
 func stringToToken(tokenString string) sleepwalker.Token {

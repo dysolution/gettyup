@@ -3,12 +3,19 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
-	log "github.com/Sirupsen/logrus"
+	"github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
+	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
 var patchVersion string
+var Log = logrus.New()
+
+func init() {
+	Log.Formatter = &prefixed.TextFormatter{TimestampFormat: time.RFC3339}
+}
 
 func main() {
 	app := cli.NewApp()
@@ -34,10 +41,15 @@ func main() {
 		},
 	}
 	app.Before = func(c *cli.Context) error {
-		client = getClient(c.String("key"), c.String("secret"), c.String("username"), c.String("password"))
+		client = getClient(
+			c.String("key"),
+			c.String("secret"),
+			c.String("username"),
+			c.String("password"),
+		)
 		quiet = c.Bool("quiet") == true
 		if c.Bool("debug") == true {
-			log.SetLevel(log.DebugLevel)
+			Log.Level = logrus.DebugLevel
 		}
 		token = stringToToken(c.String("token"))
 		return nil
@@ -244,7 +256,7 @@ func main() {
 		{
 			Name:   "controlled_values",
 			Usage:  "lists of values for fields with controlled vocabularies",
-			Action: func(c *cli.Context) { GetControlledValues(c) },
+			Action: func(c *cli.Context) { prettyPrint(GetControlledValues(c)) },
 		},
 		{
 			Name:   "transcoder",

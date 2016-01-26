@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
 	"github.com/dysolution/espsdk"
 	"github.com/dysolution/sleepwalker"
@@ -33,8 +32,13 @@ func GetPersonalities(context *cli.Context) espsdk.TermList {
 
 // GetControlledValues returns complete lists of values and descriptions for
 // fields with controlled vocabularies, grouped by submission type.
-func GetControlledValues(context *cli.Context) espsdk.TermList {
-	return espsdk.Client{}.GetTermList(espsdk.ControlledValues)
+func GetControlledValues(context *cli.Context) []byte {
+	bytes, err := espsdk.Client{}.GetControlledValues()
+	if err != nil {
+		Log.Error(err)
+		return []byte{}
+	}
+	return bytes
 }
 
 // GetTranscoderMappings lists acceptable transcoder mapping values
@@ -49,7 +53,9 @@ func prettyPrint(object interface{}) {
 	if quiet != true {
 		prettyOutput, err := sleepwalker.Marshal(object)
 		if err != nil {
-			log.Fatal(err)
+			Log.WithFields(map[string]interface{}{
+				"object": object.(string),
+			}).Error(err)
 		}
 		fmt.Println(string(prettyOutput))
 	}
@@ -62,24 +68,9 @@ func batch(id int) *espsdk.Batch              { return &espsdk.Batch{ID: id} }
 func getRequiredID(context *cli.Context, param string) int {
 	v := context.Int(param)
 	if v == 0 {
-		log.Fatalf("--%s must be set", param)
+		Log.Fatalf("--%s must be set", param)
 	}
 	return v
 }
 
 func getBatchID(context *cli.Context) int { return getRequiredID(context, "submission-batch-id") }
-
-// func get(path string) []byte {
-// 	request := sdk.NewRequest("GET", path, Token(), nil)
-// 	result := client.PerformRequest(request)
-// 	if result.Err != nil {
-// 		log.Fatal(result.Err)
-// 	}
-// 	stats, err := result.Marshal()
-// 	if err != nil {
-// 		log.Fatal(result.Err)
-// 	}
-// 	log.Info(string(stats))
-// 	log.Debugf("%s\n", result.Payload)
-// 	return result.Payload
-// }

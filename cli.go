@@ -195,6 +195,15 @@ func main() {
 					},
 				},
 				{
+					Name:   "submit",
+					Usage:  "submit an existing Contribution for review and publication",
+					Action: func(c *cli.Context) { prettyPrint(Contribution{c}.Submit()) },
+					Flags: []cli.Flag{
+						cli.StringFlag{Name: "contribution-id, c"},
+						cli.StringFlag{Name: "submission-batch-id, b"},
+					},
+				},
+				{
 					Name:   "delete",
 					Usage:  "delete an existing Contribution",
 					Action: func(c *cli.Context) { Contribution{c}.Delete() },

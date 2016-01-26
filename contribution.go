@@ -88,6 +88,38 @@ func (c Contribution) Update() *espsdk.Contribution {
 	return contribution
 }
 
+// Submit submits an existing Contribution for review and publication.
+func (c Contribution) Submit() *espsdk.Contribution {
+	myPC, _, _, _ := runtime.Caller(0)
+	desc := runtime.FuncForPC(myPC).Name() + ": "
+	data := c.build()
+	var contribution *espsdk.Contribution
+
+	result, err := client.Put(data, data.Path()+"/submit")
+	if err != nil {
+		result.Log().Errorf("%s: %v", desc, err)
+		return contribution
+	}
+
+	switch result.StatusCode {
+	case 200:
+		result.Log().Info(desc + "submitted")
+		contribution, err = espsdk.Contribution{}.Unmarshal(result.Payload)
+		if err != nil {
+			result.Log().Errorf("%s: %v", desc, err)
+		}
+	case 401:
+		result.Log().Error(desc + "unauthorized")
+	case 403:
+		result.Log().Error(desc + "forbidden")
+	case 404:
+		result.Log().Error(desc + "submission batch or contribution not found")
+	case 422:
+		result.Log().Error(desc + "unprocessable: already-submitted contribution or closed batch")
+	}
+	return contribution
+}
+
 // Delete destroys a specific Contribution.
 func (c Contribution) Delete() *espsdk.Contribution {
 	myPC, _, _, _ := runtime.Caller(0)

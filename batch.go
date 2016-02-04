@@ -77,7 +77,7 @@ func (b Batch) Create() *espsdk.Batch {
 func (b Batch) Update() *espsdk.Batch {
 	myPC, _, _, _ := runtime.Caller(0)
 	desc := runtime.FuncForPC(myPC).Name() + ": "
-	data := b.build()
+	data := espsdk.BatchUpdate{Batch: b.build()}
 	var batch *espsdk.Batch
 
 	result, err := client.Update(data)

@@ -154,14 +154,14 @@ func (b Batch) Unmarshal(payload []byte) *espsdk.Batch {
 	return batch
 }
 
-func (b Batch) id() int      { return getBatchID(b.context) }
+func (b Batch) id() string   { return getBatchID(b.context) }
 func (b Batch) path() string { return espsdk.Batch{ID: b.id()}.Path() }
 
 func (b Batch) build() espsdk.Batch {
 	return espsdk.Batch{
 		BriefID:               b.context.String("brief-id"),
 		EventID:               b.context.String("event-id"),
-		ID:                    b.context.Int("submission-batch-id"),
+		ID:                    b.context.String("submission-batch-id"),
 		Note:                  b.context.String("note"),
 		AssignmentID:          b.context.String("assignment-id"),
 		SaveExtractedMetadata: b.context.Bool("save-extracted-metadata"),

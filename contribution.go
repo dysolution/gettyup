@@ -180,7 +180,7 @@ func (c Contribution) Get() *espsdk.Contribution {
 
 }
 
-func (c Contribution) id() int { return getRequiredID(c.context, "contribution-id") }
+func (c Contribution) id() string { return getRequiredID(c.context, "contribution-id") }
 
 func (c Contribution) path() string {
 	obj := espsdk.Contribution{
@@ -202,7 +202,7 @@ func (c Contribution) build() espsdk.Contribution {
 		FileName:             c.context.String("file-name"),
 		FilePath:             c.context.String("file-path"),
 		Headline:             c.context.String("headline"),
-		ID:                   c.context.Int("contribution-id"),
+		ID:                   c.context.String("contribution-id"),
 		IPTCCategory:         c.context.String("iptc-category"),
 		MimeType:             c.context.String("mime-type"),
 		ParentSource:         c.context.String("parent-source"),
@@ -211,7 +211,7 @@ func (c Contribution) build() espsdk.Contribution {
 		ShotSpeed:            c.context.String("shot-speed"),
 		SiteDestination:      c.context.StringSlice("site-destination"),
 		Source:               c.context.String("source"),
-		SubmissionBatchID:    c.context.Int("submission-batch-id"),
+		SubmissionBatchID:    c.context.String("submission-batch-id"),
 		SubmittedToReviewAt:  c.context.String("submitted-to-review-at"),
 		UploadBucket:         uploadBucket,
 		UploadID:             c.context.String("upload-id"),

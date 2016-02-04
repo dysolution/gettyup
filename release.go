@@ -114,7 +114,7 @@ func (r Release) Get() *espsdk.Release {
 
 }
 
-func (r Release) id() int { return getRequiredID(r.context, "release-id") }
+func (r Release) id() string { return getRequiredID(r.context, "release-id") }
 
 func (r Release) path() string {
 	obj := espsdk.Release{
@@ -129,14 +129,14 @@ func (r Release) build() espsdk.Release {
 		ExternalFileLocation: r.context.String("external-file-location"),
 		FileName:             r.context.String("file-name"),
 		FilePath:             r.context.String("file-path"),
-		ID:                   r.context.Int("release-id"),
+		ID:                   r.context.String("release-id"),
 		MimeType:             r.context.String("mime-type"),
 		ModelDateOfBirth:     r.context.String("model-date-of-birth"),
 		ModelEthnicities:     r.context.StringSlice("model-ethnicities"),
 		ModelGender:          r.context.String("model-gender"),
 		ReleaseType:          r.context.String("release-type"),
 		StorageURL:           r.context.String("storage-url"),
-		SubmissionBatchID:    r.context.Int("submission-batch-id"),
+		SubmissionBatchID:    r.context.String("submission-batch-id"),
 	}
 }
 

@@ -98,6 +98,7 @@ func main() {
 					Flags: []cli.Flag{
 						cli.StringFlag{Name: "submission-batch-id, b"},
 						cli.StringFlag{Name: "submission-name, n"},
+						cli.StringFlag{Name: "save-extracted-metadata"},
 						cli.StringFlag{Name: "note"},
 					},
 				},

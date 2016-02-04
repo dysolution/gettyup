@@ -51,15 +51,14 @@ func (c Contribution) Create() *espsdk.Contribution {
 	case 404:
 		result.Log().Error(desc + "submission batch not found")
 	case 422:
-		result.Log().Error(desc + "submission batch is closed")
+		result.Log().Error(desc + "metadata error or closed batch")
 	}
 	return contribution
 }
 
 // Update changes metadata for an existing Contribution.
 func (c Contribution) Update() *espsdk.Contribution {
-	myPC, _, _, _ := runtime.Caller(0)
-	desc := runtime.FuncForPC(myPC).Name() + ": "
+	desc := "main.Contribution.Update"
 	data := c.build()
 	var contribution *espsdk.Contribution
 
@@ -83,7 +82,7 @@ func (c Contribution) Update() *espsdk.Contribution {
 	case 404:
 		result.Log().Error(desc + "submission batch not found")
 	case 422:
-		result.Log().Error(desc + "unprocessable: already-submitted contribution or closed batch")
+		result.Log().Error(desc + "unprocessable: invalid contribution data, already-submitted contribution, or closed batch")
 	}
 	return contribution
 }

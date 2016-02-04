@@ -1,142 +1,49 @@
 #!/usr/bin/env bash
-
 set -e
 
-# Uncomment this line (and comment the other CMD declaration) to use
-# "go run" for each test instead of a compiled/installed binary.
-# 
-#CMD="go run *.go ${@}"
-
-# Running a compiled binary for each test will be a bit faster.
-#
 golint
 go install
-CMD="gettyup ${@}"
+CMD="gettyup ${@}"  # or: CMD="go run *.go ${@}" to avoid installing binary
+DO="$CMD ${@} --token=$($CMD token)"  # acquire and reuse a cached token
 
-TOKEN=$($CMD token)  # retrieve and cache a token
+GES=86102  # a Getty Editorial Still (Image) batch
+GCV=89823  # a Getty Creative Video batch
 
-GES_BATCH_ID=86102  # a Getty Editorial Still (Image) batch
-GCV_BATCH_ID=88086  # a Getty Creative Video batch
+$DO batch        index
+$DO batch        get    -b $GES
+$DO batch        create         -n "a created batch" -t getty_creative_video
+$DO batch        update -b $GCV -n "an updated batch" --note "new note"
+$DO batch        delete -b $($DO batch last)
 
+$DO contribution index  -b $GES 
+$DO contribution get    -b $GES -c 1125380 
+$DO contribution create -b $GES \
+  --camera-shot-date="12/14/2015 15:04:05 -0600" \
+  --content-provider-name=provider \
+  --content-provider-title=Contributor \
+  --country-of-shoot="United States" \
+  --credit-line=credit \
+  --external-file-location="https://c2.staticflickr.com/4/3747/11235643633_60b8701616_o.jpg" \
+  --file-name="11235643633_60b8701616_o.jpg"\
+  --headline="my photo" \
+  --iptc-category=S \
+  --site-destination=Editorial \
+  --site-destination=WireImage.com \
+  --source=AFP
+$DO contribution update -b $GES -c 1125380 --headline="updated" --country-of-shoot="Canada"
+$DO contribution delete -b $GES -c 1124556
 
-CREATE_BATCH=( \
-  $CMD ${@} --token=$TOKEN batch create \
-    --submission-name "My Creative Videos" \
-    --submission-type getty_creative_video \
-)
+$DO release      index  -b $GCV
+$DO release      get    -b $GCV --release-id 40366
+$DO release      create -b $GCV \
+  --file-name some_property.jpg \
+  --release-type Property \
+  --file-path "submission/releases/batch_86103/24780225369200015_some_property.jpg" \
+  --mime-type "image/jpeg" \
+$DO release      delete -b $GCV --release-id 39966
 
-CREATE_CONTRIBUTION=( \
-  $CMD ${@} --token=$TOKEN contribution create \
-    --submission-batch-id $GES_BATCH_ID \
-    --camera-shot-date=12/14/2015 \
-    --content-provider-name=provider \
-    --content-provider-title=Contributor \
-    --country-of-shoot="United States" \
-    --credit-line=credit \
-    --file-name=example.jpg \
-    --headline="my photo" \
-    --iptc-category=S \
-    --site-destination=Editorial \
-    --site-destination=WireImage.com \
-    --source=AFP \
-)
+$DO people number_of_people
+$DO people expressions
+$DO people compositions
 
-CREATE_RELEASE=( \
-  $CMD --token=$TOKEN release create \
-    --submission-batch-id $GCV_BATCH_ID \
-    --file-name some_property.jpg \
-    --release-type Property \
-    --file-path "submission/releases/batch_86103/24780225369200015_some_property.jpg" \
-    --mime-type "image/jpeg" \
-)
-
-GET_BATCH=($CMD --token=$TOKEN batch get --submission-batch-id $GES_BATCH_ID)
-
-LAST_BATCH=($CMD --token=$TOKEN batch last)
-
-GET_CONTRIBUTION=( \
-  $CMD --token=$TOKEN contribution get \
-    --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124355 \
-)
-
-GET_RELEASE=( \
-  $CMD --token=$TOKEN release get \
-    --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39938 \
-)
-
-UPDATE_BATCH=( \
-  $CMD ${@} --token=$TOKEN batch update \
-    --submission-batch-id $GCV_BATCH_ID \
-    --submission-name "My Creative Videos" \
-    --note "new note" \
-)
-
-UPDATE_CONTRIBUTION=( \
-  $CMD ${@} --token=$TOKEN contribution update \
-    --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124360
-    --headline="yet another photo" \
-    --country-of-shoot="Canada" \
-)
-
-INDEX_BATCHES=($CMD --token=$TOKEN batch index)
-
-INDEX_CONTRIBUTIONS=( \
-  $CMD --token=$TOKEN contribution index \
-    --submission-batch-id $GES_BATCH_ID \
-)
-
-INDEX_RELEASES=( \
-  $CMD --token=$TOKEN release index \
-    --submission-batch-id $GCV_BATCH_ID \
-)
-
-
-DELETE_CONTRIBUTION=( \
-  $CMD --token=$TOKEN contribution delete \
-    --submission-batch-id $GES_BATCH_ID \
-    --contribution-id 1124556
-)
-
-DELETE_RELEASE=( \
-  $CMD --token=$TOKEN release delete \
-    --submission-batch-id $GCV_BATCH_ID \
-    --release-id 39966
-)
-
-PEOPLE_NUMBER_OF_PEOPLE=($CMD --token=$TOKEN people number_of_people)
-     PEOPLE_EXPRESSIONS=($CMD --token=$TOKEN people expressions)
-    PEOPLE_COMPOSITIONS=($CMD --token=$TOKEN people compositions)
-    TRANSCODER_MAPPINGS=($CMD --token=$TOKEN transcoder)
-
-# Enable or disable this entire block to keep the count of batches steady
-
-"${CREATE_BATCH[@]}"
-NEWEST_BATCH_ID=$("${LAST_BATCH[@]}")
-DELETE_BATCH=($CMD --token=$TOKEN batch delete --submission-batch-id $NEWEST_BATCH_ID)
-"${DELETE_BATCH[@]}"
-
-"${CREATE_CONTRIBUTION[@]}"
-"${CREATE_RELEASE[@]}"
-
-"${UPDATE_BATCH[@]}"
-"${UPDATE_CONTRIBUTION[@]}"
-
-"${GET_BATCH[@]}"
-"${GET_CONTRIBUTION[@]}"
-"${GET_RELEASE[@]}"
-
-"${INDEX_BATCHES[@]}"
-"${INDEX_CONTRIBUTIONS[@]}"
-"${INDEX_RELEASES[@]}"
-
-"${DELETE_CONTRIBUTION[@]}"
-"${DELETE_RELEASE[@]}"
-
-"${PEOPLE_NUMBER_OF_PEOPLE[@]}"
-"${PEOPLE_EXPRESSIONS[@]}"
-"${PEOPLE_COMPOSITIONS[@]}"
-
-"${TRANSCODER_MAPPINGS[@]}"
+$DO transcoder

@@ -76,13 +76,14 @@ func (c Contribution) Update() *espsdk.Contribution {
 			result.Log().Errorf("%s: %v", desc, err)
 		}
 	case 401:
-		result.Log().Error(desc + "unauthorized")
+		result.Log().Error(desc + " unauthorized")
 	case 403:
-		result.Log().Error(desc + "forbidden")
+		result.Log().Error(desc + " forbidden")
 	case 404:
-		result.Log().Error(desc + "submission batch not found")
+		result.Log().Error(desc + " submission batch not found")
 	case 422:
-		result.Log().Error(desc + "unprocessable: invalid contribution data, already-submitted contribution, or closed batch")
+		result.LogPayload().Debug(desc)
+		result.Log().Error(desc + " unprocessable: invalid contribution data, already-submitted contribution, or closed batch")
 	}
 	return contribution
 }

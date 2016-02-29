@@ -20,14 +20,14 @@ var uploadBucket string
 // for the keywords provided.
 //TODO: use search input from context
 func GetKeywords(context *cli.Context) espsdk.TermList {
-	return espsdk.Client{}.GetTermList(espsdk.Keywords)
+	return espsdk.Client{}.GetTermList(Keywords)
 }
 
 // GetPersonalities requests suggestions from the Getty controlled vocabulary
 // for the famous personalities provided.
 //TODO: use search input from context
 func GetPersonalities(context *cli.Context) espsdk.TermList {
-	return espsdk.Client{}.GetTermList(espsdk.Personalities)
+	return espsdk.Client{}.GetTermList(Personalities)
 }
 
 // GetControlledValues returns complete lists of values and descriptions for

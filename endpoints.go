@@ -6,12 +6,12 @@ import (
 
 // These constants represent the relative paths for various ESP API endpoints.
 const (
-	Batches            string = espsdk.Batches
-	ControlledValues   string = espsdk.ControlledValues
-	Keywords           string = espsdk.Keywords
-	Personalities      string = espsdk.Personalities
-	TranscoderMappings string = espsdk.TranscoderMappings
-	Compositions       string = espsdk.Compositions
-	Expressions        string = espsdk.Expressions
-	NumberOfPeople     string = espsdk.NumberOfPeople
+	Batches            string = espsdk.BatchesEndpoint
+	ControlledValues   string = espsdk.ControlledValuesEndpoint
+	Keywords           string = espsdk.KeywordsEndpoint
+	Personalities      string = espsdk.PersonalitiesEndpoint
+	TranscoderMappings string = espsdk.TranscoderMappingsEndpoint
+	Compositions       string = espsdk.CompositionsEndpoint
+	Expressions        string = espsdk.ExpressionsEndpoint
+	NumberOfPeople     string = espsdk.NumberOfPeopleEndpoint
 )

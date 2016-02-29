@@ -46,4 +46,5 @@ $DO people number_of_people
 $DO people expressions
 $DO people compositions
 
+$DO controlled_values
 $DO transcoder

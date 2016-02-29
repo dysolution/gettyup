@@ -32,13 +32,8 @@ func GetPersonalities(context *cli.Context) espsdk.TermList {
 
 // GetControlledValues returns complete lists of values and descriptions for
 // fields with controlled vocabularies, grouped by submission type.
-func GetControlledValues(context *cli.Context) []byte {
-	bytes, err := espsdk.Client{}.GetControlledValues()
-	if err != nil {
-		Log.Error(err)
-		return []byte{}
-	}
-	return bytes
+func GetControlledValues(context *cli.Context) espsdk.ControlledValues {
+	return client.GetControlledValues()
 }
 
 // GetTranscoderMappings lists acceptable transcoder mapping values

@@ -10,7 +10,11 @@ import (
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
+// patchVersion can be passed in at build time to be included in the
+// usage output.
 var patchVersion string
+
+// Log is the package-level logger.
 var Log = logrus.New()
 
 func init() {

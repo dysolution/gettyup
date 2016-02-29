@@ -15,8 +15,8 @@ $DO batch        create         -n "a created batch" -t getty_creative_video
 $DO batch        update -b $GCV -n "an updated batch" --note "new note"
 $DO batch        delete -b $($DO batch last)
 
-$DO contribution index  -b $GES 
-$DO contribution get    -b $GES -c 1125380 
+$DO contribution index  -b $GES
+$DO contribution get    -b $GES -c 1125380
 $DO contribution create -b $GES \
   --camera-shot-date="12/14/2015 15:04:05 -0600" \
   --content-provider-name=provider \

@@ -43,8 +43,8 @@ func GetControlledValues(context *cli.Context) []byte {
 
 // GetTranscoderMappings lists acceptable transcoder mapping values
 // for Getty and iStock video.
-func GetTranscoderMappings(context *cli.Context) espsdk.TranscoderMappingList {
-	return espsdk.Client{}.GetTranscoderMappings()
+func GetTranscoderMappings(context *cli.Context) *espsdk.TranscoderMappingList {
+	return client.GetTranscoderMappings()
 }
 
 // Private

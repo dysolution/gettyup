@@ -118,6 +118,7 @@ func (c Contribution) path() string {
 }
 
 func (c Contribution) validateKeywords(input []string) []espsdk.Keyword {
+	// TODO: iStock keywords
 	mediaType := "image"
 	if path.Ext(c.context.String("file-name")) == ".mov" {
 		mediaType = "film"

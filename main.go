@@ -30,7 +30,7 @@ var oAuthToken sleepwalker.Token
 func init() {
 	Log.Formatter = &prefixed.TextFormatter{TimestampFormat: time.RFC3339}
 	app.Name = "gettyup"
-	app.Version = "0.0.2" + patchVersion
+	app.Version = "0.1.0" + patchVersion
 	app.Usage = "interact with the Getty Images ESP API"
 	app.Author = "Jordan Peterson"
 	app.Email = "dysolution@gmail.com"

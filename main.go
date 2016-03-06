@@ -89,19 +89,35 @@ func registerFlags() {
 			EnvVar: "ESP_TOKEN",
 		},
 		cli.StringFlag{
-			Name:   "api-url, a",
-			Value:  espsdk.SandboxAPI,
-			Usage:  "API URL",
-			EnvVar: "ESP_API_URL",
+			Name:   "api, a",
+			Value:  "sandbox",
+			Usage:  "API endpoint [sandbox|prod]",
+			EnvVar: "ESP_API",
+		},
+		cli.StringFlag{
+			Name:   "api-url",
+			Usage:  "API base URL (overrides --api)",
+			EnvVar: "ESP_API",
 		},
 	}
-	buckets := "[germany|ireland|oregon|singapore|tokyo|virginia]"
 	app.Flags = append(app.Flags, cli.StringFlag{
 		Name:   "s3-bucket, b",
 		Value:  "oregon",
-		Usage:  "nearest S3 bucket = " + buckets,
+		Usage:  "nearest S3 bucket (http://goo.gl/3FbYLg)",
 		EnvVar: "S3_BUCKET",
 	})
+}
+
+func getAPIurl(c *cli.Context) string {
+	var apiURL string
+	apiURL = map[string]string{
+		"prod":    espsdk.ProdAPI,
+		"sandbox": espsdk.SandboxAPI,
+	}[c.String("api")]
+	if c.String("api-url") != "" {
+		apiURL = c.String("api-url")
+	}
+	return apiURL
 }
 
 func main() {
@@ -112,7 +128,7 @@ func main() {
 			c.String("secret"),
 			c.String("username"),
 			c.String("password"),
-			c.String("api-url"),
+			getAPIurl(c),
 			Log,
 		)
 		if c.Bool("debug") == true {

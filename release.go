@@ -144,3 +144,58 @@ func (r Release) build() espsdk.Release {
 func (r Release) Unmarshal(payload []byte) (*espsdk.Release, error) {
 	return espsdk.Release{}.Unmarshal(payload)
 }
+
+func (r Release) registerCmds() {
+	app.Commands = append(app.Commands, cli.Command{
+		Name:  "release",
+		Usage: "work with Releases",
+		Subcommands: []cli.Command{
+			{
+				Name:   "create",
+				Usage:  "create a new Release within a Submission Batch",
+				Action: func(c *cli.Context) { pp(Release{c}.Create()) },
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "external-file-location"},
+					cli.StringFlag{Name: "file-name"},
+					cli.StringFlag{Name: "file-path"},
+					cli.StringFlag{Name: "mime-type"},
+					cli.StringFlag{Name: "model-date-of-birth"},
+					cli.StringFlag{Name: "model-gender"},
+					cli.StringFlag{Name: "release-type", Usage: releaseTypes},
+					cli.StringFlag{Name: "submission-batch-id, b"},
+					cli.StringSliceFlag{Name: "model-ethnicities"},
+				},
+			},
+			{
+				Name:  "get",
+				Usage: "get a specific Release",
+				Action: func(c *cli.Context) {
+					pp(Release{c}.Get())
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+					cli.StringFlag{Name: "release-id, r"},
+				},
+			},
+			{
+				Name:  "index",
+				Usage: "get all Releases for a Submission Batch",
+				Action: func(c *cli.Context) {
+					pp(Release{c}.Index())
+				},
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+				},
+			},
+			{
+				Name:   "delete",
+				Usage:  "delete an existing Release",
+				Action: func(c *cli.Context) { Release{c}.Delete() },
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+					cli.StringFlag{Name: "release-id, r"},
+				},
+			},
+		},
+	})
+}

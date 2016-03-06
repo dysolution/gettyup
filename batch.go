@@ -1,17 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"runtime"
 	"strings"
 
 	"github.com/codegangsta/cli"
 	"github.com/dysolution/espsdk"
+	"github.com/dysolution/sleepwalker"
 )
 
 var batchTypes = string(strings.Join(espsdk.Batch{}.ValidTypes(), " OR "))
 
 // A Batch wraps the verbs provided by the ESP API for Submission Batches.
-type Batch struct{ context *cli.Context }
+type Batch struct {
+	context *cli.Context
+}
 
 // Index requests a list of all Submission Batches belonging to the user.
 func (b Batch) Index() espsdk.BatchList {
@@ -20,122 +24,48 @@ func (b Batch) Index() espsdk.BatchList {
 
 // Get requests the metadata for a specific Submission Batch.
 func (b Batch) Get() *espsdk.Batch {
-	desc := "Batch.Get"
 	data := b.build()
-	var batch *espsdk.Batch
-
-	result, err := client.Get(data)
-	if err != nil {
-		result.Log().Error(desc)
-		return batch
-	}
-	if result.StatusCode == 404 {
-		result.Log().Error(desc)
-		return batch
-	}
-	result.Log().Info(desc)
-	batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
-	if err != nil {
-		result.Log().Errorf("%s: %v", desc, err)
-		return batch
-	}
-	return batch
-
+	return b.do(client.Get, data)
 }
 
 // Create adds a new Submission Batch.
 func (b Batch) Create() *espsdk.Batch {
-	myPC, _, _, _ := runtime.Caller(0)
-	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := b.build()
-	var batch *espsdk.Batch
-
-	result, err := client.Create(data)
-	if err != nil {
-		result.Log().Errorf("%s: %v", desc, err)
-		return batch
-	}
-
-	switch result.StatusCode {
-	case 201:
-		result.Log().Info(desc + "created")
-		batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
-		if err != nil {
-			result.Log().Errorf("%s: %v", desc, err)
-		}
-	case 401:
-		result.Log().Error(desc + "unauthorized")
-	case 403:
-		result.Log().Error(desc + "forbidden")
-	case 422:
-		result.Log().Error(desc + "invalid batch data provided")
-	}
-	return batch
+	return b.do(client.Create, data)
 }
 
 // Update changes fields for an existing Submission Batch.
 func (b Batch) Update() *espsdk.Batch {
-	myPC, _, _, _ := runtime.Caller(0)
-	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := espsdk.BatchUpdate{Batch: b.build()}
-	var batch *espsdk.Batch
-
-	result, err := client.Update(data)
-	if err != nil {
-		result.Log().Errorf("%s: %v", desc, err)
-		return batch
-	}
-
-	switch result.StatusCode {
-	case 200:
-		result.Log().Info(desc + "updated")
-		batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
-		if err != nil {
-			result.Log().Errorf("%s: %v", desc, err)
-		}
-	case 401:
-		result.Log().Error(desc + "unauthorized")
-	case 403:
-		result.Log().Error(desc + "forbidden")
-	case 404:
-		result.Log().Error(desc + "submission batch not found")
-	case 422:
-		result.Log().Error(desc + "unprocessable: bad params or closed batch")
-	}
-	return batch
+	return b.do(client.Update, data)
 }
 
 // Delete destroys a specific Submission Batch.
 func (b Batch) Delete() *espsdk.Batch {
-	myPC, _, _, _ := runtime.Caller(0)
-	desc := runtime.FuncForPC(myPC).Name() + ": "
 	data := b.build()
-	var batch *espsdk.Batch
+	return b.do(client.Delete, data)
+}
 
-	result, err := client.Delete(data)
+func (b Batch) do(fn func(sleepwalker.Findable) (sleepwalker.Result, error), data sleepwalker.Findable) *espsdk.Batch {
+	myPC, _, _, _ := runtime.Caller(1)
+	desc := runtime.FuncForPC(myPC).Name()
+
+	result, err := fn(data)
 	if err != nil {
-		result.Log().Errorf("%s: %v", desc, err)
-		return batch
+		return &espsdk.Batch{}
+	}
+	result.Report(desc)
+	if result.StatusCode >= 200 && result.StatusCode <= 300 {
+		result.Log().Info(desc)
+	}
+	if len(result.Payload) == 0 {
+		return &espsdk.Batch{}
 	}
 
-	switch result.StatusCode {
-	case 204:
-		result.Log().Info(desc + "deleted")
-	case 401:
-		result.Log().Error(desc + "unauthorized")
-	case 403:
-		result.Log().Error(desc + "forbidden")
-	case 404:
-		result.Log().Error(desc + "submission batch not found")
-	case 422:
-		result.Log().Error(desc + "batch is protected from deletion")
-	}
-	// successful deletion usually returns a 204 without a payload/body
-	if len(result.Payload) > 0 {
-		batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
-		if err != nil {
-			result.Log().Errorf("%s: %v", desc, err)
-		}
+	var batch *espsdk.Batch
+	batch, err = espsdk.Batch{}.Unmarshal(result.Payload)
+	if err != nil {
+		return &espsdk.Batch{}
 	}
 	return batch
 }
@@ -154,8 +84,75 @@ func (b Batch) Unmarshal(payload []byte) *espsdk.Batch {
 	return batch
 }
 
-func (b Batch) id() string   { return getBatchID(b.context) }
-func (b Batch) path() string { return espsdk.Batch{ID: b.id()}.Path() }
+func (b Batch) registerCmds() {
+	app.Commands = append(app.Commands, cli.Command{
+		Name:  "batch",
+		Usage: "work with Submission Batches",
+		Subcommands: []cli.Command{
+			{
+				Name:   "create",
+				Usage:  "create a new Submission Batch",
+				Action: func(c *cli.Context) { pp(Batch{c}.Create()) },
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-name, n"},
+					cli.StringFlag{Name: "submission-type, t", Usage: batchTypes},
+					cli.StringFlag{Name: "note"},
+					cli.StringFlag{Name: "assignment-id"},
+					cli.StringFlag{Name: "brief-id"},
+					cli.StringFlag{Name: "event-id"},
+					cli.BoolTFlag{Name: "save-extracted-metadata"},
+				},
+			},
+			{
+				Name:   "get",
+				Usage:  "get a specific Submission Batch",
+				Action: func(c *cli.Context) { pp(Batch{c}.Get()) },
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+				},
+			},
+			{
+				Name:   "index",
+				Usage:  "get all Submission Batches",
+				Action: func(c *cli.Context) { pp(Batch{c}.Index()) },
+			},
+			{
+				Name:   "update",
+				Usage:  "update an existing Submission Batch",
+				Action: func(c *cli.Context) { pp(Batch{c}.Update()) },
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+					cli.StringFlag{Name: "submission-name, n"},
+					cli.StringFlag{Name: "save-extracted-metadata"},
+					cli.StringFlag{Name: "note"},
+				},
+			},
+			{
+				Name:   "delete",
+				Usage:  "delete an existing Submission Batch",
+				Action: func(c *cli.Context) { Batch{c}.Delete() },
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+				},
+			},
+			{
+				Name:  "last",
+				Usage: "get the most recent Submission Batch",
+				Action: func(c *cli.Context) {
+					fmt.Println(Batch{c}.Last().ID)
+				},
+			},
+		},
+	})
+}
+
+func (b Batch) id() string {
+	return getBatchID(b.context)
+}
+
+func (b Batch) path() string {
+	return espsdk.Batch{ID: b.id()}.Path()
+}
 
 func (b Batch) build() espsdk.Batch {
 	return espsdk.Batch{

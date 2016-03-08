@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"path"
 	"runtime"
 
@@ -83,6 +84,16 @@ func (c Contribution) Submit() *espsdk.Contribution {
 	return contribution
 }
 
+// Last returns the newest Contribution in the given Submission Batch.
+func (c Contribution) Last() espsdk.Contribution {
+	contributions := espsdk.Contribution{}.Index(client, getBatchID(c.context))
+	lastContribution, err := contributions.Last()
+	if err != nil {
+		Log.Error(err)
+	}
+	return lastContribution
+}
+
 func (c Contribution) do(fn func(sleepwalker.Findable) (sleepwalker.Result, error), data sleepwalker.Findable) *espsdk.Contribution {
 	myPC, _, _, _ := runtime.Caller(1)
 	desc := runtime.FuncForPC(myPC).Name()
@@ -154,12 +165,12 @@ func (c Contribution) build() espsdk.Contribution {
 		personCompositions = espsdk.TermItem{}.ValidateList(inPersonCompositions, corpus)
 	}
 
-	inNumberOfPeople := c.context.String("number-of-people")
-	var numberOfPeople espsdk.TermItem
-	if inNumberOfPeople != "" {
-		corpus := *client.GetTermList(NumberOfPeople)
-		numberOfPeople = espsdk.TermItem{}.Validate(inNumberOfPeople, corpus)
-	}
+	// inNumberOfPeople := c.context.Int("number-of-people")
+	// var numberOfPeople espsdk.TermItemInt
+	// if inNumberOfPeople != 0 {
+	// 	corpus := *client.GetTermIntList(NumberOfPeople)
+	// 	numberOfPeople = espsdk.TermItemInt{}.Validate(inNumberOfPeople, corpus)
+	// }
 
 	return espsdk.Contribution{
 		CameraShotDate:       c.context.String("camera-shot-date"),
@@ -177,19 +188,19 @@ func (c Contribution) build() espsdk.Contribution {
 		IPTCCategory:         c.context.String("iptc-category"),
 		Keywords:             keywords,
 		MimeType:             c.context.String("mime-type"),
-		NumberOfPeople:       numberOfPeople,
-		ParentSource:         c.context.String("parent-source"),
-		Personalities:        personalities,
-		PersonCompositions:   personCompositions,
-		RecordedDate:         c.context.String("recorded-date"),
-		RiskCategory:         c.context.String("risk-category"),
-		ShotSpeed:            c.context.String("shot-speed"),
-		SiteDestination:      c.context.StringSlice("site-destination"),
-		Source:               c.context.String("source"),
-		SubmissionBatchID:    c.context.String("submission-batch-id"),
-		SubmittedToReviewAt:  c.context.String("submitted-to-review-at"),
-		UploadBucket:         c.context.String("upload-bucket"),
-		UploadID:             c.context.String("upload-id"),
+		// NumberOfPeople:       numberOfPeople,
+		ParentSource:        c.context.String("parent-source"),
+		Personalities:       personalities,
+		PersonCompositions:  personCompositions,
+		RecordedDate:        c.context.String("recorded-date"),
+		RiskCategory:        c.context.String("risk-category"),
+		ShotSpeed:           c.context.String("shot-speed"),
+		SiteDestination:     c.context.StringSlice("site-destination"),
+		Source:              c.context.String("source"),
+		SubmissionBatchID:   c.context.String("submission-batch-id"),
+		SubmittedToReviewAt: c.context.String("submitted-to-review-at"),
+		UploadBucket:        c.context.String("upload-bucket"),
+		UploadID:            c.context.String("upload-id"),
 	}
 }
 
@@ -298,6 +309,16 @@ func (c Contribution) registerCmds() {
 				Flags: []cli.Flag{
 					cli.StringFlag{Name: "submission-batch-id, b"},
 					cli.StringFlag{Name: "contribution-id, c"},
+				},
+			},
+			{
+				Name:  "last",
+				Usage: "get the most recent contribution ID from a batch",
+				Flags: []cli.Flag{
+					cli.StringFlag{Name: "submission-batch-id, b"},
+				},
+				Action: func(c *cli.Context) {
+					fmt.Print(Contribution{c}.Last().ID)
 				},
 			},
 		},

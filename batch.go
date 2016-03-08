@@ -46,6 +46,11 @@ func (b Batch) Delete() *espsdk.Batch {
 	return b.do(client.Delete, data)
 }
 
+// Last returns the newest Submission Batch.
+func (b Batch) Last() espsdk.Batch {
+	return espsdk.Batch{}.Index(client).Last()
+}
+
 func (b Batch) do(fn func(sleepwalker.Findable) (sleepwalker.Result, error), data sleepwalker.Findable) *espsdk.Batch {
 	myPC, _, _, _ := runtime.Caller(1)
 	desc := runtime.FuncForPC(myPC).Name()
@@ -68,11 +73,6 @@ func (b Batch) do(fn func(sleepwalker.Findable) (sleepwalker.Result, error), dat
 		return &espsdk.Batch{}
 	}
 	return batch
-}
-
-// Last returns the newest Submission Batch.
-func (b Batch) Last() espsdk.Batch {
-	return espsdk.Batch{}.Index(client).Last()
 }
 
 // Unmarshal attempts to deserialize the provided JSON payload into a SubmissionBatch object.
@@ -137,9 +137,9 @@ func (b Batch) registerCmds() {
 			},
 			{
 				Name:  "last",
-				Usage: "get the most recent Submission Batch",
+				Usage: "get the most recent Submission Batch ID",
 				Action: func(c *cli.Context) {
-					fmt.Println(Batch{c}.Last().ID)
+					fmt.Print(Batch{c}.Last().ID)
 				},
 			},
 		},

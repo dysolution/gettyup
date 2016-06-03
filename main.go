@@ -50,6 +50,7 @@ func registerCommands() {
 	Release{}.registerCmds()
 
 	registerCVCmds()
+	registerEventCmds()
 }
 
 func registerFlags() {

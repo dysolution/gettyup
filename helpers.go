@@ -20,6 +20,17 @@ func pp(object interface{}) {
 	}
 }
 
+func ppWithErr(object interface{}) error {
+	if quiet != true {
+		prettyOutput, err := sleepwalker.Marshal(object)
+		if err != nil {
+			return err
+		}
+		fmt.Println(string(prettyOutput))
+	}
+	return nil
+}
+
 func getRequiredID(context *cli.Context, param string) string {
 	v := context.String(param)
 	if v == "" {

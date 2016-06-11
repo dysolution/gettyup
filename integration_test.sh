@@ -111,3 +111,6 @@ $DO events \
   --date_from "$(date -j -v-2d +%Y-%m-%d)" \
   --date_to   "$(date -j -v+5d +%Y-%m-%d)" \
   --event_name "test"
+
+$DO field_restrictions \
+  --field_restrictions_type getty_creative_video

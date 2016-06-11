@@ -51,6 +51,7 @@ func registerCommands() {
 
 	registerCVCmds()
 	registerEventCmds()
+	registerFieldRestrictionCmds()
 }
 
 func registerFlags() {

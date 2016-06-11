@@ -4,14 +4,14 @@ import (
 	"github.com/dysolution/espsdk"
 )
 
-// These constants represent the relative paths for various ESP API endpoints.
-const (
-	Batches            string = espsdk.BatchesEndpoint
-	ControlledValues   string = espsdk.ControlledValuesEndpoint
-	Keywords           string = espsdk.KeywordsEndpoint
-	Personalities      string = espsdk.PersonalitiesEndpoint
-	TranscoderMappings string = espsdk.TranscoderMappingsEndpoint
-	Compositions       string = espsdk.CompositionsEndpoint
-	Expressions        string = espsdk.ExpressionsEndpoint
-	NumberOfPeople     string = espsdk.NumberOfPeopleEndpoint
+// The relative paths for various ESP API endpoints.
+var (
+	Batches            = espsdk.Endpoints.Batches
+	ControlledValues   = espsdk.Endpoints.ControlledValues
+	Keywords           = espsdk.Endpoints.Keywords
+	Personalities      = espsdk.Endpoints.Personalities
+	TranscoderMappings = espsdk.Endpoints.TranscoderMappings
+	Compositions       = espsdk.Endpoints.Compositions
+	Expressions        = espsdk.Endpoints.Expressions
+	NumberOfPeople     = espsdk.Endpoints.NumberOfPeople
 )
